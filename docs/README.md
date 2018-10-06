@@ -64,8 +64,6 @@ make configure
 make install
 ```
 
-------------------------
-
 #### Deployed Emacs 25.3
 
 __Deployed Path:__
@@ -79,6 +77,7 @@ https://stuff-things.net/2018/01/30/building-emacs-25-on-macos-high-sierra/
 
 #### Important Paths
 
+----------------------------
 
 ## Emacs 25.3 --with-xwidgets 
 #### Requirements
