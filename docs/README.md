@@ -172,7 +172,7 @@ Command: /usr/local/bin/emacs
 
 I was experiencing errors with C-space for the Mark set and found that it could be fixed from:
 ```
-XQuartz -> Preferences
+XQuartz -> Preferences -> Input
 ------------------------------------------
 Uncheck -> Enable key equivalents under X11
 Check   -> Follow system keyboard layout
