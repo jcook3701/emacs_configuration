@@ -8,7 +8,6 @@
   - Autoconf and Automake. The easiest way to use Homebrew via brew install autoconf automake.
   - makeinfo (part of the Texinfo suite). Apple ships makeinfo, but at some point the system version fell below the minimum version Emacs needs to build.
 
-
 #### Homebrew
 
 makeinfo can also be installed from Homebrew:
@@ -29,8 +28,7 @@ Gnutls allows for the use of the package-list-packages function in emacs.
 brew install gnutls
 ```
 
-
-#### Building Emacs 
+### Building Emacs 
 
 I Chose to store my build folder in my local Applications folder.  Feel free to store where ever is convenient for you.  
 ```
@@ -64,7 +62,7 @@ make configure
 make install
 ```
 
-#### Deployed Emacs 25.3
+### Deployed Emacs 25.3
 
 __Deployment:__
 ```
@@ -74,31 +72,53 @@ cd emacs-25.3
 rsync -avP /Users/jared3701/Applications/emacs/nextstep/Emacs.app /Users/jared3701/Applications/emacs-25.3/
 ```
 
-#### Helpful Links
+### Helpful Links
 https://stuff-things.net/2018/01/30/building-emacs-25-on-macos-high-sierra/
 
 
 ----------------------------
 
+
 ## Emacs 25.3 --with-xwidgets 
-#### Requirements
+### Why?
 
-Before starting it is very important to make sure that both your Homebrew and MacPort installations are fully updated.  
-needed packages include: autoconf automake gtk3 webkitgtk.  
+The purpose of building Emacs with xwidget is to make it possible to use the command "xwidget-webkit-browse-url".  This command allows users to open web-pages inside of Emacs without ever having to leave Emacs.  I have included configuration settings for navigating web-pages in my init.el file included in this Github repository.
 
-##### Homebrew
+### Requirements
+
+Before starting it is very important to make sure that both your Homebrew and MacPort installations are fully updated.  As they will be needed for the installation of the following packages: autoconf, automake, gtk3, & webkitgtk.  
+
+#### Homebrew
+makeinfo can also be installed from Homebrew:
 ```
 brew install texinfo
+```
+
+But before building Emacs, you need to get it into your $PATH ahead of /usr/bin/makeinfo
+The following exports should be added to your bashrc or bash_profile.
+```
+export PATH=/usr/local/opt/texinfo/bin:$PATH
+export LDFLAGS=-L/usr/local/opt/texinfo/lib
+```
+
+This package is needed if you want the --with-gnutls flag to work correctly when you build emacs.  
+Gnutls allows for the use of the package-list-packages function in emacs.
+```
 brew install gnutls
+```
+
+This package is needed for Emacs to build with the flag "--with-xwidget".
+```
 brew install gtk+3
 ```
 
-##### MacPorts
+#### MacPorts
+This package is also needed for Emacs to build with the flag "--with-xwidget".
 ```
 port install webkit-gtk3
 ``` 
 
-#### Building Emacs
+### Building Emacs
 
 I Chose to store my build path local Applications folder.  Feel free to store where ever is convenient for you.  
 ```
@@ -130,7 +150,7 @@ Unless you specify a path emacs will be installed in the following location when
 /usr/local/bin/
 ```
 
-#### XQuartz
+### XQuartz
 
 If running emacs from /usr/local/bin/ starts in no window mode then you must start XQuartz and point it to emacs.  
 ```
@@ -155,8 +175,6 @@ XQuartz -> Preferences
 Uncheck -> Enable key equivalents under X11
 Check   -> Follow system keyboard layout
 ```
-
-
 
 If Built with the flag "--with-dbus" or don't use the flag "--without-dbus" you might get the following error. Never less in my experiences a dbus error can be solved with the below commands.  
 ```
@@ -186,5 +204,8 @@ Password:
 --->  Loading startupitem 'dbus-session' for dbus
 ```
 
-#### Helpful Links
+### Demonstration
+![alt text](./images/emacs_as_browser.png "Logo Title Text 1")
+
+### Helpful Links
 https://jiegec.me/programming/2016/02/18/building-emacs-git-version-with-xwidgets-and-modules-in-archlinux/
