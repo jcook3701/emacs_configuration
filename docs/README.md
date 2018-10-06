@@ -79,7 +79,7 @@ https://stuff-things.net/2018/01/30/building-emacs-25-on-macos-high-sierra/
 ----------------------------
 
 
-## Bleeding Edge: Emacs 25.3 with internal web searching
+## Bleeding Edge: Emacs 25.3 with xwidget
 ### Why?
 
 The purpose of building Emacs with xwidget is to make it possible to use the command "xwidget-webkit-browse-url".  This command allows users to open web-pages inside of Emacs without ever having to leave Emacs.  I have included configuration settings for navigating web-pages in my init.el file included in this Github repository.
