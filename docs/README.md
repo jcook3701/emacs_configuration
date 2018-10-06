@@ -66,16 +66,17 @@ make install
 
 #### Deployed Emacs 25.3
 
-__Deployed Path:__
+__Deployment:__
 ```
-/Users/jared3701/Applications/emacs-25.3/
+cd /Users/jared3701/Applications/
+mkdir emacs-25.3
+cd emacs-25.3
+rsync -avP /Users/jared3701/Applications/emacs/nextstep/Emacs.app /Users/jared3701/Applications/emacs-25.3/
 ```
 
 #### Helpful Links
 https://stuff-things.net/2018/01/30/building-emacs-25-on-macos-high-sierra/
 
-
-#### Important Paths
 
 ----------------------------
 
@@ -97,7 +98,7 @@ brew install gtk+3
 port install webkit-gtk3
 ``` 
 
-#### Build
+#### Building Emacs
 
 I Chose to store my build path local Applications folder.  Feel free to store where ever is convenient for you.  
 ```
@@ -106,6 +107,7 @@ I Chose to store my build path local Applications folder.  Feel free to store wh
 
 Once you have the prerequisites squared away, the build is the same as it’s been for a while. Get the source:  
 ```
+cd /Users/jared3701/Applications/
 git clone git://git.savannah.gnu.org/emacs.git
 cd emacs
 ```
@@ -115,30 +117,15 @@ Checkout the emacs-25 branch (master is the development branch):
 git checkout emacs-25
 ```
 
-Build emacs with the following commands.  
-__First Try:__
+__Configuration Settings:__  
+These are the configuration settings that I used for this project.  
 ```
 ./autogen.sh all
-./configure --with-xwidgets --without-ns --with-gnutls --with-imagemagick --with-x-toolkit=gtk3 --without-x
+./configure --with-xwidgets --without-ns --with-gnutls --with-imagemagick --without-dbus --with-x
 make install
 ```
 
-__Second Try:__
-```
-./configure --with-xwidgets --without-ns --with-gnutls --with-imagemagick
-```
-
-__Third Try:__ I am currently actively using this. 
-```
-./configure --with-xwidgets --without-ns --with-gnutls --with-imagemagick --without-dbus --with-x
-```
-
-__Flags I should test:__
-```
-
-```
-
-Unless you specify a path emacs will be installed in the following location.  
+Unless you specify a path emacs will be installed in the following location when using "make install" with the following configuration.  
 ```
 /usr/local/bin/
 ```
@@ -169,7 +156,9 @@ Uncheck -> Enable key equivalents under X11
 Check   -> Follow system keyboard layout
 ```
 
-If you get a dbus error you can run the following commands to fix it.   
+
+
+If Built with the flag "--with-dbus" or don't use the flag "--without-dbus" you might get the following error. Never less in my experiences a dbus error can be solved with the below commands.  
 ```
 port notes dbus
 ```
