@@ -163,7 +163,7 @@ If Built with the flag "--with-dbus" or don't use the flag "--without-dbus" you 
 port notes dbus
 ```
 
-This is the output of 'port notes dbus.'  
+This is the output of the command "port notes dbus".  
 ```
 Jareds-MacBook-Pro-2:bin jared3701$ port notes dbus
 dbus has the following notes:
@@ -178,7 +178,7 @@ Running sudo port load dbus starts the dbus and fixes the error.
 sudo port load dbus
 ```
 
-This is the output of 'sudo port load dbus'
+This is the output of the command "sudo port load dbus".
 ```
 Jareds-MacBook-Pro-2:bin jared3701$ sudo port load dbus
 Password:
