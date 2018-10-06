@@ -5,7 +5,7 @@
 
 - Before you start, you need a few dependencies:
   - Xcode (free in the Mac App Store).
-  - Autoconf and Automake. The easiest way to use Homebrew via brew install autoconf automake. If you use another package manager, you know how to work it. If you are all-in on building from source, check out the above guide for details.
+  - Autoconf and Automake. The easiest way to use Homebrew via brew install autoconf automake.
   - makeinfo (part of the Texinfo suite). Apple ships makeinfo, but at some point the system version fell below the minimum version Emacs needs to build.
 
 
@@ -17,6 +17,7 @@ brew install texinfo
 ```
 
 But before building Emacs, you need to get it into your $PATH ahead of /usr/bin/makeinfo
+The following exports should be added to your bashrc or bash_profile.
 ```
 export PATH=/usr/local/opt/texinfo/bin:$PATH
 export LDFLAGS=-L/usr/local/opt/texinfo/lib
@@ -29,18 +30,18 @@ brew install gnutls
 ```
 
 
-#### Build 
+#### Building Emacs 
 
-I Chose to store my build path local Applications folder.  Feel free to store where ever is convenient for you.  
+I Chose to store my build folder in my local Applications folder.  Feel free to store where ever is convenient for you.  
 ```
 /Users/jared3701/Applications/emacs/
 ```
 
 Once you have the prerequisites squared away, the build is the same as it’s been for a while. Get the source:
 ```
+cd /Users/jared3701/Applications/
 git clone git://git.savannah.gnu.org/emacs.git
 cd emacs
-
 ```
 
 Checkout the emacs-25 branch (master is the development branch):  
@@ -63,7 +64,7 @@ make configure
 make install
 ```
 
-
+------------------------
 
 #### Deployed Emacs 25.3
 
