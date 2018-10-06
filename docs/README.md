@@ -161,12 +161,14 @@ Inside of XQuartz run the 'Add Item' command.
 ```
 Applicaion -> Customize. -> Add Item
 ```
+![alt text](./images/XQuartz_Applications_Customize.png "Applicaion -> Customize")
 
 The new item requires a Name and Command to be associated with it.  
 ```
 Name: emacs
 Command: /usr/local/bin/emacs
 ```
+![alt text](./images/XQuartz_Application_emacs_setup.png "Applicaion -> Customize -> emacs")
 
 I was experiencing errors with C-space for the Mark set and found that it could be fixed from:
 ```
@@ -175,6 +177,8 @@ XQuartz -> Preferences
 Uncheck -> Enable key equivalents under X11
 Check   -> Follow system keyboard layout
 ```
+![alt text](./images/XQuartz_preferences.png "Applicaion -> Customize -> emacs")
+![alt text](./images/XQuartz_input_preferences.png "Applicaion -> Customize -> emacs")
 
 If Built with the flag "--with-dbus" or don't use the flag "--without-dbus" you might get the following error. Never less in my experiences a dbus error can be solved with the below commands.  
 ```
@@ -205,7 +209,7 @@ Password:
 ```
 
 ### Demonstration
-![alt text](./images/emacs_as_browser.png "Logo Title Text 1")
+![alt text](./images/emacs_as_browser.png "Emacs as a browser")
 
 ### Helpful Links
 https://jiegec.me/programming/2016/02/18/building-emacs-git-version-with-xwidgets-and-modules-in-archlinux/
