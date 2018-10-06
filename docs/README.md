@@ -1,6 +1,6 @@
 # Emacs 25.3 Built for MacOS High Sierra
-
-## Emacs 25.3 --with-ns
+Version: Mac OS 10.13.6
+## Production: Emacs 25.3
 ### Requirements
 
 - Before you start, you need a few dependencies:
@@ -79,7 +79,7 @@ https://stuff-things.net/2018/01/30/building-emacs-25-on-macos-high-sierra/
 ----------------------------
 
 
-## Emacs 25.3 --with-xwidgets 
+## Bleeding Edge: Emacs 25.3 with internal web searching
 ### Why?
 
 The purpose of building Emacs with xwidget is to make it possible to use the command "xwidget-webkit-browse-url".  This command allows users to open web-pages inside of Emacs without ever having to leave Emacs.  I have included configuration settings for navigating web-pages in my init.el file included in this Github repository.
