@@ -12,6 +12,9 @@ url:                 http://lanyon.getpoole.com
 baseurl:             'https://jcook3701.github.io/emacs_configuration/'
 paginate:            5
 
+# Build settings
+markdown: kramdown
+
 # About/contact
 #  author:
 #  name:              Mark Otto
