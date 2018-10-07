@@ -16,8 +16,8 @@ layout: default
 
 # Init File Breakdown
 
-### Bash Configuration
-#### Auto Complete 
+## Bash Configuration
+### Auto Complete 
 
 > This allows for alias in the bashrc file to be auto completed inside of Emacs shell.
 ```elisp
@@ -29,7 +29,7 @@ layout: default
 	  'bash-completion-dynamic-complete)
 ```
 
-#### emacsclient
+### emacsclient
 >
 ```elisp
 ;; Shell Feature - Allows ability to open emacs inside of emacs bash
@@ -44,8 +44,8 @@ function run_emacs
 }
 ```
 
-### Python Configuration
-
+## Python Configuration
+>
 ```elisp
 ;; ------- Python Packages for Emacs ------- ;;
 ;; virtualenvwrapper
@@ -90,8 +90,8 @@ function run_emacs
      (define-key elpy-mode-map (kbd "C-c f") 'python-eldoc-at-point)))
 ```
 
-### xwidget-webkit-browse-url Configuration
-
+## xwidget-webkit-browse-url Configuration
+>
 ```elisp
 ;; Live Testing for Emacs run on XQartz
 ;; Version: Emacs 25.3
