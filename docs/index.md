@@ -4,6 +4,7 @@ layout: default
 
 # Building Emacs
 > Platform: Mac OS High Sierra
+>
 > Version: 25.3
  
 ## with-ns
