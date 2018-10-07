@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # Emacs 25.3 Built for MacOS High Sierra
 Version: Mac OS 10.13.6
 ## Production: Emacs 25.3
