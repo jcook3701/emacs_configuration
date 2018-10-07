@@ -57,3 +57,79 @@ layout: default
                     (other-window 1)
                     (xwidget-browse-url-no-reuse url)))
 ```
+
+# Init File Breakdown
+
+
+### Bash Configuration
+#### Auto Complete 
+> This allows for alias in the bashrc file to be auto completed inside of Emacs shell.
+```elisp
+;; bash-completion
+(autoload 'bash-completion-dynamic-complete 
+  "bash-completion"
+  "BASH completion hook")
+(add-hook 'shell-dynamic-complete-functions
+	  'bash-completion-dynamic-complete)
+```
+
+#### emacsclient
+
+```elisp
+;; Shell Feature - Allows ability to open emacs inside of emacs bash
+(server-start)
+(setq server-socket-dir "~/tmp/emacs1000/server")
+```
+
+This below bash function is added to my bashrc file and allows the user to send an already open Emacs window a new buffer. It works from install Emacs "shell" and from a regular bash terminal.
+```bash
+function run_emacs
+{
+    emacsclient "$1" &
+}
+```
+
+### Python Configuration
+```elisp
+;; ------- Python Packages for Emacs ------- ;;
+;; virtualenvwrapper
+;;(require 'virtualenvwrapper)
+;;(setq venv-location "/Users/jared3701/Documents/College/5th_year/seniorProject/gitHub/supreme_bot")
+
+;; elpy
+(elpy-enable)
+(setq elpy-rpc-backend "jedi")
+
+;;-------------------------------;;
+;; Custom Setup for python shell ;;
+;;-------------------------------;;
+;;Run python and pop-up its shell.
+;; Kill process to solve the reload modules problem.
+(defun my-python-shell-run ()
+  (interactive)
+  (when (get-buffer-process "*Python*")
+    (set-process-query-on-exit-flag (get-buffer-process "*Python*") nil)
+    (kill-process (get-buffer-process "*Python*"))
+    ;; if you want to clean the buffer too.
+    ;; (kill-buffer "*Python*")
+    ;; Not so fast!
+    (sleep-for 0.5))
+  (run-python (python-shell-parse-command) nil nil)
+  (elpy-shell-send-buffer t)
+  ;; Pop a new window only if shell isn't visible
+  ;; in any frame.
+  (unless (get-buffer-window "*Python*" t)
+    (elpy-shell-switch-to-shell)))
+
+(defun my-python-shell-run-region ()
+  (interactive)
+  (python-shell-send-region (region-beginning) (region-end))
+  (python-shell-switch-to-shell))
+
+(eval-after-load 'elpy
+  `(progn
+     (message "python cfg has finished loading")
+     (define-key elpy-mode-map (kbd "C-c C-c") 'my-python-shell-run)
+     (define-key elpy-mode-map (kbd "C-c C-r") 'my-python-shell-run-region)
+     (define-key elpy-mode-map (kbd "C-c f") 'python-eldoc-at-point)))
+```
