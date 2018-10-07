@@ -6,11 +6,11 @@ layout: default
 > Platform: Mac OS High Sierra  
 > Version: 25.3  
 > 
->> ## Emacs as a contained package
+> ## Emacs as a contained package
 >> Result is an Emacs.app that contains all necessary packages for emacs 25.3.  
 >> [Emacs 25.3 with-ns](./tutorials/emacs-25-with-ns.html).
 >
->> ## Emacs running with X11
+> ## Emacs running with X11
 >> Result is Emacs 25.3 built into /usr/local/bin/  
 >> [Emacs 25.3 with-xwidget](./tutorials/emacs-25-with-xwidget.html).
 
