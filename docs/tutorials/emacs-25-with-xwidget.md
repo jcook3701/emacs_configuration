@@ -80,14 +80,14 @@ Inside of XQuartz run the 'Add Item' command.
 ```
 Applicaion -> Customize. -> Add Item
 ```
-![alt text](./images/XQuartz_Applications_Customize.png "Applicaion -> Customize")
+![alt text](../images/XQuartz_Applications_Customize.png "Applicaion -> Customize")
 
 The new item requires a Name and Command to be associated with it.  
 ```
 Name: emacs
 Command: /usr/local/bin/emacs
 ```
-![alt text](./images/XQuartz_Application_emacs_setup.png "Applicaion -> Customize -> emacs")
+![alt text](../images/XQuartz_Application_emacs_setup.png "Applicaion -> Customize -> emacs")
 
 I was experiencing errors with C-space for the Mark set and found that it could be fixed from:
 ```
@@ -96,8 +96,8 @@ XQuartz -> Preferences -> Input
 Uncheck -> Enable key equivalents under X11
 Check   -> Follow system keyboard layout
 ```
-![alt text](./images/XQuartz_preferences.png "Applicaion -> Customize -> emacs")
-![alt text](./images/XQuartz_input_preferences.png "Applicaion -> Customize -> emacs")
+![alt text](../images/XQuartz_preferences.png "Applicaion -> Customize -> emacs")
+![alt text](../images/XQuartz_input_preferences.png "Applicaion -> Customize -> emacs")
 
 If Built with the flag "--with-dbus" or don't use the flag "--without-dbus" you might get the following error. Never less in my experiences a dbus error can be solved with the below commands.  
 ```bash
@@ -128,7 +128,7 @@ Password:
 ```
 
 ### Demonstration
-![alt text](./images/emacs_as_browser.png "Emacs as a browser")
+![alt text](../images/emacs_as_browser.png "Emacs as a browser")
 
 ### Helpful Links
 #### Building Emacs
@@ -143,4 +143,4 @@ https://www.youtube.com/watch?v=J2YdjpWJJHs
 https://stackoverflow.com/questions/37826094/xt-error-cant-open-display-if-using-default-display
 https://emacs.stackexchange.com/questions/21285/set-mark-command-c-spc-not-recognised-broken
 
-[back](./)
+[back](.././)
