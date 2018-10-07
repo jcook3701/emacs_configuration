@@ -3,11 +3,11 @@ layout: default
 ---
 
 # Building Emacs
-> Platform: Mac OS High Sierra  
-> Version: 25.3  
- 
-## Emacs as a contained package
-> Result is an Emacs.app that contains all necessary packages for emacs 25.3.  
+>> Platform: Mac OS High Sierra  
+>> Version: 25.3  
+>> 
+>> ## Emacs as a contained package
+>> Result is an Emacs.app that contains all necessary packages for emacs 25.3.  
 > [Emacs 25.3 with-ns](./tutorials/emacs-25-with-ns.html).
 
 ## Emacs running with X11
@@ -18,7 +18,6 @@ layout: default
 
 ## Bash Configuration
 ### Auto Complete 
-
 > This allows for alias in the bashrc file to be auto completed inside of Emacs shell.
 > ```elisp
 > ;; bash-completion
