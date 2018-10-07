@@ -36,7 +36,7 @@ layout: default
 > (setq server-socket-dir "~/tmp/emacs1000/server")
 > ```
 > This below bash function is added to my bashrc file and allows the user to send an already open Emacs window a new buffer.
-> It works from install Emacs "shell" and from a regular bash terminal.
+> It works from inside an Emacs "shell" and from a regular bash terminal.
 > ```bash
 > function run_emacs
 > {
