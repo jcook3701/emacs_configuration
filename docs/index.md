@@ -45,7 +45,7 @@ function run_emacs
 ```
 
 ### Python Configuration
->
+
 ```elisp
 ;; ------- Python Packages for Emacs ------- ;;
 ;; virtualenvwrapper
@@ -91,7 +91,7 @@ function run_emacs
 ```
 
 ### xwidget-webkit-browse-url Configuration
->
+
 ```elisp
 ;; Live Testing for Emacs run on XQartz
 ;; Version: Emacs 25.3
