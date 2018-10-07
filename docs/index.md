@@ -17,7 +17,7 @@ layout: default
 ### Bash Configuration
 #### Auto Complete 
 
-> This allows for alias in the bashrc file to be auto completed inside of Emacs shell.  
+> This allows for alias in the bashrc file to be auto completed inside of Emacs shell.
 ```elisp
 ;; bash-completion
 (autoload 'bash-completion-dynamic-complete 
