@@ -73,4 +73,4 @@ rsync -avP /Users/jared3701/Applications/emacs/nextstep/Emacs.app /Users/jared37
 ### Helpful Links
 https://stuff-things.net/2018/01/30/building-emacs-25-on-macos-high-sierra/
 
-[back](../)
+[back](.././)
