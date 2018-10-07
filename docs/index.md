@@ -8,11 +8,11 @@ layout: default
 > 
 > ## Emacs as a contained package
 >> Result is an Emacs.app that contains all necessary packages for emacs 25.3.  
->> [Emacs 25.3 with-ns](./tutorials/emacs-25-with-ns.html).
+>> [Link: Emacs 25.3 with-ns](./tutorials/emacs-25-with-ns.html).
 >
 > ## Emacs running with X11
 >> Result is Emacs 25.3 built into /usr/local/bin/  
->> [Emacs 25.3 with-xwidget](./tutorials/emacs-25-with-xwidget.html).
+>> [Link: Emacs 25.3 with-xwidget](./tutorials/emacs-25-with-xwidget.html).
 
 # Init File Breakdown
 
