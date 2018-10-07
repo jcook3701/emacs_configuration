@@ -1,109 +1,232 @@
-# The Midnight theme
+---
+layout: default
+---
 
-[![Build Status](https://travis-ci.org/pages-themes/midnight.svg?branch=master)](https://travis-ci.org/pages-themes/midnight) [![Gem Version](https://badge.fury.io/rb/jekyll-theme-midnight.svg)](https://badge.fury.io/rb/jekyll-theme-midnight)
+# Emacs 25.3 Built for MacOS High Sierra
+Version: Mac OS 10.13.6
+## Production: Emacs 25.3
+### Requirements
 
-*Midnight is a Jekyll theme for GitHub Pages. You can [preview the theme to see what it looks like](http://pages-themes.github.io/midnight), or even [use it today](#usage).*
+- Before you start, you need a few dependencies:
+  - Xcode (free in the Mac App Store).
+  - Autoconf and Automake. The easiest way to use Homebrew via brew install autoconf automake.
+  - makeinfo (part of the Texinfo suite). Apple ships makeinfo, but at some point the system version fell below the minimum version Emacs needs to build.
 
-![Thumbnail of Midnight](thumbnail.png)
+#### Homebrew
 
-## Usage
-
-To use the Midnight theme:
-
-1. Add the following to your site's `_config.yml`:
-
-    ```yml
-    theme: jekyll-theme-midnight
-    ```
-
-2. Optionally, if you'd like to preview your site on your computer, add the following to your site's `Gemfile`:
-
-    ```ruby
-    gem "github-pages", group: :jekyll_plugins
-    ```
-
-## Customizing
-
-### Configuration variables
-
-Midnight will respect the following variables, if set in your site's `_config.yml`:
-
-```yml
-title: [The title of your site]
-description: [A short description of your site's purpose]
+makeinfo can also be installed from Homebrew:
+```bash
+brew install texinfo
 ```
 
-Additionally, you may choose to set the following optional variables:
-
-```yml
-show_downloads: ["true" or "false" to indicate whether to provide a download URL]
-google_analytics: [Your Google Analytics tracking ID]
+But before building Emacs, you need to get it into your $PATH ahead of /usr/bin/makeinfo
+The following exports should be added to your bashrc or bash_profile.
+```bash
+export PATH=/usr/local/opt/texinfo/bin:$PATH
+export LDFLAGS=-L/usr/local/opt/texinfo/lib
 ```
 
-### Stylesheet
+This package is needed if you want the --with-gnutls flag to work correctly when you build emacs.  
+Gnutls allows for the use of the package-list-packages function in emacs.
+```bash
+brew install gnutls
+```
 
-If you'd like to add your own custom styles:
+### Building Emacs 
 
-1. Create a file called `/assets/css/style.scss` in your site
-2. Add the following content to the top of the file, exactly as shown:
-    ```scss
-    ---
-    ---
+I Chose to store my build folder in my local Applications folder.  Feel free to store where ever is convenient for you.  
+```
+/Users/jared3701/Applications/emacs/
+```
 
-    @import "{{ site.theme }}";
-    ```
-3. Add any custom CSS (or Sass, including imports) you'd like immediately after the `@import` line
+Once you have the prerequisites squared away, the build is the same as it’s been for a while. Get the source:
+```bash
+cd /Users/jared3701/Applications/
+git clone git://git.savannah.gnu.org/emacs.git
+cd emacs
+```
 
-*Note: If you'd like to change the theme's Sass variables, you must set new values before the `@import` line in your stylesheet.*
+Checkout the emacs-25 branch (master is the development branch):  
+```bash
+git checkout emacs-25
+```
 
-### Layouts
+__Configuration Settings:__  
+These are the configuration settings that I used for this project.  
+- with-ns
+   - This determines that it will be build in the nextstep folder.
+- with-gnutls
+   - This was needed to get the emacs package manager working.
+- with-imagemagick
 
-If you'd like to change the theme's HTML layout:
+Configure and compile (make install build the application bundle, it doesn’t actually install anything):
+```bash
+make configure
+./configure  --with-ns --with-gnutls --with-imagemagick
+make install
+```
 
-1. [Copy the original template](https://github.com/pages-themes/midnight/blob/master/_layouts/default.html) from the theme's repository<br />(*Pro-tip: click "raw" to make copying easier*)
-2. Create a file called `/_layouts/default.html` in your site
-3. Paste the default layout content copied in the first step
-4. Customize the layout as you'd like
+### Deployed Emacs 25.3
 
-### Overriding GitHub-generated URLs
+__Deployment:__
+```bash
+cd /Users/jared3701/Applications/
+mkdir emacs-25.3
+cd emacs-25.3
+rsync -avP /Users/jared3701/Applications/emacs/nextstep/Emacs.app /Users/jared3701/Applications/emacs-25.3/
+```
 
-Templates often rely on URLs supplied by GitHub such as links to your repository or links to download your project. If you'd like to override one or more default URLs:
+### Helpful Links
+https://stuff-things.net/2018/01/30/building-emacs-25-on-macos-high-sierra/
 
-1. Look at [the template source](https://github.com/pages-themes/midnight/blob/master/_layouts/default.html) to determine the name of the variable. It will be in the form of `{{ site.github.zip_url }}`.
-2. Specify the URL that you'd like the template to use in your site's `_config.yml`. For example, if the variable was `site.github.url`, you'd add the following:
-    ```yml
-    github:
-      zip_url: http://example.com/download.zip
-      another_url: another value
-    ```
-3. When your site is built, Jekyll will use the URL you specified, rather than the default one provided by GitHub.
 
-*Note: You must remove the `site.` prefix, and each variable name (after the `github.`) should be indent with two space below `github:`.*
+----------------------------
 
-For more information, see [the Jekyll variables documentation](https://jekyllrb.com/docs/variables/).
 
-## Roadmap
+## Bleeding Edge: Emacs 25.3 with xwidget
+### Why?
 
-See the [open issues](https://github.com/pages-themes/midnight/issues) for a list of proposed features (and known issues).
+The purpose of building Emacs with xwidget is to make it possible to use the command "xwidget-webkit-browse-url".  This command allows users to open web-pages inside of Emacs without ever having to leave Emacs.  I have included configuration settings for navigating web-pages in my init.el file included in this Github repository.
 
-## Project philosophy
+### Requirements
 
-The Midnight theme is intended to make it quick and easy for GitHub Pages users to create their first (or 100th) website. The theme should meet the vast majority of users' needs out of the box, erring on the side of simplicity rather than flexibility, and provide users the opportunity to opt-in to additional complexity if they have specific needs or wish to further customize their experience (such as adding custom CSS or modifying the default layout). It should also look great, but that goes without saying.
+Before starting it is very important to make sure that both your Homebrew and MacPort installations are fully updated.  As they will be needed for the installation of the following packages: autoconf, automake, gtk3, & webkitgtk.  
 
-## Contributing
+#### Homebrew
+makeinfo can also be installed from Homebrew:
+```bash
+brew install texinfo
+```
 
-Interested in contributing to Midnight? We'd love your help. Midnight is an open source project, built one contribution at a time by users like you. See [the CONTRIBUTING file](docs/CONTRIBUTING.md) for instructions on how to contribute.
+But before building Emacs, you need to get it into your $PATH ahead of /usr/bin/makeinfo
+The following exports should be added to your bashrc or bash_profile.
+```bash
+export PATH=/usr/local/opt/texinfo/bin:$PATH
+export LDFLAGS=-L/usr/local/opt/texinfo/lib
+```
 
-### Previewing the theme locally
+This package is needed if you want the --with-gnutls flag to work correctly when you build emacs.  
+Gnutls allows for the use of the package-list-packages function in emacs.
+```bash
+brew install gnutls
+```
 
-If you'd like to preview the theme locally (for example, in the process of proposing a change):
+This package is needed for Emacs to build with the flag "--with-xwidget".
+```bash
+brew install gtk+3
+```
 
-1. Clone down the theme's repository (`git clone https://github.com/pages-themes/midnight`)
-2. `cd` into the theme's directory
-3. Run `script/bootstrap` to install the necessary dependencies
-4. Run `bundle exec jekyll serve` to start the preview server
-5. Visit [`localhost:4000`](http://localhost:4000) in your browser to preview the theme
+#### MacPorts
+This package is also needed for Emacs to build with the flag "--with-xwidget".
+```bash
+port install webkit-gtk3
+``` 
 
-### Running tests
+### Building Emacs
 
-The theme contains a minimal test suite, to ensure a site with the theme would build successfully. To run the tests, simply run `script/cibuild`. You'll need to run `script/bootstrap` one before the test script will work.
+I Chose to store my build path local Applications folder.  Feel free to store where ever is convenient for you.  
+```
+/Users/jared3701/Applications/emacs/
+```
+
+Once you have the prerequisites squared away, the build is the same as it’s been for a while. Get the source:  
+```bash
+cd /Users/jared3701/Applications/
+git clone git://git.savannah.gnu.org/emacs.git
+cd emacs
+```
+
+Checkout the emacs-25 branch (master is the development branch):  
+```bash
+git checkout emacs-25
+```
+
+__Configuration Settings:__  
+These are the configuration settings that I used for this project.  
+```bash
+./autogen.sh all
+./configure --with-xwidgets --without-ns --with-gnutls --with-imagemagick --without-dbus --with-x
+make install
+```
+
+Unless you specify a path emacs will be installed in the following location when using "make install" with the following configuration.  
+```
+/usr/local/bin/
+```
+
+### XQuartz
+
+If running emacs from /usr/local/bin/ starts in no window mode then you must start XQuartz and point it to emacs.  
+```bash
+XQuartz
+```
+
+Inside of XQuartz run the 'Add Item' command.  
+```
+Applicaion -> Customize. -> Add Item
+```
+![alt text](./images/XQuartz_Applications_Customize.png "Applicaion -> Customize")
+
+The new item requires a Name and Command to be associated with it.  
+```
+Name: emacs
+Command: /usr/local/bin/emacs
+```
+![alt text](./images/XQuartz_Application_emacs_setup.png "Applicaion -> Customize -> emacs")
+
+I was experiencing errors with C-space for the Mark set and found that it could be fixed from:
+```
+XQuartz -> Preferences -> Input
+------------------------------------------
+Uncheck -> Enable key equivalents under X11
+Check   -> Follow system keyboard layout
+```
+![alt text](./images/XQuartz_preferences.png "Applicaion -> Customize -> emacs")
+![alt text](./images/XQuartz_input_preferences.png "Applicaion -> Customize -> emacs")
+
+If Built with the flag "--with-dbus" or don't use the flag "--without-dbus" you might get the following error. Never less in my experiences a dbus error can be solved with the below commands.  
+```bash
+port notes dbus
+```
+
+This is the output of the command "port notes dbus".  
+```bash
+Jareds-MacBook-Pro-2:bin jared3701$ port notes dbus
+dbus has the following notes:
+  Startup items (named 'dbus-system, dbus-session') have been generated that will aid in starting dbus with launchd. They are disabled
+  by default. Execute the following command to start them, and to cause them to launch at startup:
+
+      sudo port load dbus
+```
+
+Running sudo port load dbus starts the dbus and fixes the error.  
+```
+sudo port load dbus
+```
+
+This is the output of the command "sudo port load dbus".
+```bash
+Jareds-MacBook-Pro-2:bin jared3701$ sudo port load dbus
+Password:
+--->  Loading startupitem 'dbus-system' for dbus
+--->  Loading startupitem 'dbus-session' for dbus
+```
+
+### Demonstration
+![alt text](./images/emacs_as_browser.png "Emacs as a browser")
+
+### Helpful Links
+#### Building Emacs
+https://stackoverflow.com/questions/24213842/webkit-not-found-on-osx
+https://emacs.stackexchange.com/questions/25037/compile-emacs-with-xwidget-under-osx
+https://jiegec.me/programming/2016/02/18/building-emacs-git-version-with-xwidgets-and-modules-in-archlinux/
+https://github.com/veshboo/emacs
+#### Using xwidget
+https://www.reddit.com/r/emacs/comments/4srze9/watching_youtube_inside_emacs_25/
+https://www.youtube.com/watch?v=J2YdjpWJJHs
+#### XQuartz
+https://stackoverflow.com/questions/37826094/xt-error-cant-open-display-if-using-default-display
+https://emacs.stackexchange.com/questions/21285/set-mark-command-c-spc-not-recognised-broken
+
+
+[back](./)
