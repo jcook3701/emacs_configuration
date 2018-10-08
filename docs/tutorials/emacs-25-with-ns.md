@@ -1,28 +1,28 @@
 ## Production: Emacs 25.3
 ### Requirements
-> - Before you start, you need a few dependencies:
->   - Xcode (free in the Mac App Store).
->   - Autoconf and Automake. The easiest way to use Homebrew via brew install autoconf automake.
->   - makeinfo (part of the Texinfo suite). Apple ships makeinfo, but at some point the system version fell below the minimum version Emacs needs to build.
-
-#### Homebrew
-> makeinfo can also be installed from Homebrew:
-> ```bash
-> brew install texinfo
-> ```
+>> - Before you start, you need a few dependencies:
+>>   - Xcode (free in the Mac App Store).
+>>   - Autoconf and Automake. The easiest way to use Homebrew via brew install autoconf automake.
+>>   - makeinfo (part of the Texinfo suite). Apple ships makeinfo, but at some point the system version fell below the minimum version Emacs needs to build.
 >
-> But before building Emacs, you need to get it into your $PATH ahead of /usr/bin/makeinfo
-> The following exports should be added to your bashrc or bash_profile.
-> ```bash
-> export PATH=/usr/local/opt/texinfo/bin:$PATH
-> export LDFLAGS=-L/usr/local/opt/texinfo/lib
-> ```
->
-> This package is needed if you want the --with-gnutls flag to work correctly when you build emacs.  
-> Gnutls allows for the use of the package-list-packages function in emacs.
-> ```bash
-> brew install gnutls
-> ```
+> #### Homebrew
+>> makeinfo can also be installed from Homebrew:
+>> ```bash
+>> brew install texinfo
+>> ```
+>>
+>> But before building Emacs, you need to get it into your $PATH ahead of /usr/bin/makeinfo
+>> The following exports should be added to your bashrc or bash_profile.
+>> ```bash
+>> export PATH=/usr/local/opt/texinfo/bin:$PATH
+>> export LDFLAGS=-L/usr/local/opt/texinfo/lib
+>> ```
+>>
+>> This package is needed if you want the --with-gnutls flag to work correctly when you build emacs.  
+>> Gnutls allows for the use of the package-list-packages function in emacs.
+>> ```bash
+>> brew install gnutls
+>> ```
 
 ### Building Emacs 
 > I Chose to store my build folder in my local Applications folder.  Feel free to store where ever is convenient for you.  

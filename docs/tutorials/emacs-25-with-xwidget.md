@@ -130,7 +130,7 @@
 ### Helpful Links
 > #### Building Emacs
 >> [https://stackoverflow.com/questions/24213842/webkit-not-found-on-osx](https://stackoverflow.com/questions/24213842/webkit-not-found-on-osx)
-> [https://emacs.stackexchange.com/questions/25037/compile-emacs-with-xwidget-under-osx](https://emacs.stackexchange.com/questions/25037/compile-emacs-with-xwidget-under-osx)
+>> [https://emacs.stackexchange.com/questions/25037/compile-emacs-with-xwidget-under-osx](https://emacs.stackexchange.com/questions/25037/compile-emacs-with-xwidget-under-osx)
 >> [https://jiegec.me/programming/2016/02/18/building-emacs-git-version-with-xwidgets-and-modules-in-archlinux/](https://jiegec.me/programming/2016/02/18/building-emacs-git-version-with-xwidgets-and-modules-in-archlinux/)
 >> [https://github.com/veshboo/emacs](https://github.com/veshboo/emacs)
 > #### Using xwidget
