@@ -1,9 +1,9 @@
 ## Production: Emacs 25.3
 ### Requirements
->> - Before you start, you need a few dependencies:
->>   - Xcode (free in the Mac App Store).
->>   - Autoconf and Automake. The easiest way to use Homebrew via brew install autoconf automake.
->>   - makeinfo (part of the Texinfo suite). Apple ships makeinfo, but at some point the system version fell below the minimum version Emacs needs to build.
+> - Before you start, you need a few dependencies:
+>   - Xcode (free in the Mac App Store).
+>   - Autoconf and Automake. The easiest way to use Homebrew via brew install autoconf automake.
+>   - makeinfo (part of the Texinfo suite). Apple ships makeinfo, but at some point the system version fell below the minimum version Emacs needs to build.
 >
 > #### Homebrew
 >> makeinfo can also be installed from Homebrew:
