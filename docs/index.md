@@ -17,32 +17,32 @@ layout: default
 # Init File Breakdown
 
 ## Bash Configuration
-### Auto Complete 
-> This allows for alias in the bashrc file to be auto completed inside of Emacs shell.
-> ```elisp
-> ;; bash-completion
-> (autoload 'bash-completion-dynamic-complete 
->   "bash-completion"
->   "BASH completion hook")
-> (add-hook 'shell-dynamic-complete-functions
-> 	  'bash-completion-dynamic-complete)
-> ```
-
-### emacsclient
+>### Auto Complete 
+>> This allows for alias in the bashrc file to be auto completed inside of Emacs shell.
+>> ```elisp
+>> ;; bash-completion
+>> (autoload 'bash-completion-dynamic-complete 
+>>   "bash-completion"
+>>   "BASH completion hook")
+>> (add-hook 'shell-dynamic-complete-functions
+>> 	  'bash-completion-dynamic-complete)
+>> ```
 >
-> ```elisp
-> ;; Shell Feature - Allows ability to open emacs inside of emacs bash
-> (server-start)
-> (setq server-socket-dir "~/tmp/emacs1000/server")
-> ```
-> This below bash function is added to my bashrc file and allows the user to send an already open Emacs window a new buffer.
-> It works from inside an Emacs "shell" and from a regular bash terminal.
-> ```bash
-> function run_emacs
-> {
->     emacsclient "$1" &
-> }
-> ```
+>### emacsclient
+>>
+>> ```elisp
+>> ;; Shell Feature - Allows ability to open emacs inside of emacs bash
+>> (server-start)
+>> (setq server-socket-dir "~/tmp/emacs1000/server")
+>> ```
+>> This below bash function is added to my bashrc file and allows the user to send an already open Emacs window a new buffer.
+>> It works from inside an Emacs "shell" and from a regular bash terminal.
+>> ```bash
+>> function run_emacs
+>> {
+>>     emacsclient "$1" &
+>> }
+>> ```
 
 ## Python Configuration
 >
