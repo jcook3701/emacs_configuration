@@ -1,5 +1,6 @@
 ---
 layout: default
+{ site.data.navigation}
 ---
 
 # Building Emacs
