@@ -132,15 +132,15 @@ Password:
 
 ### Helpful Links
 #### Building Emacs
-https://stackoverflow.com/questions/24213842/webkit-not-found-on-osx
-https://emacs.stackexchange.com/questions/25037/compile-emacs-with-xwidget-under-osx
-https://jiegec.me/programming/2016/02/18/building-emacs-git-version-with-xwidgets-and-modules-in-archlinux/
-https://github.com/veshboo/emacs
+[https://stackoverflow.com/questions/24213842/webkit-not-found-on-osx](https://stackoverflow.com/questions/24213842/webkit-not-found-on-osx)
+[https://emacs.stackexchange.com/questions/25037/compile-emacs-with-xwidget-under-osx](https://emacs.stackexchange.com/questions/25037/compile-emacs-with-xwidget-under-osx)
+[https://jiegec.me/programming/2016/02/18/building-emacs-git-version-with-xwidgets-and-modules-in-archlinux/](https://jiegec.me/programming/2016/02/18/building-emacs-git-version-with-xwidgets-and-modules-in-archlinux/)
+[https://github.com/veshboo/emacs](https://github.com/veshboo/emacs)
 #### Using xwidget
-https://www.reddit.com/r/emacs/comments/4srze9/watching_youtube_inside_emacs_25/
-https://www.youtube.com/watch?v=J2YdjpWJJHs
+[https://www.reddit.com/r/emacs/comments/4srze9/watching_youtube_inside_emacs_25/](https://www.reddit.com/r/emacs/comments/4srze9/watching_youtube_inside_emacs_25/)
+[https://www.youtube.com/watch?v=J2YdjpWJJHs](https://www.youtube.com/watch?v=J2YdjpWJJHs)
 #### XQuartz
-https://stackoverflow.com/questions/37826094/xt-error-cant-open-display-if-using-default-display
-https://emacs.stackexchange.com/questions/21285/set-mark-command-c-spc-not-recognised-broken
+[https://stackoverflow.com/questions/37826094/xt-error-cant-open-display-if-using-default-display](https://stackoverflow.com/questions/37826094/xt-error-cant-open-display-if-using-default-display)
+[https://emacs.stackexchange.com/questions/21285/set-mark-command-c-spc-not-recognised-broken](https://emacs.stackexchange.com/questions/21285/set-mark-command-c-spc-not-recognised-broken)
 
 [back](.././)
