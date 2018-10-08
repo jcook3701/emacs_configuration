@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 ## Bleeding Edge: Emacs 25.3 with xwidget
 ### Why?
 > The purpose of building Emacs with xwidget is to make it possible to use the command "xwidget-webkit-browse-url".  This command allows users to open web-pages inside of Emacs without ever having to leave Emacs.  I have included configuration settings for navigating web-pages in my init.el file included in this Github repository.

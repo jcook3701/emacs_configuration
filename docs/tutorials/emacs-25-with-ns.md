@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 ## Production: Emacs 25.3
 ### Requirements
 > - Before you start, you need a few dependencies:
