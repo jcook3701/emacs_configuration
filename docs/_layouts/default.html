@@ -36,7 +36,9 @@ float: left
       </div><!-- end header -->
 
     <div class="wrapper">
-
+      <div class="left">
+	{% include navigation.html %}
+      </div>
       <section>
         <div id="title">
           <h1>{{ site.title | default: site.github.repository_name }}</h1>
@@ -49,9 +51,7 @@ float: left
 	
 	<!--<div w3-include-html="./_includes/navigation.html"></div>-->
 
-	<div class="left">
-	  {% include navigation.html %}
-	</div>
+
         {{ content }}
 	
       </section>
