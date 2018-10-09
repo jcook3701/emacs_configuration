@@ -2,6 +2,31 @@
 @import "fonts";
 @import "rouge-base16-dark.scss";
 
+.sidenav {
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+
 body {
   padding:0px 0 20px 0px;
   margin: 0px;
@@ -78,7 +103,7 @@ strong {
 .wrapper {
   margin-left: 160px;
   max-width:650px;
-  margin:0 auto;
+  /*margin:0 auto;*/
   position:relative;
   padding: 0 20px;
 }
