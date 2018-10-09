@@ -1,9 +1,5 @@
 <!-- Belongs at: /_includes/navigation.html -->
 
-.left {
-    width: 20%;
-float: left
-}
 
 <!-- This finds the current page so it can be highlighted. -->
 
@@ -18,7 +14,7 @@ float: left
 {% endfor %}
 
 <!-- Then we build the nav bar. -->
-<nav class="left">
+<nav>
     <ul>
     {% for entry in site.data.navigation %}
         {% if entry.url == current_page %}
