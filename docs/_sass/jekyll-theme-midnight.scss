@@ -100,11 +100,11 @@ body {
   background: linear_gradient(#2a2a29, #1c1c1c);
 }
 
-h1::before {
+h1, h2, h3, h4, h5, h6::before {
     display: block; 
     content: " ";
-    margin-top: -100px;
-    height: 100px; 
+    margin-top: -90px;
+    height: 90px; 
     visibility: hidden; 
     pointer-events: none;
 }
