@@ -1,5 +1,8 @@
+
+- title: Home
+  url: index.html
 - title: Building Emacs
-  url: /about.html
+  url:
   sublinks:
     - title: Emacs 25.3 with-ns
       url: /tutorials/emacs-25-with-ns.html
