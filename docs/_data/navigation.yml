@@ -2,11 +2,11 @@
 - title: Home
   url: /
 - title: Building Emacs
-  url: /#Building Emacs
+  url: /#Building-Emacs
   sublinks:
     - title: Emacs 25.3 with-ns
       url: /tutorials/emacs-25-with-ns.html
     - title: Emacs 25.3 with-xwidget
       url: /tutorials/emacs-25-with-xwidget.html
 - title: Init File Breakdown
-  url: /#Init File Breakdown
+  url: /#Init-File-Breakdown
