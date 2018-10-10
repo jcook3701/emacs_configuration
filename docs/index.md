@@ -3,7 +3,7 @@ layout: default
 { site.data.navigation}
 ---
 
-[Building Emacs](#building-emacs)
+# Building Emacs
 > Platform: Mac OS High Sierra  
 > Version: 25.3  
 > 
@@ -15,7 +15,7 @@ layout: default
 >> Result is Emacs 25.3 built into /usr/local/bin/  
 >> [Link: Emacs 25.3 with-xwidget](./tutorials/emacs-25-with-xwidget.html).
 
-[Init File Breakdown](#init-file-breakdown)
+# Init File Breakdown
 > ## Bash Configuration
 >> ### Auto Complete 
 >>> This allows for alias in the bashrc file to be auto completed inside of Emacs shell.

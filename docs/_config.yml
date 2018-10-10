@@ -3,3 +3,6 @@ description: Building and Using Emacs 25.3
 show_downloads: true
 google_analytics:
 theme: jekyll-theme-midnight
+
+kramdown:
+  auto_ids: true
