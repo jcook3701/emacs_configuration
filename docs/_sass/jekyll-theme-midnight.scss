@@ -100,7 +100,7 @@ body {
   background: linear_gradient(#2a2a29, #1c1c1c);
 }
 
-h1::before, h2::before {
+h1::before {
     display: block; 
     content: " ";
     margin-top: -90px;
