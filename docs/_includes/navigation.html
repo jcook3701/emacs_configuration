@@ -15,7 +15,7 @@
 
 <!-- Then we build the nav bar. -->
 
-<div class="sidenav">
+<!--<div class="sidenav">-->
     {% for entry in site.data.navigation %}
         {% if entry.url == current_page %}
             {% assign current = ' class="current"' %}
@@ -37,7 +37,7 @@
         <a{{ current }} href="{{ site.baseurl }}{{ entry.url }}">{{ entry.title }}</a>
         {% endif %}
     {% endfor %}
-</div>
+<!--</div>-->
 
 
 
