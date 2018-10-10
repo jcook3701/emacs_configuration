@@ -1,6 +1,11 @@
-- title: About
+- title: Building Emacs
   url: /about.html
-- title: Team
+  sublinks:
+    - title: Emacs 25.3 with-ns
+      url: /tutorials/emacs-25-with-ns.html
+    - title: Emacs 25.3 with-xwidget
+      url: /tutorials/emacs-25-with-xwidget.html
+- title: Init File Breakdown
   url: /team.html
 - title: Contact
   url: /contact.html
