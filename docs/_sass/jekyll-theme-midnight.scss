@@ -37,11 +37,18 @@
 
 /* Position and style the close button (top right corner) */
 .sidenav .closebtn {
-    /* position: absolute; */
-    /* top: 0; */ 
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
+    padding: 6px 8px 6px 16px;
+    float: right;
+    text-decoration: none;
+    font-size: 15px; /* was 20px */
+    color: #818181;
+    display: block;
+    border: none;
+    background: none;
+    width:100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
 }
 
 /* The button used to open the sidebar */
