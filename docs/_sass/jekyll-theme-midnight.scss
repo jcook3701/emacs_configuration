@@ -37,10 +37,10 @@
 
 /* Position and style the close button (top right corner) float: right; */
 .sidenav .closebtn {
-    position: absolute;
     /* top: 0; */
-    right: 0px;
-    font-size: 15px;
+    float: right;
+    font-size: 15px; */ 
+    /* right: 0px; */
     /* margin-right: 5px; */
 }
 
