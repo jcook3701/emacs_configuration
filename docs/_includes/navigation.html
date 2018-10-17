@@ -58,29 +58,29 @@
 	</script>
 
 	<script>
+	  var clickCount = 0;
+
 	  /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
 	  function openNav() {
 	  document.getElementById("mySidebar").style.width = "200px";
-	  document.getElementById("main").style.marginLeft = "200px";
+	  /* document.getElementById("main").style.marginLeft = "200px"; */
+	  clickCount++;
 	  }
 	  
 	  /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
 	  function closeNav() {
 	  document.getElementById("mySidebar").style.width = "0";
-	  document.getElementById("main").style.margin = "0 auto";
+	  /* document.getElementById("main").style.margin = "0 auto"; */
+	  clickCount++;
 	  }
-
-	  var clickCount = 0;
 
 	  $(document).ready(function(){
 	  $('#togglebutton').click(function(){
-	  alert("Button Pushed Event");
 	  if(clickCount%2==0){
           openNav();
 	  }else{
           closeNav();
 	  }
-	  clickCount++;
 	  });
 	  });
 	</script>
