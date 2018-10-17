@@ -72,13 +72,16 @@
 
 	  var clickCount = 0;
 
+	  $(document).read(function(){
 	  $('#togglebutton').click(function(){
+	  alert("Button Pushed Event");
 	  if(clickCount%2==0){
           openNav();
 	  }else{
           closeNav();
 	  }
 	  clickCount++;
+	  });
 	  });
 	</script>
 
