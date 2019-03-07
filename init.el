@@ -241,12 +241,15 @@
 ;; Version: 10.13.6
 
 ;; make these keys behave like normal browser
-(define-key xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
-(define-key xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)
-(define-key xwidget-webkit-mode-map (kbd "<up>") 'xwidget-webkit-scroll-down)
-(define-key xwidget-webkit-mode-map (kbd "<down>") 'xwidget-webkit-scroll-up)
-(define-key xwidget-webkit-mode-map (kbd "M-w") 'xwidget-webkit-copy-selection-as-kill)
-(define-key xwidget-webkit-mode-map (kbd "C-c") 'xwidget-webkit-copy-selection-as-kill)
+;; I need to figure out a way to have this config file differentiate between my webkit build
+;; and my regular work build.  Until then I will just comment then out when I see an error and
+;; un-comment when I'm playing with my webkit build of emacs that uses X11 to run.
+;;(define-key xwidget-webkit-mode-map [mouse-4] 'xwidget-webkit-scroll-down)
+;;(define-key xwidget-webkit-mode-map [mouse-5] 'xwidget-webkit-scroll-up)
+;;(define-key xwidget-webkit-mode-map (kbd "<up>") 'xwidget-webkit-scroll-down)
+;;(define-key xwidget-webkit-mode-map (kbd "<down>") 'xwidget-webkit-scroll-up)
+;;(define-key xwidget-webkit-mode-map (kbd "M-w") 'xwidget-webkit-copy-selection-as-kill)
+;;(define-key xwidget-webkit-mode-map (kbd "C-c") 'xwidget-webkit-copy-selection-as-kill)
 
 ;; adapt webkit according to window configuration chagne automatically
 ;; without this hook, every time you change your window configuration,
