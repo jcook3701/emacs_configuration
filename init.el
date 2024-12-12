@@ -10,9 +10,14 @@
 ;; --with-modules --with-gnutls --with-jpeg --with-png --with-imagemagick --with-rsvg
 ;; --with-tiff --with-wide-int --with-xft --with-xml2 --with-xpm
 ;;----------------------------------------------------------------------------------------------
+;;; Code:
+
+;; Only display errors
+;; (setq warning-minimum-level "error")
+(setq native-comp-async-report-warnings-errors nil)
 
 ;;line numbers
-(global-linum-mode t)
+(display-line-numbers-mode t)
 (setq linum-format "%3d\u2502 ")
 
 ;;Save auto made backup files to below dirs.
@@ -35,9 +40,9 @@
 (define-key global-map (kbd "C-x C-n") nil) ;; This is for dired-sidebar
 
 ;; Modify Default key bindings
-(define-key global-map (kbd "M-v") 'universal-argument)
+;; (define-key global-map (kbd "M-v") 'universal-argument)
 ;; Scroll: Page up the screen.
-(define-key global-map (kbd "C-u") 'scroll-down-command)
+;; (define-key global-map (kbd "C-u") 'scroll-down-command)
 
 ;; Zome in/out like everywhere else
 (define-key global-map (kbd "C-+") 'text-scale-increase)
@@ -53,7 +58,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t)
- '(initial-frame-alist '((fullscreen . maximized)))
+ ;; '(initial-frame-alist '((fullscreen . maximized)))
  '(markdown-toc-user-toc-structure-manipulation-fn
    (lambda
      (toc-structure)
@@ -66,7 +71,7 @@
 	  (<= 1 index)))
       toc-structure)))
  '(package-selected-packages
-   '(org-indent npm-mode go-mode gcode-mode django-mode cmake-mode lsp-metals lsp-jedi lsp-mode tramp tramp--startup-hook tide google-this multi-web-mode web-mode rainbow-delimiters helm-themes helm-systemd helm-ros helm-codesearch helm-chrome-history helm-chrome helm-catkin lush-theme helm-make flycheck-rust js2-mode rust-mode pdf-tools pacmacs chess ansible helm-slack sl slack i3wm-config-mode i3wm zoom ox-gfm org grip-mode markdown-toc magit-todos magit-lfs forge helm-icon helm-icons helm dried-icon dried-icon-mode minimap dired-rainbow dired-open dired-icon all-the-icons-ibuffer all-the-icons-dired ibuffer-sidebar vterm-toggle dired dired-k dired-collapse all-the-icons centaur-tabs sublimity multi-vterm vterm treemacs helm-apt yarn-mode dockerfile-mode docker-compose-mode docker company lsp-ui typescript-mode sbt-mode scala-mode matlab-mode helm-ispell bash-completion vscode-icon dired-sidebar markdown-mode magit winum use-package treemacs-projectile jedi irony-eldoc helm-rtags helm-flyspell flyspell-correct-helm flycheck-rtags flycheck-irony elpy diminish company-rtags company-irony-c-headers company-irony cmake-ide cask)))
+   '(pyvenv yasnippet dap-mode dired-subtree json-mode lsp-pyright pyvenv-mode python-mode treemacs-icons-dired sed-mode csv-mode org-indent npm-mode go-mode gcode-mode django-mode cmake-mode lsp-metals lsp-jedi lsp-mode tramp tramp--startup-hook tide google-this multi-web-mode web-mode rainbow-delimiters helm-themes helm-systemd helm-ros helm-codesearch helm-chrome-history helm-chrome helm-catkin lush-theme helm-make flycheck-rust js2-mode rust-mode pdf-tools pacmacs chess ansible helm-slack sl slack i3wm-config-mode i3wm ox-gfm org grip-mode markdown-toc magit-todos magit-lfs forge helm-icon helm-icons helm dried-icon dried-icon-mode minimap dired-rainbow dired-open dired-icon all-the-icons-ibuffer all-the-icons-dired ibuffer-sidebar vterm-toggle dired dired-k dired-collapse all-the-icons centaur-tabs sublimity multi-vterm vterm treemacs helm-apt yarn-mode dockerfile-mode docker-compose-mode docker company lsp-ui typescript-mode sbt-mode scala-mode matlab-mode helm-ispell bash-completion vscode-icon dired-sidebar markdown-mode magit winum treemacs-projectile jedi irony-eldoc helm-rtags helm-flyspell flyspell-correct-helm flycheck-rtags flycheck-irony elpy diminish company-rtags company-irony-c-headers company-irony cmake-ide cask)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -95,6 +100,8 @@
 		    (not (gnutls-available-p))))
        (proto (if no-ssl "http" "https")))
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
+  (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")) t)
   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
   (when (< emacs-major-version 24)
     ;; For important compatibility libraries like cl-lib
@@ -103,6 +110,7 @@
 
 ;; Insure that use-package is installed and can install the rest of the software on the system
 (unless (package-installed-p 'use-package)
+  (package-refresh-contents)
   (package-install 'use-package))
 
 ;; bash-completion ;; Replaced by vterm -- to be removed
@@ -658,6 +666,7 @@
   ;; :load-path ("lisp/org-mode/lisp" "lisp/org-mode/lisp/contrib/lisp")
   ;; :bind
   ;; (:map org-mode-map)
+  :mode ("\\.org\\'" . org-mode)
   :custom
   (org-directory "~/org")
   (org-startup-indented t)
@@ -666,6 +675,7 @@
   ;; :custom-face
   ;; :hook
   :init
+  ;; Allows Org mode to run bash scrips
   (org-babel-do-load-languages 'org-babel-load-languages
 			       '(
 				 (shell . t)
@@ -673,6 +683,65 @@
 			       )
 
   (setq org-confirm-babel-evaluate nil)
+  :config
+  (setq org-todo-keywords
+	'(
+          (sequence "IDEA(i)" "TODO(t)" "STARTED(s)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)")
+          (sequence "|" "CANCELED(c)" "DELEGATED(l)" "SOMEDAY(f)")
+          ))
+
+  (setq org-todo-keyword-faces
+	'(("IDEA" . (:foreground "GoldenRod" :weight bold))
+          ("NEXT" . (:foreground "IndianRed1" :weight bold))
+          ("STARTED" . (:foreground "OrangeRed" :weight bold))
+          ("WAITING" . (:foreground "coral" :weight bold))
+          ("CANCELED" . (:foreground "LimeGreen" :weight bold))
+          ("DELEGATED" . (:foreground "LimeGreen" :weight bold))
+          ("SOMEDAY" . (:foreground "LimeGreen" :weight bold))
+          ))
+  
+  (setq org-tag-persistent-alist
+	'((:startgroup . nil)
+          ("HOME" . ?h)
+          ("RESEARCH" . ?r)
+          ("TEACHING" . ?t)
+          (:endgroup . nil)
+          (:startgroup . nil)
+          ("OS" . ?o)
+          ("DEV" . ?d)
+          ("WWW" . ?w)
+          (:endgroup . nil)
+          (:startgroup . nil)
+          ("EASY" . ?e)
+          ("MEDIUM" . ?m)
+          ("HARD" . ?a)
+          (:endgroup . nil)
+          ("UCANCODE" . ?c)
+          ("URGENT" . ?u)
+          ("KEY" . ?k)
+          ("BONUS" . ?b)
+          ("noexport" . ?x)
+          )
+	)
+
+  (setq org-tag-faces
+	'(
+          ("HOME" . (:foreground "GoldenRod" :weight bold))
+          ("RESEARCH" . (:foreground "GoldenRod" :weight bold))
+          ("TEACHING" . (:foreground "GoldenRod" :weight bold))
+          ("OS" . (:foreground "IndianRed1" :weight bold))
+          ("DEV" . (:foreground "IndianRed1" :weight bold))
+          ("WWW" . (:foreground "IndianRed1" :weight bold))
+          ("URGENT" . (:foreground "Red" :weight bold))
+          ("KEY" . (:foreground "Red" :weight bold))
+          ("EASY" . (:foreground "OrangeRed" :weight bold))
+          ("MEDIUM" . (:foreground "OrangeRed" :weight bold))
+          ("HARD" . (:foreground "OrangeRed" :weight bold))
+          ("BONUS" . (:foreground "GoldenRod" :weight bold))
+          ("UCANCODE" . (:foreground "GoldenRod" :weight bold))
+          ("noexport" . (:foreground "LimeGreen" :weight bold))
+          )
+	)
   :ensure t)
 
 ;; This is an implementation of dynamic virtual indentation.  It works
@@ -707,7 +776,7 @@
   :interpreter ("markdown" . markdown-mode)
   :ensure t)
 
-;; Can be used to generate a Table of Contents within a Markdown file. 
+;; Can be used to generate a Table of Contents within a Markdown file.
 ;;
 ;; Link: https://github.com/ardumont/markdown-toc
 (use-package markdown-toc
@@ -725,10 +794,12 @@
 (use-package grip-mode
   :hook ((markdown-mode org-mode) . grip-mode)
   :init
+  ;; (setq grip-binary-path "/usr/bin/grip"
   (setq grip-github-user "jcook3701")
-  (setq grip-github-password "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")
-  ;; (setq grip-update-after-change nil)
-  (setq grip-preview-use-webkit t)
+  (setq grip-github-password "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDfhI7V7AEj+xL9aUn2kD8MWmypDUjOTW9akCAOCSPDOz9voRMFgQcf+GQd/2xYDMsXGUgwns96xDLUq36ga/MDf4h7x95vOtLDcobzRP1LMqjxe/0yw19JerTYhb1oMcl7tZl63NTh+Nx/c+sPKB8j05yF/dIsbNduAOx1ZSJm9FiAoF47uRPC5PSK+7sJtnF0KuWI3a7dLNGTSDmu4ipqiks5rxh5mb50rlE5Sf5E1XeiTSzuRG8VRVDEHd1KfxEC63NCy+dtnmk6sPyqFTH7igLxSZzIQJyyb4Ou40p4VqYBEglDnTQRAKfo0H1Xknq5IaGApAI75HcQ6D3xrcVv jcook@second-chance")
+  ;; (setq grip-github-password "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")
+  (setq grip-update-after-change nil)
+  (setq grip-preview-use-webkit nil)
   :ensure t)
 
 ;; yarn-mode is a major mode designed to be used to look at yarn.lock
@@ -943,7 +1014,19 @@
   ;;       (setq lsp-idle-delay 0.500)
   ;;       (setq lsp-log-io nil)
   ;;       (setq lsp-completion-provider :capf)
+
+  ;; (lsp-register-custom-settings
+  ;; '(("pyls.plugins.pyls_mypy.enabled" t t)
+  ;; ("pyls.plugins.pyls_mypy.live_mode" nil t)
+  ;; ("pyls.plugins.pyls_black.enabled" t t)
+  ;; ("pyls.plugins.pyls_isort.enabled" t t)
+  ;; ("pyls.plugins.rope_completion.enabled" t t)
+  ;; ("pyls.plugins.yapf.enabled." t t)))
+  
   (setq lsp-prefer-flymake nil)
+  :ensure t)
+
+(use-package dap-mode
   :ensure t)
 
 ;; Add metals backend for lsp-mode
@@ -964,6 +1047,17 @@
 ;; Link: https://github.com/emacs-lsp/lsp-ui
 (use-package lsp-ui
   :commands lsp-ui-mode
+  :hook (lsp-mode . lsp-ui-mode)
+  :config
+  (setq lsp-ui-sideline-show-hover t
+                lsp-ui-sideline-delay 0.5
+                lsp-ui-doc-delay 5
+                lsp-ui-sideline-ignore-duplicates t
+                lsp-ui-doc-position 'bottom
+                lsp-ui-doc-alignment 'frame
+                lsp-ui-doc-header nil
+                lsp-ui-doc-include-signature t
+                lsp-ui-doc-use-childframe t)
   :ensure t)
 
 ;; YASnippet is a template system for Emacs. It allows you to type an abbreviation
@@ -991,7 +1085,7 @@
   :init
   ;; Company Package
   (add-hook 'after-init-hook 'global-company-mode)
-
+  
   :config
   (setq lsp-completion-provider :capf)
   ;; changed hot keys to scroll through elpy jedi configuration which uses
@@ -1136,6 +1230,53 @@
   :commands (python-mode)
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
+  :config
+  (setenv "FREECAD_MOD" "/usr/share/freecad/Mod/Web:/usr/share/freecad/Mod/Tux:/usr/share/freecad/Mod/Draft:/usr/share/freecad/Mod/OpenSCAD:/usr/share/freecad/Mod/Import:/usr/share/freecad/Mod/Path:/usr/share/freecad/Mod/Drawing:/usr/share/freecad/Mod/Part:/usr/share/freecad/Mod/Material:/usr/share/freecad/Mod/Points:/usr/share/freecad/Mod/Test:/usr/share/freecad/Mod/Arch:/usr/share/freecad/Mod/Image:/usr/share/freecad/Mod/Robot:/usr/share/freecad/Mod/AddonManager:/usr/share/freecad/Mod/Start:/usr/share/freecad/Mod/Inspection:/usr/share/freecad/Mod/PartDesign:/usr/share/freecad/Mod/ReverseEngineering:/usr/share/freecad/Mod/Fem:/usr/share/freecad/Mod/Surface:/usr/share/freecad/Mod/Sketcher:/usr/share/freecad/Mod/Measure:/usr/share/freecad/Mod/TechDraw:/usr/share/freecad/Mod/Show:/usr/share/freecad/Mod/Spreadsheet:/usr/share/freecad/Mod/Raytracing:/usr/share/freecad/Mod/MeshPart:/usr/share/freecad/Mod/Mesh:/usr/share/freecad/Mod/Idf:/usr/share/freecad/Mod:/usr/lib/freecad/Mod")
+  (setenv "FREECAD_LIB" "/usr/lib/freecad/lib:/usr/lib/freecad-python3/lib")
+  (setenv "FREECAD_EXT" "/usr/lib/freecad/Ext")
+  (setenv "FREECAD_BIN" "/usr/lib/freecad/bin")
+  (setenv "FREECAD_MACRO" "/home/jcook/.FreeCAD/Macro:/usr/lib/freecad/Macro")
+  ;; (setenv "FREECAD_STUBS" "/home/jcook/Documents/git_repo/freecad-stubs/out")
+  (setenv "ROS_LIB" "/opt/ros/melodic/lib/python2.7/dist-packages")
+  (setenv "PYTHONPATH" (concat (getenv "FREECAD_MOD")
+			       ":"
+			       (getenv "FREECAD_LIB")
+			       ":"
+			       (getenv "FREECAD_EXT")
+			       ":"
+			       ;;(getenv "FREECAD_STUBS")
+			       ;;":"
+			       (getenv "FREECAD_BIN")
+			       ":"
+			       (getenv "FREECAD_MACRO")
+			       ":"
+			       (getenv "ROS_LIB")
+			       ":"
+			       (getenv "PYTHONPATH")))
+  ;; (define-key python-mode-map (kbd "C-c C-c") 'python-shell-r)
+  (require 'dap-mode)
+  :ensure t)
+
+(use-package pyvenv
+  :demand t
+  :config
+  ;; (setenv "JAVA_HOME" "~/Documents/python_virtual_envs/nodejs/")
+  (setenv "WORKON_HOME" "~/Documents/python_virtual_envs/python3")
+  
+  (pyvenv-tracking-mode 1)
+  (setq pyvenv-mode-line-indicator '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] ")))
+  (pyvenv-mode t)
+
+  ;; Set correct Python interpreter
+  (setq pyvenv-post-activate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3"))
+		(lsp))))
+  (setq pyvenv-post-deactivate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter "python3")
+		(lsp-shutdown-workspace))))
+
   :ensure t)
 
 ;; lsp-jedi
@@ -1143,24 +1284,74 @@
 ;;
 ;; Link: https://github.com/fredcamps/lsp-jedi
 ;; Link: https://github.com/python-lsp/python-lsp-server
-(use-package lsp-jedi
-  :hook (python-mode . lsp)
-  :config
-  (lsp-register-custom-settings
-   '(("pyls.plugins.pyls_mypy.enabled" t t)
-     ("pyls.plugins.pyls_mypy.live_mode" nil t)
-     ("pyls.plugins.pyls_black.enabled" t t)
-     ("pyls.plugins.pyls_isort.enabled" t t)
-     ("pyls.plugins.rope_completion.enabled" t t)
-     ("pyls.plugins.yapf.enabled." t t)))
-  
-  (with-eval-after-load "lsp-mode"
-    (add-to-list 'lsp-disabled-clients 'pyls)
-    (add-to-list 'lsp-enabled-clients 'jedi))
-  ;; (add-to-list 'lsp-enabled-clients 'pyls)
+;;(use-package lsp-jedi
+;;  :config
+;;  (with-eval-after-load "lsp-mode"
+;;    (add-to-list 'lsp-disabled-clients 'pyls)
+;;    (add-to-list 'lsp-enabled-clients 'jedi))
+  ;; (add-to-list 'lsp-enabled-clients 'pyls))
   ;; (add-to-list 'lsp-enabled-clients 'pylsp)
   ;; (add-to-list 'lsp-enabled-clients 'rope)
   ;; (add-to-list 'lsp-enabled-clients 'yapf))
+
+;;  ;; Custom path to system FreeCAD libraries. 
+;;  (setq lsp-jedi-workspace-extra-paths
+;;	(vconcat lsp-jedi-workspace-extra-paths
+;;		 ["/usr/lib/freecad-python3/lib"]))
+  
+;;  :ensure t)
+
+
+;; importmagic
+
+(use-package lsp-pyright
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)))
+  ;; (lsp)))  ; or lsp-deferre
+  :config
+  (setq lsp-pyright-python-executable-cmd "python3")
+  (setq lsp-pyright-log-level "trace")
+  (setq lsp-pyright-stub-path "/home/jcook/.python3_stubs/FreeCAD")
+  (setq lsp-pyright-extra-paths
+	(vconcat lsp-pyright-extra-paths
+		 ["/usr/share/freecad/Mod/Web",
+		  "/usr/share/freecad/Mod/Tux",
+		  "/usr/share/freecad/Mod/Draft",
+		  "/usr/share/freecad/Mod/OpenSCAD",
+		  "/usr/share/freecad/Mod/Import",
+		  "/usr/share/freecad/Mod/Path",
+		  "/usr/share/freecad/Mod/Drawing",
+		  "/usr/share/freecad/Mod/Part",
+		  "/usr/share/freecad/Mod/Material",
+		  "/usr/share/freecad/Mod/Points",
+		  "/usr/share/freecad/Mod/Test",
+		  "/usr/share/freecad/Mod/Arch",
+		  "/usr/share/freecad/Mod/Image",
+		  "/usr/share/freecad/Mod/Robot",
+		  "/usr/share/freecad/Mod/AddonManager",
+		  "/usr/share/freecad/Mod/Start",
+		  "/usr/share/freecad/Mod/Inspection",
+		  "/usr/share/freecad/Mod/PartDesign",
+		  "/usr/share/freecad/Mod/ReverseEngineering",
+		  "/usr/share/freecad/Mod/Fem",
+		  "/usr/share/freecad/Mod/Surface",
+		  "/usr/share/freecad/Mod/Sketcher",
+		  "/usr/share/freecad/Mod/Measure",
+		  "/usr/share/freecad/Mod/TechDraw",
+		  "/usr/share/freecad/Mod/Show",
+		  "/usr/share/freecad/Mod/Spreadsheet",
+		  "/usr/share/freecad/Mod/Raytracing",
+		  "/usr/share/freecad/Mod/MeshPart",
+		  "/usr/share/freecad/Mod/Mesh",
+		  "/usr/share/freecad/Mod/Idf",
+		  "/usr/share/freecad/Mod",
+		  "/usr/lib/freecad/Mod",
+		  "/usr/lib/freecad-python3/lib",
+		  "/usr/lib/freecad/lib",
+		  "/usr/lib/freecad/Ext",		  
+		  "/usr/lib/freecad/bin",
+		  "/home/jcook/.FreeCAD/Macro",
+		  "/usr/lib/freecad/Macro"]))
   :ensure t)
 
 ;; elpy
@@ -1230,7 +1421,7 @@
 ;; Link: https://github.com/emacs-helm/helm
 (use-package helm
   :init
-  (require 'helm-config)
+  ;; (require 'helm-config)
   (helm-mode 1)
   (define-key global-map [remap find-file] 'helm-find-files)
   (define-key global-map [remap occur] 'helm-occur)

@@ -9,10 +9,15 @@ ac-comphist.dat
 auto-save-list/
 bookmarks
 cmake-ide-build-dir/
+eln-cache/
 elpa/
 emacs-saves/
 init.el.bak
 irony/
+recentf
+tramp
+transient/
 snippets/
+var/
 
 
