@@ -1,6 +1,9 @@
 
 .#init.el
 .DS_Store
+.dap-breakpoints
+.lsp-session-v1
+
 .cache/
 .cask/
 .python-environments/
@@ -12,6 +15,7 @@ cmake-ide-build-dir/
 eln-cache/
 elpa/
 emacs-saves/
+eshell/
 init.el.bak
 irony/
 recentf

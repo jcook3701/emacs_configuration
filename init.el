@@ -58,7 +58,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t)
- ;; '(initial-frame-alist '((fullscreen . maximized)))
  '(markdown-toc-user-toc-structure-manipulation-fn
    (lambda
      (toc-structure)
@@ -71,7 +70,7 @@
 	  (<= 1 index)))
       toc-structure)))
  '(package-selected-packages
-   '(pyvenv yasnippet dap-mode dired-subtree json-mode lsp-pyright pyvenv-mode python-mode treemacs-icons-dired sed-mode csv-mode org-indent npm-mode go-mode gcode-mode django-mode cmake-mode lsp-metals lsp-jedi lsp-mode tramp tramp--startup-hook tide google-this multi-web-mode web-mode rainbow-delimiters helm-themes helm-systemd helm-ros helm-codesearch helm-chrome-history helm-chrome helm-catkin lush-theme helm-make flycheck-rust js2-mode rust-mode pdf-tools pacmacs chess ansible helm-slack sl slack i3wm-config-mode i3wm ox-gfm org grip-mode markdown-toc magit-todos magit-lfs forge helm-icon helm-icons helm dried-icon dried-icon-mode minimap dired-rainbow dired-open dired-icon all-the-icons-ibuffer all-the-icons-dired ibuffer-sidebar vterm-toggle dired dired-k dired-collapse all-the-icons centaur-tabs sublimity multi-vterm vterm treemacs helm-apt yarn-mode dockerfile-mode docker-compose-mode docker company lsp-ui typescript-mode sbt-mode scala-mode matlab-mode helm-ispell bash-completion vscode-icon dired-sidebar markdown-mode magit winum treemacs-projectile jedi irony-eldoc helm-rtags helm-flyspell flyspell-correct-helm flycheck-rtags flycheck-irony elpy diminish company-rtags company-irony-c-headers company-irony cmake-ide cask)))
+   '(hl-todo flymake-ansible-lint flymake-flycheck ansible-mode ac-haskell-process pyvenv yasnippet dap-mode dired-subtree json-mode lsp-pyright pyvenv-mode python-mode treemacs-icons-dired sed-mode csv-mode org-indent npm-mode go-mode gcode-mode django-mode cmake-mode lsp-metals lsp-jedi lsp-mode tramp tramp--startup-hook tide google-this multi-web-mode web-mode rainbow-delimiters helm-themes helm-systemd helm-ros helm-codesearch helm-chrome-history helm-chrome helm-catkin lush-theme helm-make flycheck-rust js2-mode rust-mode pdf-tools pacmacs chess ansible helm-slack sl slack i3wm-config-mode i3wm ox-gfm org grip-mode markdown-toc magit-todos magit-lfs forge helm-icon helm-icons helm dried-icon dried-icon-mode minimap dired-rainbow dired-open dired-icon all-the-icons-ibuffer all-the-icons-dired ibuffer-sidebar vterm-toggle dired dired-k dired-collapse all-the-icons centaur-tabs sublimity multi-vterm vterm treemacs helm-apt yarn-mode dockerfile-mode docker-compose-mode docker company lsp-ui typescript-mode sbt-mode scala-mode matlab-mode helm-ispell bash-completion vscode-icon dired-sidebar markdown-mode magit winum treemacs-projectile jedi irony-eldoc helm-rtags helm-flyspell flyspell-correct-helm flycheck-rtags flycheck-irony elpy diminish company-rtags company-irony-c-headers company-irony cmake-ide cask)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -99,6 +98,7 @@
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
 		    (not (gnutls-available-p))))
        (proto (if no-ssl "http" "https")))
+  ;; https://emacs.stackexchange.com/questions/233/how-to-proceed-on-package-el-signature-check-failure
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
   (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
   (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")) t)
@@ -127,6 +127,14 @@
 ;; Link: https://github.com/jwiegley/use-package
 (eval-when-compile
   (require 'use-package))
+
+;; Fixes path to npm and other packages to fix lsp-install-packages
+;; Link: https://github.com/purcell/exec-path-from-shell
+(use-package exec-path-from-shell
+  :init
+  (when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+  :ensure t)
 
 ;; Background theme
 ;; A dark theme with lush colors for Emacs24, based on JD Huntington's blackboard theme
@@ -610,6 +618,14 @@
   ;;	("C-t" . nil))
   :ensure t)
 
+;; Link: https://github.com/tarsius/hl-todo
+(use-package hl-todo
+  :custom-face
+  (hl-todo ((t (:inherit hl-todo :italic t))))
+  :hook ((prog-mode . hl-todo-mode)
+         (yaml-mode . hl-todo-mode))
+  :ensure t)
+
 ;; A very simple but effective thing, eldoc-mode is a MinorMode which shows
 ;; you, in the echo area, the argument list of the function call you are currently
 ;; writing. Very handy. By NoahFriedman. Part of Emacs.
@@ -619,6 +635,14 @@
   :commands (eldoc-mode)
   :ensure t)
 
+;; Note: The hook to ansible-mode might need to be removed when working on non-ansible projects
+;;       This was needed to enable ls-ansible within lsp.  Otherwise only yamlls server starts.
+(use-package yaml
+  :hook (yaml-mode . ansible-mode)
+  :mode ("\\.yml\\'" . yaml-mode)
+  :interpreter ("yaml" . yaml-mode)
+  :ensure t)				
+
 ;; Ansible minor mode designed to be used for modifying Ansible files.
 ;; 
 ;; Requirement
@@ -627,6 +651,9 @@
 ;;
 ;; Link: https://github.com/k1LoW/emacs-ansible
 (use-package ansible
+  :after yaml
+  :hook (ansible-mode . lsp-deferred)
+  :interpreter ("ansible" . ansible-mode)
   :ensure t)
 
 ;; Emacs integration for Docker. -- Supports docker containers,
@@ -645,7 +672,7 @@
   :commands (dockerfile-mode)
   :hook
   (dockerfile-mode . lsp-deferred)
-  :mode("\\Dockerfile\\'" . dockerfile-mode)
+  :mode ("\\Dockerfile\\'" . dockerfile-mode)
   :interpreter ("dockerfile" . dockerfile-mode)
   :ensure t)
 
@@ -934,6 +961,45 @@
   (setq sbt:program-options '("-Dsbt.supershell=false"))
   :ensure t)
 
+;; Link: https://github.com/flymake/emacs-flymake
+(use-package flymake
+  :config
+  ;; This lets me say where my temp dir is.
+  (setq temporary-file-directory "~/.emacs.d/tmp/")
+  ;; I want to see all errors for the line.
+  (setq flymake-number-of-errors-to-display nil)
+  :ensure t)
+
+;; Link: https://github.com/purcell/flymake-flycheck
+(use-package flymake-flycheck
+  :hook (flymake-mode . flymake-flycheck-auto)
+  :ensure t)
+
+;; Link: https://github.com/jamescherti/flymake-ansible-lint.el
+(use-package flymake-ansible-lint
+  :commands flymake-ansible-lint-setup
+  :hook (((yaml-ts-mode yaml-mode) . flymake-ansible-lint-setup)
+         ((yaml-ts-mode yaml-mode) . flymake-mode))
+  :ensure t)
+
+;; Link: https://codeberg.org/shaohme/flymake-markdownlint
+(use-package flymake-markdownlint
+  :hook (markdown-mode . flymake-markdownlint-setup)
+  :ensure t)
+
+;; Link: https://github.com/orzechowskid/flymake-eslint
+(use-package flymake-eslint
+  :init
+  (add-hook 'web-mode-hook ; or whatever the mode-hook is for your mode of choice
+	    (lambda ()
+	      (flymake-eslint-enable)))
+  :ensure t)
+
+;; Link: https://codeberg.org/shaohme/flymake-yamllint
+(use-package flymake-yamllint
+  :hook (yaml-mode . flymake-yamllint-setup)
+  :ensure t)
+
 ;; Enable nice rendering of diagnostics like compile errors.
 ;;
 ;; Link: https://www.flycheck.org/en/latest/
@@ -1003,9 +1069,10 @@
 ;; 
 ;; Link: https://github.com/emacs-lsp/lsp-mode
 (use-package lsp-mode
+  :after company
   ;; Optional - enable lsp-mode automatically in scala files
   :commands(lsp lsp-deferred)
-  :hook ((lsp-mode . lsp-lens-mode))
+  :hook (lsp-mode . lsp-lens-mode)
   :config
   ;; Uncomment following section if you would like to tune lsp-mode performance according to
   ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
@@ -1080,7 +1147,8 @@
 ;;
 ;; Link:
 (use-package company
-  :hook ((scala-mode . company-mode))
+  :hook ((scala-mode . company-mode)
+	 (yaml-mode . company-mode))
   
   :init
   ;; Company Package

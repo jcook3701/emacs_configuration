@@ -2,7 +2,16 @@
 layout: default
 ---
 
-# Emacs 25.3 Built for MacOS High Sierra
+# Emacs 29.4 - Linux - Ubuntu 22
+
+Configuration Flags
+```bash
+$ ./configure --with-tree-sitter --with-native-compilation --with-json --with-mailutils --with-jpeg --with-png --with-rsvg --with-tiff --with-gif --with-xft --with-xml2 --without-ns --with-gnutls --with-imagemagick --with-xwidgets --with-x --with-modules --with-harfbuzz 
+```
+
+__Notes:__ [Getting Started With Tree-Sitter](https://www.masteringemacs.org/article/how-to-get-started-tree-sitter)
+
+# Emacs 25.3 Built for MacOS High Sierra - 2018
 Version: Mac OS 10.13.6
 ## Production: Emacs 25.3
 ### Requirements
