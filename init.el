@@ -70,7 +70,7 @@
 	  (<= 1 index)))
       toc-structure)))
  '(package-selected-packages
-   '(hl-todo flymake-ansible-lint flymake-flycheck ansible-mode ac-haskell-process pyvenv yasnippet dap-mode dired-subtree json-mode lsp-pyright pyvenv-mode python-mode treemacs-icons-dired sed-mode csv-mode org-indent npm-mode go-mode gcode-mode django-mode cmake-mode lsp-metals lsp-jedi lsp-mode tramp tramp--startup-hook tide google-this multi-web-mode web-mode rainbow-delimiters helm-themes helm-systemd helm-ros helm-codesearch helm-chrome-history helm-chrome helm-catkin lush-theme helm-make flycheck-rust js2-mode rust-mode pdf-tools pacmacs chess ansible helm-slack sl slack i3wm-config-mode i3wm ox-gfm org grip-mode markdown-toc magit-todos magit-lfs forge helm-icon helm-icons helm dried-icon dried-icon-mode minimap dired-rainbow dired-open dired-icon all-the-icons-ibuffer all-the-icons-dired ibuffer-sidebar vterm-toggle dired dired-k dired-collapse all-the-icons centaur-tabs sublimity multi-vterm vterm treemacs helm-apt yarn-mode dockerfile-mode docker-compose-mode docker company lsp-ui typescript-mode sbt-mode scala-mode matlab-mode helm-ispell bash-completion vscode-icon dired-sidebar markdown-mode magit winum treemacs-projectile jedi irony-eldoc helm-rtags helm-flyspell flyspell-correct-helm flycheck-rtags flycheck-irony elpy diminish company-rtags company-irony-c-headers company-irony cmake-ide cask)))
+   '(flymake-yamllint flymake-eslint flymake-markdownlint hl-todo flymake-ansible-lint flymake-flycheck ansible-mode ac-haskell-process pyvenv yasnippet dap-mode dired-subtree json-mode lsp-pyright pyvenv-mode python-mode treemacs-icons-dired sed-mode csv-mode org-indent npm-mode go-mode gcode-mode django-mode cmake-mode lsp-metals lsp-jedi lsp-mode tramp tramp--startup-hook tide google-this multi-web-mode web-mode rainbow-delimiters helm-themes helm-systemd helm-ros helm-codesearch helm-chrome-history helm-chrome helm-catkin lush-theme helm-make flycheck-rust js2-mode rust-mode pdf-tools pacmacs chess ansible helm-slack sl slack i3wm-config-mode i3wm ox-gfm org grip-mode markdown-toc magit-todos magit-lfs forge helm-icon helm-icons helm dried-icon dried-icon-mode minimap dired-rainbow dired-open dired-icon all-the-icons-ibuffer all-the-icons-dired ibuffer-sidebar vterm-toggle dired dired-k dired-collapse all-the-icons centaur-tabs sublimity multi-vterm vterm treemacs helm-apt yarn-mode dockerfile-mode docker-compose-mode docker company lsp-ui typescript-mode sbt-mode scala-mode matlab-mode helm-ispell bash-completion vscode-icon dired-sidebar markdown-mode magit winum treemacs-projectile jedi irony-eldoc helm-rtags helm-flyspell flyspell-correct-helm flycheck-rtags flycheck-irony elpy diminish company-rtags company-irony-c-headers company-irony cmake-ide cask)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -656,6 +656,13 @@
   :interpreter ("ansible" . ansible-mode)
   :ensure t)
 
+;; Link: https://github.com/paradoxxxzero/jinja2-mode
+(use-package jinja2-mode
+  ;; :hook (jinja2-mode . lsp-deferred)
+  :mode ("\\.j2\\'" . jinja2-mode)
+  :interpreter ("jinja2" . jinja2-mode)
+  :ensure t)
+
 ;; Emacs integration for Docker. -- Supports docker containers,
 ;; images, volumes, networks and docker-compose.
 ;;
@@ -670,8 +677,7 @@
 ;; Link: https://github.com/spotify/dockerfile-mode
 (use-package dockerfile-mode
   :commands (dockerfile-mode)
-  :hook
-  (dockerfile-mode . lsp-deferred)
+  :hook (dockerfile-mode . lsp-deferred)
   :mode ("\\Dockerfile\\'" . dockerfile-mode)
   :interpreter ("dockerfile" . dockerfile-mode)
   :ensure t)

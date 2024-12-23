@@ -10,6 +10,7 @@ $ ./configure --with-tree-sitter --with-native-compilation --with-json --with-ma
 ```
 
 __Notes:__ [Getting Started With Tree-Sitter](https://www.masteringemacs.org/article/how-to-get-started-tree-sitter)
+__NOTES:__ [Helpful Build discussion](https://www.reddit.com/r/emacs/comments/qf9jjx/what_compilation_flags_do_you_use_for_your_emacs/)
 
 # Emacs 25.3 Built for MacOS High Sierra - 2018
 Version: Mac OS 10.13.6
