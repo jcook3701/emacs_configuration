@@ -94,9 +94,8 @@
 
 ;; MELPA package repo
 (require 'package)
-;;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-		    (not (gnutls-available-p))))
+ 		    (not (gnutls-available-p))))
        (proto (if no-ssl "http" "https")))
   ;; https://emacs.stackexchange.com/questions/233/how-to-proceed-on-package-el-signature-check-failure
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
@@ -523,7 +522,7 @@
   ;; (zoom-ignored-buffer-names '("*MINIMAP*" "*minimap*"))
   ;; (setq minimap-dedicated-window t)
   (setq minimap-window-location 'right)
-  (minimap-mode 1)
+  ;; (minimap-mode 1)
   :ensure t)
 
 ;; A nice looking theme for the bottom power-bar
@@ -578,9 +577,21 @@
   (:map vterm-mode-map
 	("<escape>" . nil)
 	("M-w" . nil)
-	("C-t" . nil))
+	("C-t" . nil)
+	("C-c" . vterm-send-C-c)
+	("C-s" . vterm-send-C-s)
+	("C-w" . vterm-send-C-w)
+;;	("C-x" . vterm-send-C-x)
+	)
   :init
   (add-hook 'vterm-mode-hook (lambda () (linum-mode -1)))
+  (defun vterm-directory-sync ()
+  "Synchronize current working directory."
+  (interactive)
+  (when vterm--process
+    (let* ((pid (process-id vterm--process))
+           (dir (file-truename (format "/proc/%d/cwd/" pid))))
+      (setq default-directory dir))))
   :ensure t)
 
 ;; This package provides the command vterm-toggle which toggles between the
@@ -1708,6 +1719,30 @@
   ;; :init
   ;; (ghub-request 
   :ensure t)
+
+;; ----------------------------------- Calendar  ----------------------------------
+
+;; ----------------------------------- Email  ----------------------------------
+(use-package mu4e-alert
+    :ensure f)
+(use-package mu4e-column-faces
+    :ensure f)
+(use-package mu4e-conversation
+    :ensure f)
+(use-package mu4e-jump-to-list
+    :ensure f)
+(use-package mu4e-marker-icons
+    :ensure f)
+(use-package mu4e-overview
+    :ensure f)
+(use-package mu4e-query-fragments
+    :ensure f)
+(use-package mu4e-views
+  :ensure f)
+(use-package mu4easy
+  :ensure f)
+(use-package outlook
+  :ensure f)
 
 ;; ----------------------------------- Games/Easter Eggs ----------------------------------
 
