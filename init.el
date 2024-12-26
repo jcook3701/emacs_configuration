@@ -2,13 +2,13 @@
 ;;; Commentary:
 ;; jcook3701's Emacs init.el
 ;;----------------------------------------------------------------------------------------------
-;; For GNU Emacs 28.0.91 - Linux OS
+;; For GNU Emacs 29.4 - Linux OS
 ;;----------------------------------------------------------------------------------------------
 ;; Configuration Flags:
 ;;----------------------------------------------------------------------------------------------
-;; --with-mailutils --with-native-compilation --with-json --with-xwidgets
-;; --with-modules --with-gnutls --with-jpeg --with-png --with-imagemagick --with-rsvg
-;; --with-tiff --with-wide-int --with-xft --with-xml2 --with-xpm
+;; --with-tree-sitter --with-native-compilation --with-json --with-mailutils --with-jpeg
+;; --with-png --with-rsvg --with-tiff --with-gif --with-xft --with-xml2 --without-ns
+;; --with-gnutls --with-imagemagick --with-xwidgets --with-x --with-modules --with-harfbuzz 
 ;;----------------------------------------------------------------------------------------------
 ;;; Code:
 
@@ -118,31 +118,14 @@
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
 
-
-;; Install `use-package` using Elpaca
-(elpaca elpaca-use-package
-  (elpaca-use-package-mode))
 ;; The use-package macro allows you to isolate package configuration
 ;; in your .emacs file in a way that is both performance-oriented and,
 ;; well, tidy.
 ;;
-
-;; (eval-when-compile
-;;   (require 'use-package))
-
 ;; Link: https://github.com/jwiegley/use-package
-;; Install use-package via Elpaca
-;; Explicitly require `use-package` after Elpaca has been initialized
-;; (elpaca use-package
-;;  (use-package elpaca
-;;    :hook (elpaca-after-init .
-;;			     (lambda ()
-;;			       (require 'use-package)))
-;;    :demand t))
-
-
-;; (use-package latex :ensure nil) ; "latex" is a subfeature provided by the auctex package. It is not published as a standalone package.
-;; (use-package emacs :ensure nil) ; The "emacs" feature is a pseudo-feature provided by Emacs, it should be treated like a built-in package.
+;; Install `use-package` using Elpaca
+(elpaca elpaca-use-package
+  (elpaca-use-package-mode))
 
 ;; Fixes path to npm and other packages to fix lsp-install-packages
 ;; Link: https://github.com/purcell/exec-path-from-shell
