@@ -12,23 +12,15 @@
 ;;----------------------------------------------------------------------------------------------
 ;;; Code:
 
+;; ----------------------------------- Emacs Settings ----------------------------------
+
 ;; Only display errors
 ;; (setq warning-minimum-level "error")
 (setq native-comp-async-report-warnings-errors nil)
 
-;;line numbers
-(display-line-numbers-mode t)
-(setq linum-format "%3d\u2502 ")
-
 ;;Save auto made backup files to below dirs.
 (setq auto-save-file-name-transforms `((".*" "~/.emacs.d/auto-save-list/" t)))
 (setq backup-directory-alist '(("." . "~/.emacs.d/emacs-saves/")))
-
-(setenv "PYTHONIOENCODING" "utf-8")
-(add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
-;; (add-to-list 'process-coding-system-alist '("elpy" . (utf-8 . utf-8)))
-(add-to-list 'process-coding-system-alist '("flake8" . (utf-8 . utf-8)))
-(add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
 
 ;; Set Meta Key - ESC
 (setq x-meta-keysym 'meta)
@@ -52,80 +44,105 @@
 (setq vc-follow-symlinks t)
 
 ;; Full Screen
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(inhibit-startup-screen t)
- '(markdown-toc-user-toc-structure-manipulation-fn
-   (lambda
-     (toc-structure)
-     (-filter
-      (lambda
-	(l)
-	(let
-	    ((index
-	      (car l)))
-	  (<= 1 index)))
-      toc-structure)))
- '(package-selected-packages
-   '(flymake-yamllint flymake-eslint flymake-markdownlint hl-todo flymake-ansible-lint flymake-flycheck ansible-mode ac-haskell-process pyvenv yasnippet dap-mode dired-subtree json-mode lsp-pyright pyvenv-mode python-mode treemacs-icons-dired sed-mode csv-mode org-indent npm-mode go-mode gcode-mode django-mode cmake-mode lsp-metals lsp-jedi lsp-mode tramp tramp--startup-hook tide google-this multi-web-mode web-mode rainbow-delimiters helm-themes helm-systemd helm-ros helm-codesearch helm-chrome-history helm-chrome helm-catkin lush-theme helm-make flycheck-rust js2-mode rust-mode pdf-tools pacmacs chess ansible helm-slack sl slack i3wm-config-mode i3wm ox-gfm org grip-mode markdown-toc magit-todos magit-lfs forge helm-icon helm-icons helm dried-icon dried-icon-mode minimap dired-rainbow dired-open dired-icon all-the-icons-ibuffer all-the-icons-dired ibuffer-sidebar vterm-toggle dired dired-k dired-collapse all-the-icons centaur-tabs sublimity multi-vterm vterm treemacs helm-apt yarn-mode dockerfile-mode docker-compose-mode docker company lsp-ui typescript-mode sbt-mode scala-mode matlab-mode helm-ispell bash-completion vscode-icon dired-sidebar markdown-mode magit winum treemacs-projectile jedi irony-eldoc helm-rtags helm-flyspell flyspell-correct-helm flycheck-rtags flycheck-irony elpy diminish company-rtags company-irony-c-headers company-irony cmake-ide cask)))
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
- '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
+;; Inhibit Default Startup Screen
+(setq inhibit-startup-screen t)
 
 ;; Shell Feature - Allows ability to open emacs inside of emacs bash
 (server-start)
 (setq server-socket-dir "~/tmp/emacs1000/server")
 
-;; C++ Mode Settings
-(setq-default c-basic-offset 4)
+;; Set Face Attributes
+(set-face-attribute 'mode-line nil :foreground "#030303" :background "#bdbdbd" :box nil)
+(set-face-attribute 'mode-line-inactive nil :foreground "#f9f9f9" :background "#666666" :box nil)
 
 ;; This forces my setup to connect to MELPA over HTTPS
 (require 'gnutls)
 ;; (require 'tls)
 (add-to-list 'gnutls-trustfiles "/usr/local/etc/libressl/cert.Perm")
 
+;; Comment out or remove existing package.el configuration
 ;; MELPA package repo
-(require 'package)
-(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
- 		    (not (gnutls-available-p))))
-       (proto (if no-ssl "http" "https")))
-  ;; https://emacs.stackexchange.com/questions/233/how-to-proceed-on-package-el-signature-check-failure
-  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-  (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
-  (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")) t)
-  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-  (when (< emacs-major-version 24)
-    ;; For important compatibility libraries like cl-lib
-    (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
-(package-initialize)
+;; (require 'package)
+;; (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+;;  		    (not (gnutls-available-p))))
+;;        (proto (if no-ssl "http" "https")))
+;;   ;; https://emacs.stackexchange.com/questions/233/how-to-proceed-on-package-el-signature-check-failure
+;;   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+;;   (add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa/")) t)
+;;   (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")) t)
+;;   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+;;   (when (< emacs-major-version 24)
+;;     ;; For important compatibility libraries like cl-lib
+;;     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
+;; (package-initialize)
 
-;; Insure that use-package is installed and can install the rest of the software on the system
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; Link: https://github.com/progfolio/elpaca
+;; Bootstrap Elpaca
+(defvar elpaca-installer-version 0.8)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil :depth 1
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+                                                  ,@(when-let* ((depth (plist-get order :depth)))
+                                                      (list (format "--depth=%d" depth) "--no-single-branch"))
+                                                  ,(plist-get order :repo) ,repo))))
+                  ((zerop (call-process "git" nil buffer t "checkout"
+                                        (or (plist-get order :ref) "--"))))
+                  (emacs (concat invocation-directory invocation-name))
+                  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                        "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                  ((require 'elpaca))
+                  ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
 
-;; bash-completion ;; Replaced by vterm -- to be removed
-;;;(autoload 'bash-completion-dynamic-complete
-;;;  "bash-completion"
-;;;  "BASH completion hook")
-;;;(add-hook 'shell-dynamic-complete-functions
-;;;	  'bash-completion-dynamic-complete)
 
+;; Install `use-package` using Elpaca
+(elpaca elpaca-use-package
+  (elpaca-use-package-mode))
 ;; The use-package macro allows you to isolate package configuration
 ;; in your .emacs file in a way that is both performance-oriented and,
 ;; well, tidy.
 ;;
+
+;; (eval-when-compile
+;;   (require 'use-package))
+
 ;; Link: https://github.com/jwiegley/use-package
-(eval-when-compile
-  (require 'use-package))
+;; Install use-package via Elpaca
+;; Explicitly require `use-package` after Elpaca has been initialized
+;; (elpaca use-package
+;;  (use-package elpaca
+;;    :hook (elpaca-after-init .
+;;			     (lambda ()
+;;			       (require 'use-package)))
+;;    :demand t))
+
+
+;; (use-package latex :ensure nil) ; "latex" is a subfeature provided by the auctex package. It is not published as a standalone package.
+;; (use-package emacs :ensure nil) ; The "emacs" feature is a pseudo-feature provided by Emacs, it should be treated like a built-in package.
 
 ;; Fixes path to npm and other packages to fix lsp-install-packages
 ;; Link: https://github.com/purcell/exec-path-from-shell
@@ -143,6 +160,17 @@
   :init
   (setq custom--inhibit-theme-enable nil)
   (load-theme 'lush t)
+  :ensure t)
+
+;; Line numbers in side column
+;; Link: https://github.com/emacsmirror/nlinum
+(use-package nlinum
+  ;; :init (global-nlinum-mode 1) ;; Always on
+  :hook (prog-mode . nlinum-mode) ;; Only programing mode
+  :init
+  ;;line numbers
+  ;; (global-display-line-numbers-mode t)
+  ;; (setq linum-format "%3d\u2502 ")
   :ensure t)
 
 ;; rainbow-delimiters is a "rainbow parentheses"-like mode which highlights
@@ -361,8 +389,7 @@
 (use-package ibuffer
   :init
   ;; Define Key: C-x C-b
-  (define-key global-map [remap list-buffers] 'ibuffer)
-  :ensure t)
+  (define-key global-map [remap list-buffers] 'ibuffer))
 
 ;; Buffer Side Bar
 ;;;(use-package ibuffer-sidebar
@@ -561,6 +588,13 @@
 ;;;  (sublimity-mode 1)
 ;;;  :ensure t)
 
+;; bash-completion ;; Replaced by vterm -- to be removed
+;;;(autoload 'bash-completion-dynamic-complete
+;;;  "bash-completion"
+;;;  "BASH completion hook")
+;;;(add-hook 'shell-dynamic-complete-functions
+;;;	  'bash-completion-dynamic-complete)
+
 ;; Emacs-libvterm (vterm) is fully-fledged terminal emulator inside GNU Emacs
 ;; based on libvterm, a C library. As a result of using compiled code (instead
 ;; of elisp), emacs-libvterm is fully capable, fast, and it can seamlessly handle
@@ -592,7 +626,24 @@
     (let* ((pid (process-id vterm--process))
            (dir (file-truename (format "/proc/%d/cwd/" pid))))
       (setq default-directory dir))))
-  :ensure t)
+  :ensure (vterm :post-build
+                 (progn
+                   (setq vterm-always-compile-module t)
+                   (require 'vterm)
+                   ;;print compilation info for elpaca
+                   (with-current-buffer (get-buffer-create vterm-install-buffer-name)
+                     (goto-char (point-min))
+                     (while (not (eobp))
+                       (message "%S"
+                                (buffer-substring (line-beginning-position)
+                                                  (line-end-position)))
+                       (forward-line)))
+                   (when-let ((so (expand-file-name "./vterm-module.so"))
+                              ((file-exists-p so)))
+                     (make-symbolic-link
+                      so (expand-file-name (file-name-nondirectory so)
+                                           "../../builds/vterm")
+                      'ok-if-already-exists)))))
 
 ;; This package provides the command vterm-toggle which toggles between the
 ;; vterm buffer and whatever buffer you are editing.
@@ -643,8 +694,7 @@
 ;; 
 ;; Link: https://www.emacswiki.org/emacs/ElDoc
 (use-package eldoc
-  :commands (eldoc-mode)
-  :ensure t)
+  :commands (eldoc-mode))
 
 ;; Note: The hook to ansible-mode might need to be removed when working on non-ansible projects
 ;;       This was needed to enable ls-ansible within lsp.  Otherwise only yamlls server starts.
@@ -786,7 +836,7 @@
           ("noexport" . (:foreground "LimeGreen" :weight bold))
           )
 	)
-  :ensure t)
+  :ensure (:wait t))
 
 ;; This is an implementation of dynamic virtual indentation.  It works
 ;; by adding text properties to a buffer to make sure lines are
@@ -804,9 +854,9 @@
 ;;;  :init
 ;;;  (require 'ox-gfm nil t)
 ;;;  :ensure t)
-
-(eval-after-load "org"
-  '(require 'ox-gfm nil t))
+;;;
+;;; (eval-after-load "org"
+;;;  '(require 'ox-gfm nil t))
 
 ;; markdown-mode is a major mode for editing Markdown-formatted text.
 ;; The latest stable version is markdown-mode 2.5, released on Feb 12, 2022.
@@ -827,10 +877,10 @@
   :init
   (require 'dash)
   (custom-set-variables '(markdown-toc-user-toc-structure-manipulation-fn
-  (lambda (toc-structure)
-  (-filter (lambda (l) (let ((index (car l)))
-                    (<= 1 index)))
-           toc-structure))))
+			  (lambda (toc-structure)
+			    (-filter (lambda (l) (let ((index (car l)))
+						   (<= 1 index)))
+				     toc-structure))))
   :ensure t)
 
 ;; Instant Github-flavored Markdown/Org preview using Grip (GitHub Readme Instant Preview).
@@ -1077,8 +1127,7 @@
 	  '(c-mode-common-hook python-mode-hook emacs-lisp-mode-hook html-mode-hook js-mode-hook))
   :bind
   (:map flyspell-mode-map
-	("C-;" . nil))
-  :ensure t)
+	("C-;" . nil)))
 
 ;; Client for Language Server Protocol (v3.14). lsp-mode aims to provide IDE-like experience by
 ;; providing optional integration with the most popular Emacs packages like company, flycheck
@@ -1227,6 +1276,7 @@
 ;;
 ;; Link: https://code.djangoproject.com/wiki/Emacs
 (use-package django-mode
+  :after python
   :ensure t)
 
 ;; `gcode-mode' performs basic syntax highlighting on G-Code files
@@ -1315,6 +1365,12 @@
   :commands (python-mode)
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
+  :init
+  (setenv "PYTHONIOENCODING" "utf-8")
+  (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
+  ;; (add-to-list 'process-coding-system-alist '("elpy" . (utf-8 . utf-8)))
+  (add-to-list 'process-coding-system-alist '("flake8" . (utf-8 . utf-8)))
+  (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
   :config
   (setenv "FREECAD_MOD" "/usr/share/freecad/Mod/Web:/usr/share/freecad/Mod/Tux:/usr/share/freecad/Mod/Draft:/usr/share/freecad/Mod/OpenSCAD:/usr/share/freecad/Mod/Import:/usr/share/freecad/Mod/Path:/usr/share/freecad/Mod/Drawing:/usr/share/freecad/Mod/Part:/usr/share/freecad/Mod/Material:/usr/share/freecad/Mod/Points:/usr/share/freecad/Mod/Test:/usr/share/freecad/Mod/Arch:/usr/share/freecad/Mod/Image:/usr/share/freecad/Mod/Robot:/usr/share/freecad/Mod/AddonManager:/usr/share/freecad/Mod/Start:/usr/share/freecad/Mod/Inspection:/usr/share/freecad/Mod/PartDesign:/usr/share/freecad/Mod/ReverseEngineering:/usr/share/freecad/Mod/Fem:/usr/share/freecad/Mod/Surface:/usr/share/freecad/Mod/Sketcher:/usr/share/freecad/Mod/Measure:/usr/share/freecad/Mod/TechDraw:/usr/share/freecad/Mod/Show:/usr/share/freecad/Mod/Spreadsheet:/usr/share/freecad/Mod/Raytracing:/usr/share/freecad/Mod/MeshPart:/usr/share/freecad/Mod/Mesh:/usr/share/freecad/Mod/Idf:/usr/share/freecad/Mod:/usr/lib/freecad/Mod")
   (setenv "FREECAD_LIB" "/usr/lib/freecad/lib:/usr/lib/freecad-python3/lib")
@@ -1595,8 +1651,7 @@
 ;;
 ;; Link: https://github.com/ikirill/irony-eldoc
 (use-package irony-eldoc
-  :init
-  (add-hook 'irony-mode-hook #'irony-eldoc)
+  :hook (irony-mode . irony-eldoc)
   :ensure t)
 
 ;; Company Irony
@@ -1608,16 +1663,19 @@
 ;; Link: https://github.com/Sarcasm/irony-mode
 (use-package irony
   :init
+  ;; C++ Mode Settings
+  (setq-default c-basic-offset 4)
+
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
 
-  (defun my-irony-mode-hook ()
+  (defun my-irony-mode ()
     (define-key irony-mode-map [remap completion-at-point]
       'irony-completion-at-point-async)
     (define-key irony-mode-map [remap complete-symbol]
       'irony-completion-at-point-async))
-  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+  (add-hook 'irony-mode-hook 'my-irony-mode)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
   
@@ -1693,7 +1751,9 @@
 (use-package tramp
   :init
   (setq tramp-default-method "ssh")
-  :ensure t)
+  :ensure (:wait t))
+
+(use-package transient :ensure (:fetcher github :repo "magit/transient"))
 
 ;; Magit - Magit is an interface to the version control system Git,
 ;; implemented as an Emacs package. Magit aspires to be a complete
@@ -1723,26 +1783,28 @@
 ;; ----------------------------------- Calendar  ----------------------------------
 
 ;; ----------------------------------- Email  ----------------------------------
-(use-package mu4e-alert
-    :ensure f)
-(use-package mu4e-column-faces
-    :ensure f)
-(use-package mu4e-conversation
-    :ensure f)
-(use-package mu4e-jump-to-list
-    :ensure f)
-(use-package mu4e-marker-icons
-    :ensure f)
-(use-package mu4e-overview
-    :ensure f)
-(use-package mu4e-query-fragments
-    :ensure f)
-(use-package mu4e-views
-  :ensure f)
-(use-package mu4easy
-  :ensure f)
-(use-package outlook
-  :ensure f)
+;; (require 'mu4e)
+
+;; (use-package mu4e-alert
+;;   :ensure t)
+;; (use-package mu4e-column-faces
+;;    :ensure t)
+;;(use-package mu4e-conversation
+;;    :ensure t)
+;;(use-package mu4e-jump-to-list
+;;    :ensure t)
+;;(use-package mu4e-marker-icons
+;;    :ensure t)
+;;(use-package mu4e-overview
+;;    :ensure t)
+;;(use-package mu4e-query-fragments
+;;    :ensure t)
+;;(use-package mu4e-views
+;;    :ensure t)
+;;(use-package mu4easy
+;;  :ensure t)  
+;;(use-package outlook
+;;    :ensure t)
 
 ;; ----------------------------------- Games/Easter Eggs ----------------------------------
 
@@ -1809,4 +1871,5 @@
 ;;;
 ;;;(put 'erase-buffer 'disabled nil) 
 ;;; ----------------------------------- init.el ends here ----------------------------------- ;;;
+
 

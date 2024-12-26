@@ -1,8 +1,11 @@
-
 .#init.el
 .DS_Store
 .dap-breakpoints
 .lsp-session-v1
+
+
+*bytecomp*
+flycheck*
 
 .cache/
 .cask/
@@ -14,11 +17,13 @@ bookmarks
 cmake-ide-build-dir/
 eln-cache/
 elpa/
+elpaca/
 emacs-saves/
 eshell/
 init.el.bak
 irony/
 recentf
+tmp/
 tramp
 transient/
 snippets/
