@@ -127,6 +127,56 @@
 (elpaca elpaca-use-package
   (elpaca-use-package-mode))
 
+;; (require 'tree-sitter)
+;;(global-tree-sitter-mode)
+
+(use-package treesit
+  :init
+  ;; 
+  (setq treesit-language-source-alist
+   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+     (cmake "https://github.com/uyha/tree-sitter-cmake")
+     (css "https://github.com/tree-sitter/tree-sitter-css")
+     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+     (go "https://github.com/tree-sitter/tree-sitter-go")
+     (html "https://github.com/tree-sitter/tree-sitter-html")
+     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+     (json "https://github.com/tree-sitter/tree-sitter-json")
+     (make "https://github.com/alemuller/tree-sitter-make")
+     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+     (python "https://github.com/tree-sitter/tree-sitter-python")
+     (toml "https://github.com/tree-sitter/tree-sitter-toml")
+     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
+  :config
+  (global-tree-sitter-mode)
+;;  (require 'tree-sitter-langs)
+  (defvar python--treesit-settings
+    (treesit-font-lock-rules
+     :feature 'comment
+     :language 'python
+     '((comment) @font-lock-comment-face)
+     
+     :feature 'string
+     :language 'python
+     '((string) @font-lock-string-face
+       (string) @contextual) ; Contextual special treatment.
+     
+     :feature 'function-name
+     :language 'python
+     '((function_definition
+	name: (identifier) @font-lock-function-name-face))
+     
+     :feature 'class-name
+     :language 'python
+     '((class_definition
+	name: (identifier) @font-lock-type-face))
+     ))
+  )
+;;(use-package tree-sitter-langs)
+
 ;; Fixes path to npm and other packages to fix lsp-install-packages
 ;; Link: https://github.com/purcell/exec-path-from-shell
 (use-package exec-path-from-shell
@@ -186,7 +236,7 @@
 ;;
 ;; Link: https://github.com/seagle0128/all-the-icons-ibuffer
 (use-package all-the-icons-ibuffer
-  :init
+  :config
   (all-the-icons-ibuffer-mode 1)
   :ensure t)
 
@@ -199,7 +249,7 @@
 ;;
 ;; Link: https://github.com/Alexander-Miller/treemacs
 (use-package treemacs-icons-dired
-  :init
+  :config
   (treemacs-icons-dired-mode)
   :ensure t)
 
@@ -208,7 +258,7 @@
 ;; Link: https://github.com/yyoncho/helm-icons
 (use-package helm-icons
   :defer
-  :init
+  :config
   (helm-icons-enable)
   :ensure t)
 
@@ -399,7 +449,9 @@
 (use-package dired
   :bind
   (:map dired-mode-map
-   ("i" . nil)))
+	("i" . nil))
+  :hook
+  (dired-mode . (turn-on-auto-revert-mode)))
 
 ;; dired-k.el highlights dired buffer like k.
 ;;
@@ -595,9 +647,9 @@
 	("<escape>" . nil)
 	("M-w" . nil)
 	("C-t" . nil)
-	("C-c" . vterm-send-C-c)
-	("C-s" . vterm-send-C-s)
-	("C-w" . vterm-send-C-w)
+;;	("C-c" . vterm-send-C-c)
+;;	("C-s" . vterm-send-C-s)
+;;	("C-w" . vterm-send-C-w)
 ;;	("C-x" . vterm-send-C-x)
 	)
   :init
@@ -661,6 +713,30 @@
   ;; (:map vterm-mode-map
   ;;	("<escape>" . nil)
   ;;	("C-t" . nil))
+  :ensure t)
+
+;; Link: https://github.com/emacs-exwm/exwm/wiki
+(use-package exwm
+  :init
+  ;; Set the initial workspace number.
+  (setq exwm-workspace-number 4)
+  ;; Make class name the buffer name.
+  (add-hook 'exwm-update-class-hook
+  (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
+  ;; Global keybindings.
+  (setq exwm-input-global-keys
+	`(([?\s-r] . exwm-reset) ;; s-r: Reset (to line-mode).
+          ([?\s-w] . exwm-workspace-switch) ;; s-w: Switch workspace.
+          ([?\s-&] . (lambda (cmd) ;; s-&: Launch application.
+                       (interactive (list (read-shell-command "$ ")))
+                       (start-process-shell-command cmd nil cmd)))
+          ;; s-N: Switch to certain workspace.
+          ,@(mapcar (lambda (i)
+                      `(,(kbd (format "s-%d" i)) .
+			(lambda ()
+                          (interactive)
+                          (exwm-workspace-switch-create ,i))))
+                    (number-sequence 0 9))))  
   :ensure t)
 
 ;; Link: https://github.com/tarsius/hl-todo
@@ -1349,6 +1425,7 @@
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
   :init
+  ;; Custom
   (setenv "PYTHONIOENCODING" "utf-8")
   (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
   ;; (add-to-list 'process-coding-system-alist '("elpy" . (utf-8 . utf-8)))
@@ -1733,8 +1810,7 @@
 ;; Link: https://www.emacswiki.org/emacs/TrampMode
 (use-package tramp
   :init
-  (setq tramp-default-method "ssh")
-  :ensure (:wait t))
+  (setq tramp-default-method "ssh"))
 
 (use-package transient :ensure (:fetcher github :repo "magit/transient"))
 
@@ -1766,6 +1842,8 @@
 ;; ----------------------------------- Calendar  ----------------------------------
 
 ;; ----------------------------------- Email  ----------------------------------
+;; https://www.reddit.com/r/emacs/comments/z0bopp/is_there_a_complete_guide_for_setting_up/
+;; https://macowners.club/posts/email-emacs-mu4e-macos/
 ;; (require 'mu4e)
 
 ;; (use-package mu4e-alert
