@@ -13,7 +13,6 @@
 ;;; Code:
 
 ;; ----------------------------------- Emacs Settings ----------------------------------
-
 ;; Only display errors
 ;; (setq warning-minimum-level "error")
 (setq native-comp-async-report-warnings-errors nil)
@@ -151,7 +150,7 @@
      (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
   :config
-  (global-tree-sitter-mode)
+  ;; (global-tree-sitter-mode)
 ;;  (require 'tree-sitter-langs)
   (defvar python--treesit-settings
     (treesit-font-lock-rules
@@ -445,13 +444,20 @@
 ;; to operate on the listed files. Dired works with both local and remote
 ;; directories.
 ;;
+;; Helpful: https://emacs.stackexchange.com/questions/34567/dired-not-showing-recently-created-files-when-emacs-is-run-in-daemon-mode
+;; 
 ;; Link: https://www.gnu.org/software/emacs/manual/html_node/emacs/Dired.html
 (use-package dired
   :bind
   (:map dired-mode-map
 	("i" . nil))
   :hook
-  (dired-mode . (turn-on-auto-revert-mode)))
+  (dired-mode . (turn-on-auto-revert-mode))
+  :init
+  (customize-set-value
+   'auto-revert-verbose
+   nil
+   "Prevent any auto-revert messages from obscuring the minibuffer at crucial times!"))
 
 ;; dired-k.el highlights dired buffer like k.
 ;;
@@ -1867,6 +1873,38 @@
 ;;(use-package outlook
 ;;    :ensure t)
 
+;; ----------------------------------- ChatGpt ----------------------------------
+;; Load OpenAI Key
+(let ((api-key-file "~/.emacs.d/openai-api-key.el"))
+  (when (file-exists-p api-key-file)
+    (message "Loading OpenAI API key...")
+    (load api-key-file)))
+
+;; Link: https://github.com/emacs-openai/openai#-usage
+(use-package openai
+  :config
+  ;; Set the API key (already loaded from the external file)
+  (setq openai-key openai-api-key)
+  :ensure (:host github
+		 :repo "emacs-openai/openai"))
+
+;; Link: https://github.com/emacs-openai/chatgpt?tab=readme-ov-file
+(use-package chatgpt
+  :bind
+  (("C-c g" . chatgpt)  ;; Bind 'chatgpt' to "C-c g"
+   ("C-c q" . chatgpt-query)) ;; Bind 'chatgpt-query' to "C-c q"
+  :after openai
+  :ensure (:host github
+		 :repo "emacs-openai/chatgpt"))
+
+;; Link: https://github.com/xenodium/chatgpt-shell
+(use-package chatgpt-shell
+;;   :bind
+;;   ("" . )
+  :custom
+  (chatgpt-shell-openai-key openai-api-key)
+  :ensure t)
+
 ;; ----------------------------------- Games/Easter Eggs ----------------------------------
 
 ;; Displays an animated train
@@ -1933,4 +1971,6 @@
 ;;;(put 'erase-buffer 'disabled nil) 
 ;;; ----------------------------------- init.el ends here ----------------------------------- ;;;
 
+;; Helpful keybindings
+;; C-h k KEY - describe what KEY is bound to
 

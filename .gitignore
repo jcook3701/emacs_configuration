@@ -3,6 +3,7 @@
 .dap-breakpoints
 .lsp-session-v1
 
+openai-api-key.el
 .chatgpt*
 *bytecomp*
 flycheck*
