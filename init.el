@@ -224,11 +224,11 @@
 ;;
 ;; Requires you to run: M-x all-the-icons-install-fonts
 (use-package all-the-icons
+  :if (display-graphic-p)
   :ensure t)
 
 ;;;(use-package all-the-icons-dired
-;;;  :hook
-;;;  (dired-mode . all-the-icons-dired-mode)
+;;;  :hook (dired-mode . all-the-icons-dired-mode)
 ;;;  :ensure t)
 
 ;; Display icons for all buffers in ibuffer.
@@ -237,6 +237,7 @@
 (use-package all-the-icons-ibuffer
   :config
   (all-the-icons-ibuffer-mode 1)
+  :after ibuffer
   :ensure t)
 
 ;;;(use-package dired-icon
@@ -250,15 +251,16 @@
 (use-package treemacs-icons-dired
   :config
   (treemacs-icons-dired-mode)
+  :after treemacs
   :ensure t)
 
 ;; Treemacs Icons for Helm
 ;;
 ;; Link: https://github.com/yyoncho/helm-icons
 (use-package helm-icons
-  :defer
   :config
   (helm-icons-enable)
+  :after helm
   :ensure t)
 
 ;;;(use-package vscode-icon
@@ -315,6 +317,29 @@
   :bind
   ("C-<prior>" . centaur-tabs-backward)
   ("C-<next>" . centaur-tabs-forward)
+  :ensure t)
+
+;; Window numbers for Emacs: Navigate your windows and frames using numbers!
+;;
+;; Link: https://github.com/deb0ch/emacs-winum
+(use-package winum 
+  :init
+  (setq winum-keymap
+	(let ((map (make-sparse-keymap)))
+	  (define-key map (kbd "C-`") 'winum-select-window-by-number)
+	  (define-key map (kbd "C-²") 'winum-select-window-by-number)
+	  (define-key map (kbd "M-0") 'winum-select-window-0-or-10)
+	  (define-key map (kbd "M-1") 'winum-select-window-1)
+	  (define-key map (kbd "M-2") 'winum-select-window-2)
+	  (define-key map (kbd "M-3") 'winum-select-window-3)
+	  (define-key map (kbd "M-4") 'winum-select-window-4)
+	  (define-key map (kbd "M-5") 'winum-select-window-5)
+	  (define-key map (kbd "M-6") 'winum-select-window-6)
+	  (define-key map (kbd "M-7") 'winum-select-window-7)
+	  (define-key map (kbd "M-8") 'winum-select-window-8)
+	  map))
+  :config
+  (winum-mode)
   :ensure t)
 
 ;; Left Side Bar - File Explorer & More -- Treemacs is a file and project
@@ -428,8 +453,6 @@
 ;;;  :commands (ibuffer-sidebar-toggle-sidebar)
 ;;;  ;; :hook (dired-sidebar-mode . ibuffer-sidebar-toggle-sidebar)
 ;;;  :init  
-;;;  (add-hook 'ibuffer-sidebar-mode-hook (lambda () (linum-mode -1)))
-;;;  
 ;;;  ;; (setq ibuffer-sidebar-use-custom-font t)
 ;;;  ;; (setq ibuffer-sidebar-face `(:family "Helvetica" :height 120))
 ;;;  (setq ibuffer-sidebar-display-column-titles t)
@@ -451,8 +474,7 @@
   :bind
   (:map dired-mode-map
 	("i" . nil))
-  :hook
-  (dired-mode . (turn-on-auto-revert-mode))
+;;  :hook (dired-mode . (turn-on-auto-revert-mode))
   :init
   (customize-set-value
    'auto-revert-verbose
@@ -468,13 +490,12 @@
   :bind
   (:map dired-mode-map
 	("K" . dired-k))
+  :hook ((dired-initial-position . dired-k)
+	 (dired-after-readin . dired-k-no-revert))
   :init
   ;; (setq dired-listing-switches "-laGh1v") ;; --group-directories-first
   (setq dired-k-human-readable t)
   (setq dired-k-style "k.zsh")
-  ;; (add-hook 'dired-mode-hook 'dired-k)
-  (add-hook 'dired-initial-position-hook 'dired-k)
-  (add-hook 'dired-after-readin-hook #'dired-k-no-revert)
   :ensure t)
 
 ;; This package adds more customizable highlighting for files in dired listings.
@@ -532,7 +553,7 @@
 ;;
 ;; Link: https://github.com/Fuco1/dired-hacks
 (use-package dired-subtree
-  ;; :after dired-sidebar
+  ;; :after dired-sidebar1
   :commands dired-subtree-insert dired-subtre-remove dired-subtree-toggle
   :bind
   (:map dired-mode-map
@@ -552,8 +573,6 @@
 	    (lambda ()
 	      (unless (file-remote-p default-directory)
 		(auto-revert-mode))))
-
-  (add-hook 'dired-sidebar-mode-hook (lambda () (linum-mode -1)))
 
   ;; (defun sidebar-toggle ()
     ;; Toggle both `dired-sidebar' and `ibuffer-sidebar'."
@@ -659,7 +678,6 @@
 ;;	("C-x" . vterm-send-C-x)
 	)
   :init
-  (add-hook 'vterm-mode-hook (lambda () (linum-mode -1)))
   (defun vterm-directory-sync ()
   "Synchronize current working directory."
   (interactive)
@@ -761,6 +779,11 @@
 (use-package eldoc
   :commands (eldoc-mode))
 
+;;
+(use-package rtags
+  :config
+  :ensure t)
+
 ;; Note: The hook to ansible-mode might need to be removed when working on non-ansible projects
 ;;       This was needed to enable ls-ansible within lsp.  Otherwise only yamlls server starts.
 (use-package yaml
@@ -780,6 +803,14 @@
   :after yaml
   :hook (ansible-mode . lsp-deferred)
   :interpreter ("ansible" . ansible-mode)
+  :ensure t)
+
+;; A major mode for editing nginx config files
+;;
+;; Link: https://github.com/ajc/nginx-mode
+(use-package nginx-mode
+  :commands nginx-mode
+;;  :mode ("/nginx/sites-\\(?:available\\|enabled\\)/" . nginx-mode)
   :ensure t)
 
 ;; Link: https://github.com/paradoxxxzero/jinja2-mode
@@ -933,6 +964,7 @@
   :commands (markdown-mode)
   :mode ("\\.md\\'" . markdown-mode)
   :interpreter ("markdown" . markdown-mode)
+  :hook (markdown-mode . lsp-deferred)
   :ensure t)
 
 ;; Can be used to generate a Table of Contents within a Markdown file.
@@ -995,24 +1027,28 @@
 ;; Link: https://github.com/fxbois/web-mode
 (use-package web-mode
   :hook (web-mode . lsp-deferred)
+  :mode
+  (("\\.html?\\'" . web-mode)
+   ("\\.css?\\'" . web-mode)
+   ("\\.scss?\\'" . web-mode)
+   ("\\.jsx\\'" . web-mode)
+   ("\\.ts\\'" . web-mode)
+   ("\\.tsx\\'" . web-mode)
+   ("\\.launch\\'" . web-mode))
   :init
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.launch\\'" . web-mode))
+  
+;;  (add-hook 'web-mode-hook	    
+;;            (lambda ()
+;;              (when (string-equal "jsx" (file-name-extension buffer-file-name))
+;;		(setup-tide-mode))))
 
-  (add-hook 'web-mode-hook	    
-            (lambda ()
-              (when (string-equal "jsx" (file-name-extension buffer-file-name))
-		(setup-tide-mode))))
+;;  (add-hook 'web-mode-hook
+;;            (lambda ()
+;;              (when (string-equal "tsx" (file-name-extension buffer-file-name))
+  ;;		(setup-tide-mode))))
 
-  (add-hook 'web-mode-hook
-            (lambda ()
-              (when (string-equal "tsx" (file-name-extension buffer-file-name))
-		(setup-tide-mode))))
+  ;; (add-hook 'tsx-ts-mode-hook #'setup-tide-mode)
+
 
   (setq web-mode-enable-current-column-highlight t)
   (setq web-mode-enable-current-element-highlight t)
@@ -1036,24 +1072,85 @@
 ;;
 ;; Link: https://github.com/mooz/js2-mode
 (use-package js2-mode
-  ;; :init
-  ;; (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  :mode ("\\.js\\'" . js2-mode)
+  :hook ((js2-mode . lsp-deferred)
+	 (js2-minor-mode . lsp-deferred))
+  :bind (:map js2-mode-map
+              ("M-r"        . node-js-eval-region-or-buffer)
+              ("M-R"        . refresh-chrome)
+              ("M-s-<up>"   . js2r-move-line-up)
+              ("M-s-<down>" . js2r-move-line-down)
+              ("C-<left>"   . js2r-forward-barf)
+              ("C-<right>"  . js2r-forward-slurp)
+              ("M-m S"      . js2r-split-string))
+  :config
+  ;; Formatting
+  (setq js2-basic-offset 2)
+  ;; Errors and Warnings
+  (setq js2-mode-show-parse-errors nil)
+  (setq js2-mode-show-strict-warnings nil)
+  :ensure t)
+
+;; A JavaScript refactoring library for emacs.
+;;
+;; This is a collection of small refactoring functions to further
+;; the idea of a JavaScript IDE in Emacs that started with js2-mode.
+;;
+;; Link: https://github.com/js-emacs/js2-refactor.el
+(use-package js2-refactor
+  :hook (js2-mode . js2-refactor-mode)
   :ensure t)
 
 ;; TypeScript Interactive Development Environment for Emacs
 ;;
 ;; Link: https://github.com/ananthakumaran/tide
 (use-package tide
-  :after (typescript-mode company flycheck)
-  :hook ((typescript-mode . tide-setup)
-         (typescript-mode . tide-hl-identifier-mode)
-         (before-save . tide-format-before-save))
+  :after (company flycheck)
+  :hook ((typescript-mode . setup-tide-mode)
+	 (js2-mode . setup-tide-mode)
+	 (web-mode . setup-tide-mode)
+         (tide-mode . flycheck-mode)
+         (tide-mode . company-mode)
+         (tide-mode . tide-hl-identifier-mode)
+         (before-save . tide-format-before-sve))
+  :config
+  (defun setup-tide-mode ()
+    "Configure Tide mode for JavaScript/TypeScript."
+    (interactive)
+    (when (or (string-equal "tsx" (file-name-extension buffer-file-name))
+              (string-equal "ts" (file-name-extension buffer-file-name))
+	      (string-equal "jsx" (file-name-extension buffer-file-name))
+              (string-equal "js" (file-name-extension buffer-file-name)))
+      (tide-setup)))
+
+  ;; aligns annotation to the right hand side
+  (setq company-tooltip-align-annotations t)
+  ;; Disable Tide's formatting if using LSP's formatting
+  (setq tide-format-options nil)
   :ensure t)
 
 ;; typescript-mode is a major-mode for editing Typescript-files in GNU Emacs.
 ;;
 ;; Link: https://github.com/emacs-typescript/typescript.el
-(use-package typescript-mode  
+(use-package typescript-mode
+  :hook (typescript-mode . lsp-deferred)
+  :ensure t)
+
+;; prettier-js is a function that formats the current buffer using prettier.
+;; The package also exports a minor mode that applies (prettier-js) on save.
+;;
+;; Link: https://github.com/prettier/prettier-emacs
+(use-package prettier-js
+  :hook ((js2-mode . prettier-js-mode)
+	 (tide-mode . prettier-js-mode)
+	 (web-mode . prettier-js-mode))
+  :ensure t)
+
+;; Run Node.js REPL in Emacs
+;; 
+;; Link: https://github.com/abicky/nodejs-repl.el
+;; TODO: This package needs to be configured.
+(use-package nodejs-repl
   :ensure t)
 
 ;; Extends the builtin js-mode to add better syntax highlighting for JSON and some
@@ -1061,7 +1158,15 @@
 ;;
 ;; Link: https://github.com/joshwnj/json-mode
 (use-package json-mode
+  :hook (json-mode . lsp-deferred)
+  :config
+  (setq js-indent-level 2)
   :ensure t)
+
+;; Unmaintained: Last commit was 8 years ago
+;; Link: https://github.com/antonj/scss-mode
+;; (use-package scss-mode
+;;   :ensure t)
 
 ;; ----------------------------------- Scala Setup ----------------------------------
 ;; The mode intends to provide basic emacs support for the Scala language, including:
@@ -1105,6 +1210,7 @@
 ;; Link: https://github.com/purcell/flymake-flycheck
 (use-package flymake-flycheck
   :hook (flymake-mode . flymake-flycheck-auto)
+  :after (flymake flycheck)
   :ensure t)
 
 ;; Link: https://github.com/jamescherti/flymake-ansible-lint.el
@@ -1112,24 +1218,28 @@
   :commands flymake-ansible-lint-setup
   :hook (((yaml-ts-mode yaml-mode) . flymake-ansible-lint-setup)
          ((yaml-ts-mode yaml-mode) . flymake-mode))
+  :after flymake
   :ensure t)
 
 ;; Link: https://codeberg.org/shaohme/flymake-markdownlint
 (use-package flymake-markdownlint
   :hook (markdown-mode . flymake-markdownlint-setup)
+  :after flymake
   :ensure t)
 
 ;; Link: https://github.com/orzechowskid/flymake-eslint
 (use-package flymake-eslint
   :init
-  (add-hook 'web-mode-hook ; or whatever the mode-hook is for your mode of choice
-	    (lambda ()
-	      (flymake-eslint-enable)))
+;;  (add-hook 'web-mode-hook ; or whatever the mode-hook is for your mode of choice
+;;	    (lambda ()
+  ;;	      (flymake-eslint-enable)))
+  :after flymake
   :ensure t)
 
 ;; Link: https://codeberg.org/shaohme/flymake-yamllint
 (use-package flymake-yamllint
   :hook (yaml-mode . flymake-yamllint-setup)
+  :after flymake
   :ensure t)
 
 ;; Enable nice rendering of diagnostics like compile errors.
@@ -1137,38 +1247,43 @@
 ;; Link: https://www.flycheck.org/en/latest/
 (use-package flycheck
   :init (global-flycheck-mode)
+  :config
+  ;; Configure Flycheck to use ESLint from LSP
+  (setq-default flycheck-disabled-checkers '(javascript-jshint javascript-jscs))
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
+  (flycheck-add-mode 'javascript-eslint 'js2-mode)
+  (flycheck-add-mode 'javascript-eslint 'typescript-mode)
   :ensure t)
 
 ;; This package provides a flycheck checker for the C, C++ and Objective-C languages.
 ;;
 ;; Link: https://github.com/Sarcasm/flycheck-irony
 (use-package flycheck-irony
-  :init
-  (eval-after-load 'flycheck
-    '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+  :hook (flycheck-mode . flycheck-irony-setup)
+  :after flycheck
   :ensure t)
 
 ;; This Flycheck extension configures Flycheck automatically for the current Cargo project.
 ;;
 ;; Link: https://github.com/flycheck/flycheck-rust
 (use-package flycheck-rust
-  :init
-  (with-eval-after-load 'rust-mode
-    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  :hook (flycheck-mode . flycheck-rust-setup)
+  :after rust-mode
   :ensure t)
 
 ;; Error Highlighting/Navigation
 ;;
 ;; Link: https://github.com/Andersbakken/rtags
 (use-package flycheck-rtags
+  :hook ((c-mode . my-flycheck-rtags-setup)
+	 (c++-mode . my-flycheck-rtags-setup)
+	 (objc-mode . my-flycheck-rtags-setup))
   :init
   (defun my-flycheck-rtags-setup ()
     (flycheck-select-checker 'rtags)
     (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-    (setq-local flycheck-check-syntax-automatically nil))  
-  :hook ((c-mode . my-flycheck-rtags-setup)
-	 (c++-mode . my-flycheck-rtags-setup)
-	 (objc-mode . my-flycheck-rtags-setup))
+    (setq-local flycheck-check-syntax-automatically nil))
+  :after flycheck
   :ensure t)
 
 ;; “Flyspell enables on-the-fly spell checking in Emacs by the means of a minor mode.
@@ -1202,7 +1317,7 @@
 (use-package lsp-mode
   :after company
   ;; Optional - enable lsp-mode automatically in scala files
-  :commands(lsp lsp-deferred)
+  :commands (lsp lsp-deferred)
   :hook (lsp-mode . lsp-lens-mode)
   :config
   ;; Uncomment following section if you would like to tune lsp-mode performance according to
@@ -1222,6 +1337,16 @@
   ;; ("pyls.plugins.yapf.enabled." t t)))
   
   (setq lsp-prefer-flymake nil)
+  ;; (setq lsp-enable-snippet nil) 
+  (setq lsp-eslint-auto-fix-on-save t) ; Automatically fix errors on save
+  (setq lsp-eslint-enable t)
+  :ensure t)
+
+;; Integration between lsp-mode and treemacs and implementation of
+;;   treeview controls using treemacs as a tree renderer.
+;; Link: https://github.com/emacs-lsp/lsp-treemacs
+(use-package lsp-treemacs
+  :commands (lsp-treemacs-errors-list)
   :ensure t)
 
 (use-package dap-mode
@@ -1256,6 +1381,8 @@
                 lsp-ui-doc-header nil
                 lsp-ui-doc-include-signature t
                 lsp-ui-doc-use-childframe t)
+  (setq lsp-ui-imenu-enable t)
+  (setq lsp-ui-peek-enable t)
   :ensure t)
 
 ;; YASnippet is a template system for Emacs. It allows you to type an abbreviation
@@ -1279,12 +1406,8 @@
 ;; Link:
 (use-package company
   :hook ((scala-mode . company-mode)
-	 (yaml-mode . company-mode))
-  
-  :init
-  ;; Company Package
-  (add-hook 'after-init-hook 'global-company-mode)
-  
+	 (yaml-mode . company-mode)
+	 (after-init . global-company-mode))
   :config
   (setq lsp-completion-provider :capf)
   ;; changed hot keys to scroll through elpy jedi configuration which uses
@@ -1321,6 +1444,7 @@
   :mode(("CMakeLists\\.txt\\'" . cmake-mode)
 	("\\.cmake\\'" . cmake-mode))
   :interpreter ("cmake" . cmake-mode)
+  :hook (cmake-mode . lsp-deferred)
   :ensure t)
 
 ;; This package implements CSV mode, a major mode for editing records
@@ -1351,10 +1475,9 @@
 ;; Link: https://gitlab.com/wavexx/gcode-mode.el/tree/1f83845af4102efc5e5856b55bd5ad165b2f0cdd
 (use-package gcode-mode
   :commands (gcode-mode)
+  :mode ("\\.gcode\\'" . gcode-mode)
   :hook((gcode-mode . eldoc-mode)
 	(gcode-mode . lsp-deferred))
-  :config
-  (add-to-list 'auto-mode-alist '("\\.gcode\\'" . gcode-mode))
   :ensure t)
 
 ;; go-mode covers the basic features you need for working with the Go code
@@ -1364,10 +1487,8 @@
 ;; Link: https://github.com/dominikh/go-mode.el
 (use-package go-mode
   :commands (go-mode)
-  :hook
-  (go-mode . lsp-deferred)
-  :config
-  (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
+  :mode ("\\.go\\'" . go-mode)
+  :hook (go-mode . lsp-deferred)
   :ensure t)
 
 ;; This is npm-mode, an Emacs minor mode for working with NPM projects.
@@ -1653,6 +1774,7 @@
   :bind
   (:map flyspell-mode-map
 	("C-;" . helm-flyspell-correct))
+  :after helm
   :ensure t)
 
 ;; A call to helm-make will give you a helm selection of this directory
@@ -1662,6 +1784,7 @@
 ;;
 ;; Link: https://github.com/abo-abo/helm-make
 (use-package helm-make
+  :after helm
   :ensure t)
 
 ;; This package integrates the catkin build tool for ROS packages into Emacs. With it you can:
@@ -1672,24 +1795,28 @@
 ;;
 ;; Link: https://github.com/gollth/helm-catkin
 (use-package helm-catkin
+  :after helm
   :ensure t)
 
 ;; Helm Interface for Chrome bookmarks.
 ;;
 ;; Link: https://github.com/kawabata/helm-chrome
 (use-package helm-chrome
+  :after helm
   :ensure t)
 
 ;; Browse your Chrome history with Helm.
 ;;
 ;; Link: https://github.com/xuchunyang/helm-chrome-history
 (use-package helm-chrome-history
+  :after helm
   :ensure t)
 
 ;; helm interface for codesearch
 ;;
 ;; Link: https://github.com/youngker/helm-codesearch.el
 (use-package helm-codesearch
+  :after helm
   :ensure t)
 
 ;;;(use-package helm-ros
@@ -1700,12 +1827,14 @@
 ;;
 ;; Link: https://github.com/Lompik/helm-systemd
 (use-package helm-systemd
+  :after helm
   :ensure t)
 
 ;; helm-themes.el provides Emacs themes selection with helm interface.
 ;;
 ;; Link: https://github.com/emacsorphanage/helm-themes
 (use-package helm-themes
+  :after helm
   :ensure t)
 
 ;;;(use-package helm-google-helm
@@ -1728,13 +1857,12 @@
 ;;
 ;; Link: https://github.com/Sarcasm/irony-mode
 (use-package irony
+  :hook ((c++-mode . irony-mode)
+	 (c-mode . irony-mode)
+	 (objc-mode . irony-mode))
   :init
   ;; C++ Mode Settings
   (setq-default c-basic-offset 4)
-
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode)
 
   (defun my-irony-mode ()
     (define-key irony-mode-map [remap completion-at-point]
@@ -1749,15 +1877,25 @@
 
 ;;(setq company-backends (delete 'company-semantic company-backends))
 
+;; This package provides a company-mode asynchronous completion
+;; backend for the C, C++ and Objective-C languages.
+;;
+;; Link: https://github.com/Sarcasm/company-irony
+(use-package company-irony
+  :config
+  (add-to-list 'company-backends 'company-irony)
+  :after company
+  :ensure t)
+
 ;; This package provides a company-mode backend for C/C++ header files
 ;; that works with irony-mode. This package is meant to be complementary
 ;; to company-irony by offering completion suggestions to header files.
 ;;
 ;; Link: https://github.com/hotpxl/company-irony-c-headers
 (use-package company-irony-c-headers
-  :init
-  (eval-after-load 'company
-    '(add-to-list 'company-backends '(company-irony-c-headers company-irony)))
+  :config
+  (add-to-list 'company-backends 'company-irony-c-headers)
+  :after company
   :ensure t)
 
 ;; ROS Emacs
@@ -1788,8 +1926,7 @@
 ;;
 ;; Link: https://github.com/politza/pdf-tools
 (use-package pdf-tools  
-  :init
-  (add-hook 'pdf-view-mode-hook (lambda () (linum-mode -1)))
+  :config
   (pdf-loader-install)
   :ensure t)
 
@@ -1801,7 +1938,7 @@
 ;;
 ;; Link: https://github.com/Malabarba/emacs-google-this
 (use-package google-this
-  :init
+  :config
   ;; (setq google-this-keybind (kbd "C-x g"))
   (google-this-mode 1)
   :ensure t)
@@ -1815,10 +1952,16 @@
 ;;
 ;; Link: https://www.emacswiki.org/emacs/TrampMode
 (use-package tramp
-  :init
+  :config
   (setq tramp-default-method "ssh"))
 
-(use-package transient :ensure (:fetcher github :repo "magit/transient"))
+;; Transient is the library used to implement the keyboard-driven “menus”
+;; in Magit. It is distributed as a separate package, so that it can be used
+;; to implement similar menus in other packages.
+;; 
+;; Link: https://github.com/magit/transient
+(use-package transient
+  :ensure (:fetcher github :repo "magit/transient"))
 
 ;; Magit - Magit is an interface to the version control system Git,
 ;; implemented as an Emacs package. Magit aspires to be a complete
@@ -1831,8 +1974,7 @@
 ;; 
 ;; Link: https://github.com/magit/magit
 (use-package magit
-  :defer
-  ;; :init
+  :config
   (setq auth-sources '("~/.authinfo"))
   :ensure t)
 
