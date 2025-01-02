@@ -4,13 +4,13 @@ layout: default
 
 ## Bleeding Edge: Emacs 25.3 with xwidget
 ### Why?
-> The purpose of building Emacs with xwidget is to make it possible to use the command "xwidget-webkit-browse-url".  This command allows users to open web-pages inside of Emacs without ever having to leave Emacs.  I have included configuration settings for navigating web-pages in my init.el file included in this Github repository.
+> The purpose of building Emacs with xwidget is to make it possible to use the command "xwidget-webkit-browse-url".  This command allows users to open web-pages inside of Emacs without ever having to leave Emacs.  I have included configuration settings for navigating web-pages in my init.el file included in this Github repository.  
 
 ### Requirements
 > Before starting it is very important to make sure that both your Homebrew and MacPort installations are fully updated.  As they will be needed for the installation of the following packages: autoconf, automake, gtk3, & webkitgtk.  
 >
 > #### Homebrew
->> makeinfo can also be installed from Homebrew:
+>> makeinfo can also be installed from Homebrew:  
 >> ```bash
 >> brew install texinfo
 >> ```
@@ -28,13 +28,13 @@ layout: default
 >> brew install gnutls
 >> ```
 >> 
->> This package is needed for Emacs to build with the flag "--with-xwidget".
+>> This package is needed for Emacs to build with the flag "--with-xwidget".  
 >> ```bash
 >> brew install gtk+3
 >> ```
 >
 >#### MacPorts
->> This package is also needed for Emacs to build with the flag "--with-xwidget".
+>> This package is also needed for Emacs to build with the flag "--with-xwidget".  
 >> ```bash
 >> port install webkit-gtk3
 >> ``` 
@@ -65,7 +65,7 @@ layout: default
 > make install
 > ```
 >
-> Unless you specify a path emacs will be installed in the following location when using "make install" with the following configuration.
+> Unless you specify a path emacs will be installed in the following location when using "make install" with the following configuration.  
 > ```
 > /usr/local/bin/
 > ```
@@ -81,14 +81,14 @@ layout: default
 > ```
 > Applicaion -> Customize. -> Add Item
 > ```
-> ![alt text](../images/XQuartz_Applications_Customize.png "Applicaion -> Customize")
+> ![alt text](../images/XQuartz_Applications_Customize.png "Applicaion -> Customize")  
 >
 > The new item requires a Name and Command to be associated with it.  
 > ```
 > Name: emacs
 > Command: /usr/local/bin/emacs
 > ```
-> ![alt text](../images/XQuartz_Application_emacs_setup.png "Applicaion -> Customize -> emacs")
+> ![alt text](../images/XQuartz_Application_emacs_setup.png "Applicaion -> Customize -> emacs")  
 >
 > I was experiencing errors with C-space for the Mark set and found that it could be fixed from:
 > ```
@@ -97,8 +97,8 @@ layout: default
 > Uncheck -> Enable key equivalents under X11
 > Check   -> Follow system keyboard layout
 > ```
-> ![alt text](../images/XQuartz_preferences.png "Applicaion -> Customize -> emacs")
-> ![alt text](../images/XQuartz_input_preferences.png "Applicaion -> Customize -> emacs")
+> ![alt text](../images/XQuartz_preferences.png "Applicaion -> Customize -> emacs")  
+> ![alt text](../images/XQuartz_input_preferences.png "Applicaion -> Customize -> emacs")  
 > 
 > If Built with the flag "--with-dbus" or don't use the flag "--without-dbus" you might get the following error. Never less in my experiences a dbus error can be solved with the below commands.  
 > ```bash
@@ -120,7 +120,7 @@ layout: default
 > sudo port load dbus
 > ```
 >
-> This is the output of the command "sudo port load dbus".
+> This is the output of the command "sudo port load dbus".  
 > ```bash
 > Jareds-MacBook-Pro-2:bin jared3701$ sudo port load dbus
 > Password:
@@ -129,21 +129,21 @@ layout: default
 > ```
 
 ### Demonstration
-> ![alt text](../images/emacs_as_browser.png "Emacs as a browser")
+> ![alt text](../images/emacs_as_browser.png "Emacs as a browser")  
 
 ### Helpful Links
 > #### Building Emacs
->> [https://stackoverflow.com/questions/24213842/webkit-not-found-on-osx](https://stackoverflow.com/questions/24213842/webkit-not-found-on-osx)
->> [https://emacs.stackexchange.com/questions/25037/compile-emacs-with-xwidget-under-osx](https://emacs.stackexchange.com/questions/25037/compile-emacs-with-xwidget-under-osx)
->> [https://jiegec.me/programming/2016/02/18/building-emacs-git-version-with-xwidgets-and-modules-in-archlinux/](https://jiegec.me/programming/2016/02/18/building-emacs-git-version-with-xwidgets-and-modules-in-archlinux/)
->> [https://github.com/veshboo/emacs](https://github.com/veshboo/emacs)
+>> [https://stackoverflow.com/questions/24213842/webkit-not-found-on-osx](https://stackoverflow.com/questions/24213842/webkit-not-found-on-osx)  
+>> [https://emacs.stackexchange.com/questions/25037/compile-emacs-with-xwidget-under-osx](https://emacs.stackexchange.com/questions/25037/compile-emacs-with-xwidget-under-osx)  
+>> [https://jiegec.me/programming/2016/02/18/building-emacs-git-version-with-xwidgets-and-modules-in-archlinux/](https://jiegec.me/programming/2016/02/18/building-emacs-git-version-with-xwidgets-and-modules-in-archlinux/)  
+>> [https://github.com/veshboo/emacs](https://github.com/veshboo/emacs)  
 >
 > #### Using xwidget
->> [https://www.reddit.com/r/emacs/comments/4srze9/watching_youtube_inside_emacs_25/](https://www.reddit.com/r/emacs/comments/4srze9/watching_youtube_inside_emacs_25/)
->> [https://www.youtube.com/watch?v=J2YdjpWJJHs](https://www.youtube.com/watch?v=J2YdjpWJJHs)
+>> [https://www.reddit.com/r/emacs/comments/4srze9/watching_youtube_inside_emacs_25/](https://www.reddit.com/r/emacs/comments/4srze9/watching_youtube_inside_emacs_25/)  
+>> [https://www.youtube.com/watch?v=J2YdjpWJJHs](https://www.youtube.com/watch?v=J2YdjpWJJHs)  
 >
 > #### XQuartz
->> [https://stackoverflow.com/questions/37826094/xt-error-cant-open-display-if-using-default-display](https://stackoverflow.com/questions/37826094/xt-error-cant-open-display-if-using-default-display)
->> [https://emacs.stackexchange.com/questions/21285/set-mark-command-c-spc-not-recognised-broken](https://emacs.stackexchange.com/questions/21285/set-mark-command-c-spc-not-recognised-broken)
+>> [https://stackoverflow.com/questions/37826094/xt-error-cant-open-display-if-using-default-display](https://stackoverflow.com/questions/37826094/xt-error-cant-open-display-if-using-default-display)  
+>> [https://emacs.stackexchange.com/questions/21285/set-mark-command-c-spc-not-recognised-broken](https://emacs.stackexchange.com/questions/21285/set-mark-command-c-spc-not-recognised-broken)  
 
-[back](.././)
+[back](.././)  

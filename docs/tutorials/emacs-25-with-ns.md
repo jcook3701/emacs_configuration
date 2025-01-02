@@ -4,26 +4,26 @@ layout: default
 
 ## Production: Emacs 25.3
 ### Requirements
-> - Before you start, you need a few dependencies:
->   - Xcode (free in the Mac App Store).
->   - Autoconf and Automake. The easiest way to use Homebrew via brew install autoconf automake.
->   - makeinfo (part of the Texinfo suite). Apple ships makeinfo, but at some point the system version fell below the minimum version Emacs needs to build.
+> - Before you start, you need a few dependencies:  
+>   - Xcode (free in the Mac App Store).  
+>   - Autoconf and Automake. The easiest way to use Homebrew via brew install autoconf automake.  
+>   - makeinfo (part of the Texinfo suite). Apple ships makeinfo, but at some point the system version fell below the minimum version Emacs needs to build.  
 >
 > #### Homebrew
->> makeinfo can also be installed from Homebrew:
+>> makeinfo can also be installed from Homebrew:  
 >> ```bash
 >> brew install texinfo
 >> ```
 >>
 >> But before building Emacs, you need to get it into your $PATH ahead of /usr/bin/makeinfo
->> The following exports should be added to your bashrc or bash_profile.
+>> The following exports should be added to your bashrc or bash_profile.  
 >> ```bash
 >> export PATH=/usr/local/opt/texinfo/bin:$PATH
 >> export LDFLAGS=-L/usr/local/opt/texinfo/lib
 >> ```
 >>
 >> This package is needed if you want the --with-gnutls flag to work correctly when you build emacs.  
->> Gnutls allows for the use of the package-list-packages function in emacs.
+>> Gnutls allows for the use of the package-list-packages function in emacs.  
 >> ```bash
 >> brew install gnutls
 >> ```
@@ -34,7 +34,7 @@ layout: default
 > /Users/jared3701/Applications/emacs/
 > ```
 >
-> Once you have the prerequisites squared away, the build is the same as it’s been for a while. Get the source:
+> Once you have the prerequisites squared away, the build is the same as it’s been for a while. Get the source:  
 > ```bash
 > cd /Users/jared3701/Applications/
 > git clone git://git.savannah.gnu.org/emacs.git
@@ -48,13 +48,13 @@ layout: default
 >
 > __Configuration Settings:__  
 > These are the configuration settings that I used for this project.  
-> - with-ns
->    - This determines that it will be build in the nextstep folder.
-> - with-gnutls
->    - This was needed to get the emacs package manager working.
-> - with-imagemagick
+> - with-ns  
+>    - This determines that it will be build in the nextstep folder.  
+> - with-gnutls  
+>    - This was needed to get the emacs package manager working.  
+> - with-imagemagick  
 >
-> Configure and compile (make install build the application bundle, it doesn’t actually install anything):
+> Configure and compile (make install build the application bundle, it doesn’t actually install anything):  
 > ```bash
 > make configure
 > ./configure  --with-ns --with-gnutls --with-imagemagick
@@ -62,7 +62,7 @@ layout: default
 > ```
 
 ### Deployed Emacs 25.3
-> __Deployment:__
+> __Deployment:__  
 > ```bash
 > cd /Users/jared3701/Applications/
 > mkdir emacs-25.3
@@ -71,6 +71,6 @@ layout: default
 > ```
 
 ### Helpful Links
-> [https://stuff-things.net/2018/01/30/building-emacs-25-on-macos-high-sierra/](https://stuff-things.net/2018/01/30/building-emacs-25-on-macos-high-sierra/)
+> [https://stuff-things.net/2018/01/30/building-emacs-25-on-macos-high-sierra/](https://stuff-things.net/2018/01/30/building-emacs-25-on-macos-high-sierra/)  
 
-[back](.././)
+[back](.././)  

@@ -1,12 +1,15 @@
-
+---
 - title: Home
   url: /
 - title: Building Emacs
   url: /#building-emacs
   sublinks:
+    - title: Emacs 25.3 OSX
+      url: /tutorials/emacs-25-OSX.html
+    - title: Emacs 25.3 OSX - Init File Breakdown
+      url: /tutorials/emacs-25-OSX.html/#init-file-breakdown
     - title: Emacs 25.3 with-ns
       url: /tutorials/emacs-25-with-ns.html
     - title: Emacs 25.3 with-xwidget
       url: /tutorials/emacs-25-with-xwidget.html
-- title: Init File Breakdown
-  url: /#init-file-breakdown
+      
