@@ -44,8 +44,9 @@
 
 ;; Full Screen
 
-;; Inhibit Default Startup Screen
-(setq inhibit-startup-screen t)
+(setq inhibit-startup-screen t)         ;; Inhibit Default Startup Screen
+(setq initial-scratch-message "")       ;; No message in scratch buffer
+
 
 ;; Shell Feature - Allows ability to open emacs inside of emacs bash
 (server-start)
@@ -795,9 +796,91 @@
 (use-package eldoc
   :commands (eldoc-mode))
 
+;; To Company-lsp users:
+;; Company-lsp is no longer maintained and has been removed from MELPA.
+;; Please migrate to company-capf.
 ;;
-(use-package rtags
+;; Company is a text and code completion framework for Emacs. The name
+;; stands for "complete anything". It uses pluggable back-ends and
+;; front-ends to retrieve and display completion candidates.
+;;
+;; Link: https://github.com/company-mode/company-mode?tab=readme-ov-file
+(use-package company
+  :hook ((scala-mode . company-mode)
+	 (yaml-mode . company-mode)
+	 (after-init-hook . global-company-mode))
   :config
+  (setq lsp-completion-provider :capf)
+  ;; changed hot keys to scroll through elpy jedi configuration which uses
+  ;; company under the hood.
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") 'company-select-next)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous)
+   ;;  Already defined however I am putting this here for my reference.
+   ;; (define-key company-active-map (kbd "C-d") ')  ;; display a temporary window with documentation.
+   ;; (define-key company-active-map (kbd "C-w") ')  ;; will display a temporary window showing the
+                                                  ;; source code of the completion to get some context. 
+  (global-company-mode 1)
+  (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
+  :ensure t)
+
+;; Projectile is a project interaction library for Emacs.
+;;
+;; https://github.com/bbatsov/projectile
+(use-package projectile
+  :init
+  (setq projectile-completion-system 'helm) ;; Using Helm
+  :config
+  (setq projectile-tags-command "ctags -Re") ;; Command to generate tags
+  (projectile-mode 1)
+  :hook
+  ;; ctags setup (regenerating tags after switching project)
+  (projectile-after-switch-project-hook .
+        (lambda ()
+	  (let ((default-directory (projectile-project-root)))
+	    (shell-command "ctags -Re ."))))
+  :bind
+  (("C-c p p" . projectile-switch-project)
+   ("C-c p f" . projectile-find-file))
+  :ensure t)
+
+;; 
+;; 
+;; Link: https://github.com/Andersbakken/rtags
+(use-package rtags
+  :hook (c-mode-common . rtags-start-process-unless-running)
+  :init
+  (setq rtags-autostart-diagnostics t)
+  :config
+  (rtags-enable-standard-keybindings)
+  :bind
+  (("M-." . rtags-find-symbol-at-point)
+   ("M-," . rtags-find-references-at-point))
+  :ensure t)
+
+;; Code completion
+;;
+;; Link: https://github.com/Andersbakken/rtags
+(use-package company-rtags
+  :after (company rtags)
+  :config
+  (setq rtags-autostart-diagnostics t)   ;; Enable autostart for diagnostics
+  (rtags-diagnostics)                    ;; Start RTags diagnostics
+  (setq rtags-completions-enabled t)     ;; Enable RTags completions
+  (push 'company-rtags company-backends) ;; Add company-rtags as a backend for company-mode
+  :bind
+  (("M-." . company-rtags-find-symbol-at-point)  ;; Go to symbol
+   ("M-," . company-rtags-find-references-at-point))  ;; Find references
+  :ensure t)
+
+;; GGTAGS setup
+(use-package ggtags
+  :hook ((c-mode c++-mode) . ggtags-mode)
+  :config
+  (setq ggtags-completion-mode 'helm) ;; Using Helm for ggtags completion
+  :bind
+  (("C-c g" . ggtags-find-tag-dwim))
   :ensure t)
 
 ;; Note: The hook to ansible-mode might need to be removed when working on non-ansible projects
@@ -1331,11 +1414,56 @@
   (:map flyspell-mode-map
 	("C-;" . nil)))
 
+;; Emacs client/library for Debug Adapter Protocol is a wire protocol for communication
+;; between client and Debug Server. It’s similar to the LSP but provides integration with
+;; debug server.
+;;
+;; Link: https://github.com/emacs-lsp/dap-mode
+(use-package dap-mode
+  :hook
+  ((prog-mode . dap-mode)       ;; Enable dap-mode for programming modes
+   (dap-mode . dap-ui-mode))    ;; Enable the UI for debugging
+  :config
+  ;; Optional: Configure features for better debugging experience
+  ;; (dap-auto-configure-mode)      ;; Automatically configures the buffer
+  ;; (setq dap-auto-configure-features '(sessions locals breakpoints expressions repl)) ;; Features to auto-configure
+  
+  ;; Language-specific configurations
+  (require 'dap-python)         ;; Python support
+  (require 'dap-node)           ;; Node.js support
+  (dap-node-setup)
+  (require 'dap-lldb)          ;; C++/Rust with LLDB  
+  :ensure t)
+
+;; Optional: Treemacs integration for visual debugging (if you use Treemacs)
+(use-package dap-ui
+  :ensure nil
+  :after (treemacs dap-mode)
+  :config
+  (dap-ui-mode 1)
+  ;;(dap-ui-breakpoints)
+  )
+
+;; Python Debugger Configuration
+(use-package dap-python
+  :after dap-mode
+  :config
+  (setq dap-python-debugger 'debugpy)  ;; Use `debugpy` as the Python debugger
+  (setq dap-python-executable "python3"))
+
+;; Node.js Debugger Configuration
+(use-package dap-node
+  :after dap-mode
+  :config
+  (setq dap-node-debug-program `("node" "--inspect-brk"))) ;; Ensure Node.js is installed
+
+
 ;; Client for Language Server Protocol (v3.14). lsp-mode aims to provide IDE-like experience by
 ;; providing optional integration with the most popular Emacs packages like company, flycheck
 ;; and projectile
 ;; 
 ;; Link: https://github.com/emacs-lsp/lsp-mode
+;; Helpful: https://emacs-lsp.github.io/lsp-mode/page/lsp-eslint/
 (use-package lsp-mode
   :after company
   ;; Optional - enable lsp-mode automatically in scala files
@@ -1371,9 +1499,6 @@
   :commands (lsp-treemacs-errors-list)
   :ensure t)
 
-(use-package dap-mode
-  :ensure t)
-
 ;; Add metals backend for lsp-mode
 ;; Emacs Scala IDE using lsp-mode to connect to Metals.
 ;;
@@ -1391,20 +1516,22 @@
 ;;
 ;; Link: https://github.com/emacs-lsp/lsp-ui
 (use-package lsp-ui
+  :after lsp-mode
   :commands lsp-ui-mode
   :hook (lsp-mode . lsp-ui-mode)
   :config
-  (setq lsp-ui-sideline-show-hover t
-                lsp-ui-sideline-delay 0.5
-                lsp-ui-doc-delay 5
-                lsp-ui-sideline-ignore-duplicates t
-                lsp-ui-doc-position 'bottom
-                lsp-ui-doc-alignment 'frame
-                lsp-ui-doc-header nil
-                lsp-ui-doc-include-signature t
-                lsp-ui-doc-use-childframe t)
+  (setq lsp-ui-sideline-show-hover t)
+  (setq lsp-ui-sideline-delay 0.5)
+  (setq lsp-ui-doc-delay 5)
+  (setq lsp-ui-sideline-ignore-duplicates t)
+  (setq lsp-ui-doc-position 'bottom)
+  (setq lsp-ui-doc-alignment 'frame)
+  (setq lsp-ui-doc-header nil)
+  (setq lsp-ui-doc-include-signature t)
+  (setq lsp-ui-doc-use-childframe t)
   (setq lsp-ui-imenu-enable t)
   (setq lsp-ui-peek-enable t)
+  (setq lsp-ui-doc-enable t)
   :ensure t)
 
 ;; YASnippet is a template system for Emacs. It allows you to type an abbreviation
@@ -1419,29 +1546,6 @@
 ;;
 ;; Link: https://github.com/joaotavora/yasnippet
 (use-package yasnippet
-  :ensure t)
-
-;; To Company-lsp users:
-;; Company-lsp is no longer maintained and has been removed from MELPA.
-;; Please migrate to company-capf.
-;;
-;; Link:
-(use-package company
-  :hook ((scala-mode . company-mode)
-	 (yaml-mode . company-mode)
-	 (after-init . global-company-mode))
-  :config
-  (setq lsp-completion-provider :capf)
-  ;; changed hot keys to scroll through elpy jedi configuration which uses
-  ;; company under the hood.
-  (define-key company-active-map (kbd "M-n") nil)
-  (define-key company-active-map (kbd "M-p") nil)
-  (define-key company-active-map (kbd "C-n") 'company-select-next)
-  (define-key company-active-map (kbd "C-p") 'company-select-previous)
-   ;;  Already defined however I am putting this here for my reference.
-   ;; (define-key company-active-map (kbd "C-d") ')  ;; display a temporary window with documentation.
-   ;; (define-key company-active-map (kbd "C-w") ')  ;; will display a temporary window showing the
-                                                  ;; source code of the completion to get some context. 
   :ensure t)
 
 ;;;cmake-ide
@@ -1538,25 +1642,6 @@
 	 ("\\.vh\\'" . verilog-mode))
   :interpreter ("verilog" . verilog-mode)
   :ensure t)
-
-;; Code completion
-;;
-;; Link: https://github.com/Andersbakken/rtags
-(use-package company-rtags
-  :init
-  (setq rtags-autostart-diagnostics t)
-  (rtags-diagnostics)
-  (setq rtags-completions-enabled t)
-  ;;      rtags-path "/home/jcook/.emacs.d/elpa/rtags-20201008.1707/rtags.el"
-  ;;      rtags-rc-binary-name "/home/jcook/.emacs.d/elpa/rtags-20201008.1707/rtags-2.38/bin/rc"
-  ;;      rtags-use-helm t
-  ;;      rtags-rdm-binary-name "/home/jcook/.emacs.d/elpa/rtags-20201008.1707/rtags-2.38/bin/rdm")
-  :config
-  (push 'company-rtags company-backends)
-  (global-company-mode)
-  (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
-  :ensure t)
-
 
 ;; ------- Python Packages for Emacs ------- ;;
 ;;; virtualenvwrapper
@@ -1799,6 +1884,33 @@
   :after helm
   :ensure t)
 
+;; Projectile integration with Helm
+;;
+;; Link: https://github.com/bbatsov/helm-projectile
+(use-package helm-projectile
+  :after (projectile helm)
+  :config
+  (helm-projectile-on)
+  :bind
+  (("C-c p p" . helm-projectile-switch-project)
+   ("C-c p f" . helm-projectile-find-file)
+   ("C-c p s" . helm-projectile-ag))
+  :ensure t)
+
+;; helm-gtags.el is GNU GLOBAL helm interface.
+;;
+;; Link: https://github.com/emacsorphanage/helm-gtags
+(use-package helm-gtags
+  :after (helm ggtags)
+  :ensure t
+  :config
+  (add-hook 'c-mode-hook 'helm-gtags-mode)
+  (add-hook 'c++-mode-hook 'helm-gtags-mode)
+  :bind
+  (("M-." . helm-gtags-dwim)         ;; Go to symbol
+   ("M-," . helm-gtags-pop-stack)     ;; Jump back to previous location
+   ("C-c g r" . helm-gtags-find-reference))) ;; Find references
+
 ;; A call to helm-make will give you a helm selection of this directory
 ;; Makefile's targets. Selecting a target will call compile on it. You
 ;; can cancel as usual with C-g. Support is provided for the various
@@ -1861,6 +1973,18 @@
 
 ;;;(use-package helm-google-helm
 ;;;  :ensure t)
+
+;; helm-ag.el provides interfaces of The Silver Searcher with helm.
+;;
+;; Link: https://github.com/emacsorphanage/helm-ag
+(use-package helm-ag
+  :after helm  ;; Ensure Helm is loaded before Helm-Ag
+  :config
+  (setq helm-ag-base-command "ag --nocolor --nogroup --ignore-case")  ;; Customize ag command options if needed
+  :bind
+  (("M-s a" . helm-ag)         ;; Search the entire project/directory with ag (M-s a)
+   ("M-s A" . helm-ag-project-root))  ;; Search within the current project root (M-s A)
+  :ensure t)
 
 ;; This implements eldoc support in irony-mode. eldoc is a built-in Emacs
 ;; mode for displaying documentation about a symbol or function call at
@@ -1926,6 +2050,22 @@
 ;;; (require 'helm-ros)
 
 ;; ----------------------------------- Useful Tools -----------------------------------
+
+;; A code searching tool similar to ack, with a focus on speed.
+;; 
+;; Link: https://github.com/ggreer/the_silver_searcher
+(use-package ag
+  :ensure t
+  :config
+  (setq ag-highlight-search t))  ;; Enable highlighting for search results
+
+;; This is an EditorConfig plugin for Emacs.
+;;
+;; Link: https://github.com/editorconfig/editorconfig-emacs
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))  ;; Enable EditorConfig globally
 
 ;; emacs-slack is a Slack client for emacs
 ;;
@@ -1999,6 +2139,8 @@
 (use-package magit
   :config
   (setq auth-sources '("~/.authinfo"))
+  :bind
+  (("C-x g" . magit-status)) ;; Bind Magit status to C-x g
   :ensure t)
 
 ;; Work with Git forges, such as Github and Gitlab, from the comfort of Magit and the rest of Emacs.

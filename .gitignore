@@ -10,6 +10,7 @@ flycheck*
 
 .cache/
 .cask/
+.extension/
 .python-environments/
 .python-environments-old/
 ac-comphist.dat
@@ -23,6 +24,7 @@ emacs-saves/
 eshell/
 init.el.bak
 irony/
+projectile-bookmarks.eld
 recentf
 tmp/
 tramp
