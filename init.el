@@ -225,6 +225,15 @@
 ;; Requires you to run: M-x all-the-icons-install-fonts
 (use-package all-the-icons
   :if (display-graphic-p)
+  :config
+  ;; Function to install all-the-icons fonts
+  (defun install-all-the-icons-fonts ()
+    "Install the all-the-icons fonts."
+    (unless (file-exists-p "~/.local/share/fonts/all-the-icons.ttf")
+      (all-the-icons-install-fonts t)))
+  
+  ;; Run the function to install the fonts
+  (install-all-the-icons-fonts)
   :ensure t)
 
 ;;;(use-package all-the-icons-dired
@@ -474,7 +483,7 @@
   :bind
   (:map dired-mode-map
 	("i" . nil))
-;;  :hook (dired-mode . (turn-on-auto-revert-mode))
+;;  :hook (dired-mode . auto-revert-mode)  ;; Need to test this...
   :init
   (customize-set-value
    'auto-revert-verbose
@@ -496,6 +505,13 @@
   ;; (setq dired-listing-switches "-laGh1v") ;; --group-directories-first
   (setq dired-k-human-readable t)
   (setq dired-k-style "k.zsh")
+  :ensure t)
+
+;; This package implements useful features present in the ranger file manager which
+;; are missing in dired.
+;;
+;; Link: https://github.com/Fuco1/dired-hacks
+(use-package dired-ranger
   :ensure t)
 
 ;; This package adds more customizable highlighting for files in dired listings.
@@ -990,7 +1006,7 @@
   (setq grip-github-password "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDfhI7V7AEj+xL9aUn2kD8MWmypDUjOTW9akCAOCSPDOz9voRMFgQcf+GQd/2xYDMsXGUgwns96xDLUq36ga/MDf4h7x95vOtLDcobzRP1LMqjxe/0yw19JerTYhb1oMcl7tZl63NTh+Nx/c+sPKB8j05yF/dIsbNduAOx1ZSJm9FiAoF47uRPC5PSK+7sJtnF0KuWI3a7dLNGTSDmu4ipqiks5rxh5mb50rlE5Sf5E1XeiTSzuRG8VRVDEHd1KfxEC63NCy+dtnmk6sPyqFTH7igLxSZzIQJyyb4Ou40p4VqYBEglDnTQRAKfo0H1Xknq5IaGApAI75HcQ6D3xrcVv jcook@second-chance")
   ;; (setq grip-github-password "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")
   (setq grip-update-after-change nil)
-  (setq grip-preview-use-webkit nil)
+  (setq grip-preview-use-webkit t)
   :ensure t)
 
 ;; yarn-mode is a major mode designed to be used to look at yarn.lock
@@ -1149,8 +1165,14 @@
 ;; Run Node.js REPL in Emacs
 ;; 
 ;; Link: https://github.com/abicky/nodejs-repl.el
-;; TODO: This package needs to be configured.
 (use-package nodejs-repl
+  :hook ((js2-mode . nodejs-repl-minor-mode)
+	 (tide-mode . nodejs-repl-minor-mode)
+	 (web-mode . nodejs-repl-minor-mode))
+  :config
+  (defun nvm-which ()
+    (let ((output (shell-command-to-string "source ~/.nvm/nvm.sh; nvm which")))
+      (cadr (split-string output "[\n]+" t))))
   :ensure t)
 
 ;; Extends the builtin js-mode to add better syntax highlighting for JSON and some
@@ -1973,6 +1995,7 @@
 ;; porcelains.
 ;; 
 ;; Link: https://github.com/magit/magit
+;; TODO: [emacs-authinfo](https://www.gnu.org/software/emacs/manual/html_node/emacs/Authentication.html)
 (use-package magit
   :config
   (setq auth-sources '("~/.authinfo"))

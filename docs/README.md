@@ -1,6 +1,5 @@
 ---
 layout: default
-{ site.data.navigation}
 ---
 
 # Emacs 29.4 - Linux - Ubuntu 22
@@ -11,11 +10,7 @@ $ ./configure --with-tree-sitter --with-native-compilation --with-json --with-ma
 ```
 
 ## After First Run (Within Emacs)
-1. Install fonts for emacs package all-the-icons.  
-```
-$ M-x all-the-icons-install-fonts
-```
-2. Install LSP servers:  
+1. Install LSP servers:  
 ```
 $ M-x lsp-install-server
 ```
@@ -35,10 +30,11 @@ $ M-x lsp-install-server
 	12. ansible-ls  
 	13. pyright  
 
-3. Install all Treesitter Packages:  
+2. Install all Treesitter Packages:  
 ```
 $ M-x treesit-install-language-grammar
 ```
+
 __NOTES:__ [Getting Started With Tree-Sitter](https://www.masteringemacs.org/article/how-to-get-started-tree-sitter)
 __NOTES:__ [Helpful Build discussion](https://www.reddit.com/r/emacs/comments/qf9jjx/what_compilation_flags_do_you_use_for_your_emacs/)
 

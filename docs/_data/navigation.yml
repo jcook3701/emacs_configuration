@@ -5,9 +5,9 @@
   url: /#building-emacs
   sublinks:
     - title: Emacs 25.3 OSX
-      url: /tutorials/emacs-25-OSX.html
+      url: /tutorials/emacs-25-Mac-OSX.html
     - title: Emacs 25.3 OSX - Init File Breakdown
-      url: /tutorials/emacs-25-OSX.html/#init-file-breakdown
+      url: /tutorials/emacs-25-Mac-OSX.html/#init-file-breakdown
     - title: Emacs 25.3 with-ns
       url: /tutorials/emacs-25-with-ns.html
     - title: Emacs 25.3 with-xwidget
