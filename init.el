@@ -177,6 +177,12 @@
   )
 ;;(use-package tree-sitter-langs)
 
+(use-package auth-source
+  :ensure nil ; Built-in, so no need to install it
+  :config
+  ;; Your custom configuration for auth-source goes here
+  (setq auth-sources '("~/.authinfo.gpg")))
+
 ;; Fixes path to npm and other packages to fix lsp-install-packages
 ;; Link: https://github.com/purcell/exec-path-from-shell
 (use-package exec-path-from-shell
@@ -190,7 +196,7 @@
 ;;
 ;; Link: https://github.com/andre-richter/emacs-lush-theme
 (use-package lush-theme
-  :init
+  :config
   (setq custom--inhibit-theme-enable nil)
   (load-theme 'lush t)
   :ensure t)
@@ -822,7 +828,8 @@
    ;; (define-key company-active-map (kbd "C-w") ')  ;; will display a temporary window showing the
                                                   ;; source code of the completion to get some context. 
   (global-company-mode 1)
-  (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
+  :bind
+  ("<C-tab>" . company-complete)
   :ensure t)
 
 ;; Projectile is a project interaction library for Emacs.
@@ -902,6 +909,20 @@
   :after yaml
   :hook (ansible-mode . lsp-deferred)
   :interpreter ("ansible" . ansible-mode)
+  :ensure t)
+
+;; Minor mode for in place manipulation of ansible-vault.
+;;
+;; Link: https://github.com/zellio/ansible-vault-mode
+(use-package ansible-vault
+  :hook
+  (yaml-mode . ansible-vault-mode-maybe)
+  :init
+  (defun ansible-vault-mode-maybe ()
+    (when (ansible-vault--is-encrypted-vault-file)
+      (ansible-vault-mode 1)))
+  :config
+  ;; (setq ansible-vault-password-file "~/vault-pass")
   :ensure t)
 
 ;; A major mode for editing nginx config files
@@ -1060,36 +1081,68 @@
 ;;
 ;; Link: https://jblevins.org/projects/markdown-mode/
 (use-package markdown-mode
-  :commands (markdown-mode)
-  :mode ("\\.md\\'" . markdown-mode)
-  :interpreter ("markdown" . markdown-mode)
-  :hook (markdown-mode . lsp-deferred)
+  :commands (gfm-mode)
+  :mode (("\\.md\\'"  . gfm-mode)
+	 ("\\.markdown\\'" . gfm-mode))
+  :hook ((gfm-mode . lsp-deferred)
+	 (gfm-mode . visual-line-mode)
+	 (gfm-mode . writegood-mode))
+  ;; :interpreter ("markdown" . gfm-mode)
+  :init
+  ;; (setq markdown-command "pandoc")    ; Use pandoc for Markdown processing if installed
+  :config
+  ;; Enable syntax highlighting for code blocks
+  (setq markdown-fontify-code-blocks-natively t)
+  :ensure t)
+
+;; NOTE: I'm really not using this right now. 
+;; Link: https://github.com/polymode/poly-markdown?tab=readme-ov-file
+(use-package poly-markdown
   :ensure t)
 
 ;; Can be used to generate a Table of Contents within a Markdown file.
 ;;
 ;; Link: https://github.com/ardumont/markdown-toc
 (use-package markdown-toc
-  :init
-  (require 'dash)
+  :after dash
+  :commands markdown-toc-generate-toc
+  :config
   (custom-set-variables '(markdown-toc-user-toc-structure-manipulation-fn
-			  (lambda (toc-structure)
-			    (-filter (lambda (l) (let ((index (car l)))
-						   (<= 1 index)))
-				     toc-structure))))
+        (lambda (toc-structure)
+	  (-filter (lambda (l) (let ((index (car l)))
+				 (<= 1 index)))
+		   toc-structure))))
   :ensure t)
 
 ;; Instant Github-flavored Markdown/Org preview using Grip (GitHub Readme Instant Preview).
+;;
 ;; https://github.com/seagle0128/grip-mode
 (use-package grip-mode
-  :hook ((markdown-mode org-mode) . grip-mode)
-  :init
-  ;; (setq grip-binary-path "/usr/bin/grip"
-  (setq grip-github-user "jcook3701")
-  (setq grip-github-password "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDfhI7V7AEj+xL9aUn2kD8MWmypDUjOTW9akCAOCSPDOz9voRMFgQcf+GQd/2xYDMsXGUgwns96xDLUq36ga/MDf4h7x95vOtLDcobzRP1LMqjxe/0yw19JerTYhb1oMcl7tZl63NTh+Nx/c+sPKB8j05yF/dIsbNduAOx1ZSJm9FiAoF47uRPC5PSK+7sJtnF0KuWI3a7dLNGTSDmu4ipqiks5rxh5mb50rlE5Sf5E1XeiTSzuRG8VRVDEHd1KfxEC63NCy+dtnmk6sPyqFTH7igLxSZzIQJyyb4Ou40p4VqYBEglDnTQRAKfo0H1Xknq5IaGApAI75HcQ6D3xrcVv jcook@second-chance")
-  ;; (setq grip-github-password "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")
-  (setq grip-update-after-change nil)
-  (setq grip-preview-use-webkit t)
+  :after auth-source
+  :hook ((gfm-mode org-mode) . grip-mode)
+  :config
+  (setq grip-use-mdopen t) ;; to use `mdopen` instead of `grip`
+  ;; You can get the user name and password from ~/.authinfo like this.
+  ;; NOTE: This is not needed unless I swap off of mdopen which appears to work much better at the moment.
+  (let* ((auth-info (car (auth-source-search :host "api.github.com" :user "jcook3701^grip" :require '(:user :secret))))
+	 (user (plist-get auth-info :user))
+	 (password (funcall (plist-get auth-info :secret))))
+    (setq grip-github-user user)
+    (setq grip-github-password password))
+  (message "GitHub user: %s" grip-github-user)
+
+  (setq grip-preview-host "localhost") ;; Preview hostname
+  (setq grip-update-after-change nil)  ;; after every text change
+  (setq grip-preview-use-webkit t)   ;; Use embedded webkit to preview
+  (setq grip-sleep-time 2)             ;; Sleep seconds to ensure the server starts
+  :ensure t)
+
+;; This is a small exporter based on the Markdown exporter already existing
+;; in Org mode.
+;;
+;; Link: https://github.com/larstvei/ox-gfm
+(use-package ox-gfm
+  :after org
   :ensure t)
 
 ;; yarn-mode is a major mode designed to be used to look at yarn.lock
@@ -1210,8 +1263,8 @@
 	 (web-mode . setup-tide-mode)
          (tide-mode . flycheck-mode)
          (tide-mode . company-mode)
-         (tide-mode . tide-hl-identifier-mode)
-         (before-save . tide-format-before-sve))
+         (tide-mode . tide-hl-identifier-mode))
+         ;;(before-save . tide-format-before-sve))
   :config
   (defun setup-tide-mode ()
     "Configure Tide mode for JavaScript/TypeScript."
@@ -1220,7 +1273,8 @@
               (string-equal "ts" (file-name-extension buffer-file-name))
 	      (string-equal "jsx" (file-name-extension buffer-file-name))
               (string-equal "js" (file-name-extension buffer-file-name)))
-      (tide-setup)))
+      (tide-setup)
+      (setq flycheck-check-syntax-automatically '(save mode-enabled))))
 
   ;; aligns annotation to the right hand side
   (setq company-tooltip-align-annotations t)
@@ -1328,7 +1382,7 @@
 
 ;; Link: https://codeberg.org/shaohme/flymake-markdownlint
 (use-package flymake-markdownlint
-  :hook (markdown-mode . flymake-markdownlint-setup)
+  :hook ((markdown-mode gfm-mode) . flymake-markdownlint-setup)
   :after flymake
   :ensure t)
 
@@ -1406,7 +1460,7 @@
   (setq ispell-dictionary "en_US")
   
   (mapcar (lambda (mode-hook) (add-hook mode-hook 'turn-on-flyspell))
-	  '(markdown-mode-hook text-mode-hook))
+	  '(markdown-mode-hook gfm-mode-hook text-mode-hook))
   
   (mapcar (lambda (mode-hook) (add-hook mode-hook 'flyspell-prog-mode))
 	  '(c-mode-common-hook python-mode-hook emacs-lisp-mode-hook html-mode-hook js-mode-hook))
@@ -2051,6 +2105,13 @@
 
 ;; ----------------------------------- Useful Tools -----------------------------------
 
+;; This is a minor mode to aid in finding common writing problems.
+;; Matt Might’s weaselwords scripts inspired this mode.
+;;
+;; https://github.com/bnbeckwith/writegood-mode
+(use-package writegood-mode
+  :ensure t)
+
 ;; A code searching tool similar to ack, with a focus on speed.
 ;; 
 ;; Link: https://github.com/ggreer/the_silver_searcher
@@ -2137,8 +2198,7 @@
 ;; Link: https://github.com/magit/magit
 ;; TODO: [emacs-authinfo](https://www.gnu.org/software/emacs/manual/html_node/emacs/Authentication.html)
 (use-package magit
-  :config
-  (setq auth-sources '("~/.authinfo"))
+  :after auth-source
   :bind
   (("C-x g" . magit-status)) ;; Bind Magit status to C-x g
   :ensure t)
@@ -2148,8 +2208,13 @@
 ;; Link: https://github.com/magit/forge
 (use-package forge
   :after magit
-  ;; :init
-  ;; (ghub-request 
+  :config
+  (let* ((auth-info (car (auth-source-search :host "api.github.com" :user "jcook3701^forge" :require '(:user :secret))))
+	 (user (plist-get auth-info :user))
+	 (password (funcall (plist-get auth-info :secret))))
+    (setq forge-github-user user)
+    (setq forge-github-password password))
+  (message "GitHub user: %s" forge-github-user)
   :ensure t)
 
 ;; ----------------------------------- Calendar  ----------------------------------

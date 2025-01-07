@@ -11,7 +11,7 @@ $ ./configure --with-tree-sitter --with-native-compilation --with-json --with-ma
 
 ## After First Run (Within Emacs)
 1. Install LSP servers:  
-```
+```elisp
 $ M-x lsp-install-server
 ```
 	1.  yamlls  
