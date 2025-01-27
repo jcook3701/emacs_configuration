@@ -31,7 +31,7 @@
   (setq markdown-fontify-code-blocks-natively t)
   :ensure t)
 
-;; NOTE: I'm really not using this right now. 
+;; NOTE: I'm really not using this right now.
 ;; Link: https://github.com/polymode/poly-markdown?tab=readme-ov-file
 (use-package poly-markdown
   :ensure t)
@@ -102,8 +102,8 @@
 
 (use-package mdopen-mode
   :hook ((markdown-mode . mdopen-mode))
-;;	 (after-save-hook . mdopen-refresh))
-  :bind 
+  ;;	 (after-save-hook . mdopen-refresh))
+  :bind
   (:map markdown-mode-command-map
 	("C-c C-m" . mdopen-mode))
   :config

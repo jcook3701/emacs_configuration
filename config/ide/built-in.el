@@ -58,11 +58,11 @@
   (setq tramp-verbose 1)
   (setq tramp-default-method "ssh"))
 
+;; tree-sitter is an Emacs binding for Tree-sitter, an incremental parsing
+;; system. It aims to be the foundation for a new breed of Emacs packages
+;; that understand code structurally.
 ;;
-;;
-;; Link:
-;; (require 'tree-sitter)
-;;(global-tree-sitter-mode)
+;; Link: https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
 (use-package treesit
   :ensure nil
   :init
@@ -85,18 +85,17 @@
   
   :config
   (setq treesit-debug t)
-  (message "Tree-sitter available: %s" (treesit-available-p)))
+  (message "Tree-sitter available: %s" (treesit-available-p))
 
   ;; (setq treesit-extra-load-path '("/usr/local/lib"))
-
   ;; (global-tree-sitter-mode)
-;;  (require 'tree-sitter-langs)
-;;;  (defvar python--treesit-settings
+  ;; (require 'tree-sitter-langs)
+;;;   (defvar python--treesit-settings
 ;;;    (treesit-font-lock-rules
 ;;;     :feature 'comment
 ;;;     :language 'python
 ;;;     '((comment) @font-lock-comment-face)
-     
+   
 ;;;     :feature 'string
 ;;;     :language 'python
 ;;;     '((string) @font-lock-string-face
@@ -112,8 +111,7 @@
 ;;;     '((class_definition
 ;;;	name: (identifier) @font-lock-type-face))
 ;;;     ))
-;;;  )
-;;(use-package tree-sitter-langs)
+  )
 
 ;; “Flyspell enables on-the-fly spell checking in Emacs by the means of a minor mode.
 ;; It is called Flyspell. This facility is hardly intrusive. It requires no help.

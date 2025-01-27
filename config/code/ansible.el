@@ -11,9 +11,13 @@
 ;; *auto-complete
 ;;
 ;; Link: https://github.com/k1LoW/emacs-ansible
+;; NOTE: The hook to ansible-mode might need to be removed when working on non-ansible projects
+;;       This was needed to enable ls-ansible within lsp.  Otherwise only yamlls server starts.
 (use-package ansible
   :after yaml
-  :hook ((ansible-mode . lsp-deferred))
+  :hook
+  (((yaml-ts-mode yaml-mode) . ansible-mode)
+   (ansible-mode . lsp-deferred))
 	 ;;(ansible-mode . my-yaml-with-jinja2-highlighting))
   :interpreter ("ansible" . ansible-mode)
   :config
@@ -25,7 +29,7 @@
 			      ;; First, match the name: field and value
 			      ("^ *- \\(name\\):\\([^#\n]*\\)"
 			       (1 font-lock-builtin-face t)
-			       (2 ansible-task-label-face t))			      
+			       (2 ansible-task-label-face t))
 			      ;; Highlight {{ ... }} expressions in Jinja2
 			      ("\\({{\\)\\([^}]+\\)\\(}}\\)"
 			       (1 font-lock-builtin-face t)
@@ -46,14 +50,8 @@
 			       (1 font-lock-comment-delimiter-face t)
 			       (2 font-lock-comment-face t)
 			       (3 font-lock-comment-delimiter-face t))
-
-
-			      
-			      
 			      ))
     "Font lock definitions for Jinja2 syntax in Ansible playbooks.")
-
-			    
   :ensure t)
 
 ;; Ansible documentation lookup for GNU Emacs:

@@ -58,6 +58,7 @@
 (setq use-package-always-ensure t)
 (elpaca-wait)
 
+;; https://github.com/progfolio/elpaca/issues/398
 (unload-feature 'eldoc t)
 (setq custom-delayed-init-variables '())
 (defvar global-eldoc-mode nil)

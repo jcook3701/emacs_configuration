@@ -8,7 +8,4 @@
 (setq package-enable-at-startup nil)
 (setq package--init-file-ensured t)
 
-;; https://github.com/progfolio/elpaca/issues/236#issuecomment-1879838229
-;; (setq elpaca-menu-functions '(elpaca-menu-extensions elpaca-menu-gnu-devel-elpa))
-
 ;;; early-init.el ends here

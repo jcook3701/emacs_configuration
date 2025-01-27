@@ -13,7 +13,6 @@
 (use-package csv-mode
   :commands (csv-mode)
   :mode ("\\.csv\\'" . csv-mode)
-  :interpreter ("csv" . csv-mode)
   :ensure t)
 
 ;;; csv.el ends here

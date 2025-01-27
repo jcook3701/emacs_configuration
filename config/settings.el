@@ -42,8 +42,11 @@
 (setq initial-scratch-message "")       ;; No message in scratch buffer
 
 ;; Increase max lisp depth for package installation
-(setq max-lisp-eval-depth 10000)
-(setq max-specpdl-size 10000)
+(setq max-lisp-eval-depth 2000)
+(setq max-specpdl-size 2000)
+
+
+;; TODO: Set: `lsp-enable-file-watchers' and `lsp-file-watch-threshold' variables
 
 
 ;; Shell Feature - Allows ability to open emacs inside of emacs bash

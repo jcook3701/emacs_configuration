@@ -20,7 +20,6 @@
   :commands (dockerfile-mode)
   :hook ((dockerfile-ts-mode dockerfile-mode) . lsp-deferred)
   :mode ("\\Dockerfile\\'" . dockerfile-mode)
-  :interpreter ("dockerfile" . dockerfile-mode)
   :ensure t)
 
 ;; Major mode for editing docker-compose files, providing context-aware completion of docker-compose

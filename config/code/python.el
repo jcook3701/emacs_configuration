@@ -32,7 +32,7 @@
   (setenv "FREECAD_LIB" "/usr/lib/freecad/lib:/usr/lib/freecad-python3/lib")
   (setenv "FREECAD_EXT" "/usr/lib/freecad/Ext")
   (setenv "FREECAD_BIN" "/usr/lib/freecad/bin")
-  ;; TODO: Pull this in ansible and change path 
+  ;; TODO: Pull this in ansible and change path
   (setenv "FREECAD_MACRO" "/home/jcook/.FreeCAD/Macro:/usr/lib/freecad/Macro")
   (setenv "FREECAD_STUBS" "/home/jcook/Documents/git_repo/freecad-stubs/out")
   (setenv "ROS_LIB" "/opt/ros/melodic/lib/python2.7/dist-packages")
@@ -121,13 +121,18 @@
 		  "/usr/lib/freecad/Mod",
 		  "/usr/lib/freecad-python3/lib",
 		  "/usr/lib/freecad/lib",
-		  "/usr/lib/freecad/Ext",		  
+		  "/usr/lib/freecad/Ext",
 		  "/usr/lib/freecad/bin",
 		  "/home/jcook/.FreeCAD/Macro",
 		  "/usr/lib/freecad/Macro"]))
   :ensure t)
 
 ;; TODO: importmagic
+;; importmagic.el is an Emacs package inspired on @alecthomas's
+;; importmagic library and PyCharm's ability to suggest imports
+;; for unresolved symbols.
+;;
+;; Link: https://github.com/anachronic/importmagic.el
 
 ;; elpy
 ;;; (use-package elpy
@@ -182,7 +187,7 @@
   
 ;; jedi Package - This is outdated
 ;;;(add-hook 'python-mode-hook 'jedi:setup)
-;;;(setq jedi:complete-on-dot t)     
+;;;(setq jedi:complete-on-dot t)
 
 ;; lsp-jedi
 ;; Helpful Link: https://www.mattduck.com/lsp-python-getting-started.html

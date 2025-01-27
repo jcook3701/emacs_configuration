@@ -31,7 +31,7 @@
    ("\\.launch\\'" . web-mode))
   :init
   
-;;  (add-hook 'web-mode-hook	    
+;;  (add-hook 'web-mode-hook
 ;;            (lambda ()
 ;;              (when (string-equal "jsx" (file-name-extension buffer-file-name))
 ;;		(setup-tide-mode))))
@@ -59,10 +59,10 @@
   (setq web-mode-enable-css-colorization t)
 
   (setq web-mode-enable-block-face t)
-  (setq web-mode-enable-part-face t)  
+  (setq web-mode-enable-part-face t)
   :ensure t)
 
-;; Improved JavaScript editing mode for GNU Emacs. 
+;; Improved JavaScript editing mode for GNU Emacs.
 ;;
 ;; Link: https://github.com/mooz/js2-mode
 (use-package js2-mode
@@ -101,6 +101,7 @@
 (use-package tide
   :after (company flycheck)
   :hook (((typescript-ts-mode typescript-mode) . setup-tide-mode)
+	 ((js-ts-mode js-mode) . setup-tide-mode)
 	 (js2-mode . setup-tide-mode)
 	 (web-mode . setup-tide-mode)
          (tide-mode . flycheck-mode)
