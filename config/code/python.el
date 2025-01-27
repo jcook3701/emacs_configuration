@@ -16,142 +16,118 @@
 ;;
 ;; Link: https://www.emacswiki.org/emacs/PythonProgrammingInEmacs
 (use-package python
-  :commands (python-mode python-ts-mode)
+  :commands (python-ts-mode)
   :mode ("\\.py\\'" . python-ts-mode)
-  :interpreter ("python" . python-ts-mode)
   :hook
-  (((python-ts-mode python-mode) .  (lambda () (eldoc-mode -1)))
-   ((python-ts-mode python-mode) . dap-mode))
-;;;  :init
+  (((python-ts-mode python-mode) . dap-mode))
+  :init
   ;; Custom
-;;;  (setenv "PYTHONIOENCODING" "utf-8")
-;;;  (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
+  (setenv "PYTHONIOENCODING" "utf-8")
+  (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
   ;; (add-to-list 'process-coding-system-alist '("elpy" . (utf-8 . utf-8)))
-;;;  (add-to-list 'process-coding-system-alist '("flake8" . (utf-8 . utf-8)))
-;;;  (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
-;;;  :config
-;;;  (setenv "FREECAD_MOD" "/usr/share/freecad/Mod/Web:/usr/share/freecad/Mod/Tux:/usr/share/freecad/Mod/Draft:/usr/share/freecad/Mod/OpenSCAD:/usr/share/freecad/Mod/Import:/usr/share/freecad/Mod/Path:/usr/share/freecad/Mod/Drawing:/usr/share/freecad/Mod/Part:/usr/share/freecad/Mod/Material:/usr/share/freecad/Mod/Points:/usr/share/freecad/Mod/Test:/usr/share/freecad/Mod/Arch:/usr/share/freecad/Mod/Image:/usr/share/freecad/Mod/Robot:/usr/share/freecad/Mod/AddonManager:/usr/share/freecad/Mod/Start:/usr/share/freecad/Mod/Inspection:/usr/share/freecad/Mod/PartDesign:/usr/share/freecad/Mod/ReverseEngineering:/usr/share/freecad/Mod/Fem:/usr/share/freecad/Mod/Surface:/usr/share/freecad/Mod/Sketcher:/usr/share/freecad/Mod/Measure:/usr/share/freecad/Mod/TechDraw:/usr/share/freecad/Mod/Show:/usr/share/freecad/Mod/Spreadsheet:/usr/share/freecad/Mod/Raytracing:/usr/share/freecad/Mod/MeshPart:/usr/share/freecad/Mod/Mesh:/usr/share/freecad/Mod/Idf:/usr/share/freecad/Mod:/usr/lib/freecad/Mod")
-;;;  (setenv "FREECAD_LIB" "/usr/lib/freecad/lib:/usr/lib/freecad-python3/lib")
-;;;  (setenv "FREECAD_EXT" "/usr/lib/freecad/Ext")
-;;;  (setenv "FREECAD_BIN" "/usr/lib/freecad/bin")
-;;;  (setenv "FREECAD_MACRO" "/home/jcook/.FreeCAD/Macro:/usr/lib/freecad/Macro")
-;;; (setenv "FREECAD_STUBS" "/home/jcook/Documents/git_repo/freecad-stubs/out")
-;;;  (setenv "ROS_LIB" "/opt/ros/melodic/lib/python2.7/dist-packages")
-;;;  (setenv "PYTHONPATH" (concat (getenv "FREECAD_MOD")
-;;;			       ":"
-;;;			       (getenv "FREECAD_LIB")
-;;;			       ":"
-;;;			       (getenv "FREECAD_EXT")
-;;;			       ":"
-;;;			       ;;(getenv "FREECAD_STUBS")
-;;;			       ;;":"
-;;;			       (getenv "FREECAD_BIN")
-;;;			       ":"
-;;;			       (getenv "FREECAD_MACRO")
-;;;			       ":"
-;;;			       (getenv "ROS_LIB")
-;;;			       ":"
-;;;			       (getenv "PYTHONPATH")))
+  (add-to-list 'process-coding-system-alist '("flake8" . (utf-8 . utf-8)))
+  (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
+  :config
+  (setenv "FREECAD_MOD" "/usr/share/freecad/Mod/Web:/usr/share/freecad/Mod/Tux:/usr/share/freecad/Mod/Draft:/usr/share/freecad/Mod/OpenSCAD:/usr/share/freecad/Mod/Import:/usr/share/freecad/Mod/Path:/usr/share/freecad/Mod/Drawing:/usr/share/freecad/Mod/Part:/usr/share/freecad/Mod/Material:/usr/share/freecad/Mod/Points:/usr/share/freecad/Mod/Test:/usr/share/freecad/Mod/Arch:/usr/share/freecad/Mod/Image:/usr/share/freecad/Mod/Robot:/usr/share/freecad/Mod/AddonManager:/usr/share/freecad/Mod/Start:/usr/share/freecad/Mod/Inspection:/usr/share/freecad/Mod/PartDesign:/usr/share/freecad/Mod/ReverseEngineering:/usr/share/freecad/Mod/Fem:/usr/share/freecad/Mod/Surface:/usr/share/freecad/Mod/Sketcher:/usr/share/freecad/Mod/Measure:/usr/share/freecad/Mod/TechDraw:/usr/share/freecad/Mod/Show:/usr/share/freecad/Mod/Spreadsheet:/usr/share/freecad/Mod/Raytracing:/usr/share/freecad/Mod/MeshPart:/usr/share/freecad/Mod/Mesh:/usr/share/freecad/Mod/Idf:/usr/share/freecad/Mod:/usr/lib/freecad/Mod")
+  (setenv "FREECAD_LIB" "/usr/lib/freecad/lib:/usr/lib/freecad-python3/lib")
+  (setenv "FREECAD_EXT" "/usr/lib/freecad/Ext")
+  (setenv "FREECAD_BIN" "/usr/lib/freecad/bin")
+  ;; TODO: Pull this in ansible and change path 
+  (setenv "FREECAD_MACRO" "/home/jcook/.FreeCAD/Macro:/usr/lib/freecad/Macro")
+  (setenv "FREECAD_STUBS" "/home/jcook/Documents/git_repo/freecad-stubs/out")
+  (setenv "ROS_LIB" "/opt/ros/melodic/lib/python2.7/dist-packages")
+  (setenv "PYTHONPATH" (concat (getenv "FREECAD_MOD")
+			       ":"
+			       (getenv "FREECAD_LIB")
+			       ":"
+			       (getenv "FREECAD_EXT")
+			       ":"
+			       (getenv "FREECAD_STUBS")
+			       ;;":"
+			       (getenv "FREECAD_BIN")
+			       ":"
+			       (getenv "FREECAD_MACRO")
+			       ":"
+			       (getenv "ROS_LIB")
+			       ":"
+			       (getenv "PYTHONPATH")))
   ;; (define-key python-mode-map (kbd "C-c C-c") 'python-shell-r)
-  ;; (require 'dap-mode)
+   :ensure nil)
+
+(use-package pyvenv
+  :demand t
+  :config
+  ;; (setenv "JAVA_HOME" "~/Documents/python_virtual_envs/nodejs/")
+  ;; TODO: Ansible should create a base virtual env that this should source
+  (setenv "WORKON_HOME" "~/Documents/python_virtual_envs/python3")
+  
+  (pyvenv-tracking-mode 1)
+  (setq pyvenv-mode-line-indicator '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] ")))
+  (pyvenv-mode t)
+  
+  ;; Set correct Python interpreter
+  (setq pyvenv-post-activate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3"))
+		(lsp))))
+  (setq pyvenv-post-deactivate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter "python3")
+		(lsp-shutdown-workspace))))
+  
   :ensure t)
 
-;;;(use-package pyvenv
-;;;  :demand t
-;;;  :config
-  ;; (setenv "JAVA_HOME" "~/Documents/python_virtual_envs/nodejs/")
-;;;  (setenv "WORKON_HOME" "~/Documents/python_virtual_envs/python3")
+(use-package lsp-pyright
+  :hook ((python-ts-mode python-mode) . (lambda ()
+					  (require 'lsp-pyright)))
+  ;;  (lsp)))  ; or lsp-deferred
+  :config
+  (setq lsp-pyright-python-executable-cmd "python3")
+  (setq lsp-pyright-log-level "trace")
+  (setq lsp-pyright-stub-path "/home/jcook/.python3_stubs/FreeCAD")
+  (setq lsp-pyright-extra-paths
+	(vconcat lsp-pyright-extra-paths
+		 ["/usr/share/freecad/Mod/Web",
+		  "/usr/share/freecad/Mod/Tux",
+		  "/usr/share/freecad/Mod/Draft",
+		  "/usr/share/freecad/Mod/OpenSCAD",
+		  "/usr/share/freecad/Mod/Import",
+		  "/usr/share/freecad/Mod/Path",
+		  "/usr/share/freecad/Mod/Drawing",
+		  "/usr/share/freecad/Mod/Part",
+		  "/usr/share/freecad/Mod/Material",
+		  "/usr/share/freecad/Mod/Points",
+		  "/usr/share/freecad/Mod/Test",
+		  "/usr/share/freecad/Mod/Arch",
+		  "/usr/share/freecad/Mod/Image",
+		  "/usr/share/freecad/Mod/Robot",
+		  "/usr/share/freecad/Mod/AddonManager",
+		  "/usr/share/freecad/Mod/Start",
+		  "/usr/share/freecad/Mod/Inspection",
+		  "/usr/share/freecad/Mod/PartDesign",
+		  "/usr/share/freecad/Mod/ReverseEngineering",
+		  "/usr/share/freecad/Mod/Fem",
+		  "/usr/share/freecad/Mod/Surface",
+		  "/usr/share/freecad/Mod/Sketcher",
+		  "/usr/share/freecad/Mod/Measure",
+		  "/usr/share/freecad/Mod/TechDraw",
+		  "/usr/share/freecad/Mod/Show",
+		  "/usr/share/freecad/Mod/Spreadsheet",
+		  "/usr/share/freecad/Mod/Raytracing",
+		  "/usr/share/freecad/Mod/MeshPart",
+		  "/usr/share/freecad/Mod/Mesh",
+		  "/usr/share/freecad/Mod/Idf",
+		  "/usr/share/freecad/Mod",
+		  "/usr/lib/freecad/Mod",
+		  "/usr/lib/freecad-python3/lib",
+		  "/usr/lib/freecad/lib",
+		  "/usr/lib/freecad/Ext",		  
+		  "/usr/lib/freecad/bin",
+		  "/home/jcook/.FreeCAD/Macro",
+		  "/usr/lib/freecad/Macro"]))
+  :ensure t)
 
-;;;  (pyvenv-tracking-mode 1)
-;;;  (setq pyvenv-mode-line-indicator '(pyvenv-virtual-env-name ("[venv:" pyvenv-virtual-env-name "] ")))
-;;;  (pyvenv-mode t)
-
-  ;; Set correct Python interpreter
-;;;  (setq pyvenv-post-activate-hooks
-;;;        (list (lambda ()
-;;;                (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3"))
-;;;		(lsp))))
-;;;  (setq pyvenv-post-deactivate-hooks
-;;;        (list (lambda ()
-;;;                (setq python-shell-interpreter "python3")
-;;;		(lsp-shutdown-workspace))))
-
-;;;  :ensure t)
-
-;; lsp-jedi
-;; Helpful Link: https://www.mattduck.com/lsp-python-getting-started.html
-;;
-;; Link: https://github.com/fredcamps/lsp-jedi
-;; Link: https://github.com/python-lsp/python-lsp-server
-;;(use-package lsp-jedi
-;;  :config
-;;  (with-eval-after-load "lsp-mode"
-;;    (add-to-list 'lsp-disabled-clients 'pyls)
-;;    (add-to-list 'lsp-enabled-clients 'jedi))
-  ;; (add-to-list 'lsp-enabled-clients 'pyls))
-  ;; (add-to-list 'lsp-enabled-clients 'pylsp)
-  ;; (add-to-list 'lsp-enabled-clients 'rope)
-  ;; (add-to-list 'lsp-enabled-clients 'yapf))
-
-;;  ;; Custom path to system FreeCAD libraries. 
-;;  (setq lsp-jedi-workspace-extra-paths
-;;	(vconcat lsp-jedi-workspace-extra-paths
-;;		 ["/usr/lib/freecad-python3/lib"]))
-  
-;;  :ensure t)
-
-
-;; importmagic
-
-;;;(use-package lsp-pyright
-;;  :hook ((python-ts-mode python-mode) . (lambda ()
-;;					  (require 'lsp-pyright)))
-  ;; (lsp)))  ; or lsp-deferre
-;;  :config
-;;  (setq lsp-pyright-python-executable-cmd "python3")
-;;  (setq lsp-pyright-log-level "trace")
-;;  (setq lsp-pyright-stub-path "/home/jcook/.python3_stubs/FreeCAD")
-;;  (setq lsp-pyright-extra-paths
-;;	(vconcat lsp-pyright-extra-paths
-;;		 ["/usr/share/freecad/Mod/Web",
-;;		  "/usr/share/freecad/Mod/Tux",
-;;		  "/usr/share/freecad/Mod/Draft",
-;;		  "/usr/share/freecad/Mod/OpenSCAD",
-;;		  "/usr/share/freecad/Mod/Import",
-;;		  "/usr/share/freecad/Mod/Path",
-;;		  "/usr/share/freecad/Mod/Drawing",
-;;		  "/usr/share/freecad/Mod/Part",
-;;		  "/usr/share/freecad/Mod/Material",
-;;		  "/usr/share/freecad/Mod/Points",
-;;		  "/usr/share/freecad/Mod/Test",
-;;		  "/usr/share/freecad/Mod/Arch",
-;;		  "/usr/share/freecad/Mod/Image",
-;;		  "/usr/share/freecad/Mod/Robot",
-;;		  "/usr/share/freecad/Mod/AddonManager",
-;;		  "/usr/share/freecad/Mod/Start",
-;;		  "/usr/share/freecad/Mod/Inspection",
-;;		  "/usr/share/freecad/Mod/PartDesign",
-;;		  "/usr/share/freecad/Mod/ReverseEngineering",
-;;		  "/usr/share/freecad/Mod/Fem",
-;;		  "/usr/share/freecad/Mod/Surface",
-;;		  "/usr/share/freecad/Mod/Sketcher",
-;;		  "/usr/share/freecad/Mod/Measure",
-;;		  "/usr/share/freecad/Mod/TechDraw",
-;;		  "/usr/share/freecad/Mod/Show",
-;;		  "/usr/share/freecad/Mod/Spreadsheet",
-;;		  "/usr/share/freecad/Mod/Raytracing",
-;;		  "/usr/share/freecad/Mod/MeshPart",
-;;		  "/usr/share/freecad/Mod/Mesh",
-;;		  "/usr/share/freecad/Mod/Idf",
-;;		  "/usr/share/freecad/Mod",
-;;		  "/usr/lib/freecad/Mod",
-;;		  "/usr/lib/freecad-python3/lib",
-;;		  "/usr/lib/freecad/lib",
-;;		  "/usr/lib/freecad/Ext",		  
-;;		  "/usr/lib/freecad/bin",
-;;		  "/home/jcook/.FreeCAD/Macro",
-;;		  "/usr/lib/freecad/Macro"]))
-;;;  :ensure t)
+;; TODO: importmagic
 
 ;; elpy
 ;;; (use-package elpy
@@ -208,4 +184,27 @@
 ;;;(add-hook 'python-mode-hook 'jedi:setup)
 ;;;(setq jedi:complete-on-dot t)     
 
+;; lsp-jedi
+;; Helpful Link: https://www.mattduck.com/lsp-python-getting-started.html
+;;
+;; Link: https://github.com/fredcamps/lsp-jedi
+;; Link: https://github.com/python-lsp/python-lsp-server
+;;(use-package lsp-jedi
+;;  :config
+;;  (with-eval-after-load "lsp-mode"
+;;    (add-to-list 'lsp-disabled-clients 'pyls)
+;;    (add-to-list 'lsp-enabled-clients 'jedi))
+  ;; (add-to-list 'lsp-enabled-clients 'pyls))
+  ;; (add-to-list 'lsp-enabled-clients 'pylsp)
+  ;; (add-to-list 'lsp-enabled-clients 'rope)
+  ;; (add-to-list 'lsp-enabled-clients 'yapf))
+
+;;  ;; Custom path to system FreeCAD libraries. 
+;;  (setq lsp-jedi-workspace-extra-paths
+;;	(vconcat lsp-jedi-workspace-extra-paths
+;;		 ["/usr/lib/freecad-python3/lib"]))
+  
+;;  :ensure t)
+
 ;;; python.el ends here
+

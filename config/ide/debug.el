@@ -16,10 +16,10 @@
   ;; (setq dap-auto-configure-features '(sessions locals breakpoints expressions repl)) ;; Features to auto-configure
   
   ;; Language-specific configurations
-;;  (require 'dap-python)         ;; Python support
+  (require 'dap-python)         ;; Python support
   (require 'dap-node)           ;; Node.js support
   (dap-node-setup)
-  (require 'dap-lldb)          ;; C++/Rust with LLDB  
+  (require 'dap-lldb)          ;; C++/Rust with LLDB
   :ensure t)
 
 ;; Optional: Treemacs integration for visual debugging (if you use Treemacs)
@@ -32,12 +32,12 @@
   )
 
 ;; Python Debugger Configuration
-;;;(use-package dap-python
-;;;  :ensure nil
-;;;  :after dap-mode
-;;;  :config
-;;;  (setq dap-python-debugger 'debugpy)  ;; Use `debugpy` as the Python debugger
-;;;  (setq dap-python-executable "python3"))
+(use-package dap-python
+  :ensure nil
+  :after dap-mode
+  :config
+  (setq dap-python-debugger 'debugpy)  ;; Use `debugpy` as the Python debugger
+  (setq dap-python-executable "python3"))
 
 ;; Node.js Debugger Configuration
 (use-package dap-node

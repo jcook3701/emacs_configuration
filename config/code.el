@@ -15,7 +15,7 @@
 (load "~/.emacs.d/config/code/jinja2.el")
 (load "~/.emacs.d/config/code/markdown.el")
 (load "~/.emacs.d/config/code/org.el")
-;; (load "~/.emacs.d/config/code/python.el")
+(load "~/.emacs.d/config/code/python.el")
 (load "~/.emacs.d/config/code/ros.el")
 (load "~/.emacs.d/config/code/rust.el")
 (load "~/.emacs.d/config/code/scala.el")
