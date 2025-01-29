@@ -7,4 +7,3 @@
   (depends-on "checkdoc"))
 
 (depends-on "use-package")  ;; Needed for config
-(depends-on "elpaca")       ;; Your package manager
