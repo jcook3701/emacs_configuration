@@ -58,19 +58,19 @@ jobs:
 
       - name: Byte-compile Emacs config
         run: |
-          emacs --batch -Q -L . \
+          emacs --batch -Q -L ${{ github.workspace }}/.cask \
                 -f batch-byte-compile ${{ github.workspace }}/init.el ${{ github.workspace }}/early-init.el || exit 1
 
       - name: Lint Emacs Lisp files with package-lint
         run: |
-          cask exec emacs --batch -Q \
+          cask exec emacs --batch -Q -L ${{ github.workspace }}/.cask \
                 --eval "(progn
                   (require 'package-lint)
                   (mapc #'package-lint-buffer (directory-files-recursively \"./\" \"\\.el$\")))"
 
       - name: Checkdoc on Emacs Lisp files
         run: |
-          cask exec emacs --batch -Q \
+          cask exec emacs --batch -Q -L ${{ github.workspace }}/.cask \
                 --eval "(progn
                   (require 'checkdoc)
                   (dolist (file (directory-files-recursively \"./\" \"\\.el$\"))
