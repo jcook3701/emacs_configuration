@@ -8,6 +8,13 @@
 ;; (setq warning-minimum-level "error")
 (setq native-comp-async-report-warnings-errors nil)
 
+;; Make necessary directories
+(make-directory "~/.emacs.d/tmp" t)
+(make-directory "~/.emacs.d/rtags" t)
+(make-directory "~/.emacs.d/org" t)
+(make-directory "~/.emacs.d/auto-save-list/" t)
+(make-directory "~/.emacs.d/emacs-saves/" t)
+
 ;; Emacs temporary directory location.
 (setq temporary-file-directory "~/.emacs.d/tmp/")
 
@@ -47,7 +54,6 @@
 
 
 ;; TODO: Set: `lsp-enable-file-watchers' and `lsp-file-watch-threshold' variables
-
 
 ;; Shell Feature - Allows ability to open emacs inside of emacs bash
 (server-start)

@@ -1,8 +1,67 @@
 ;;; dired.el --- Summary
 ;;; Commentary:
-;; Emacs dired packages configurations
+;; Emacs Dired package configurations
 ;;----------------------------------------------------------------------------------------------
 ;;; Code:
+
+;; Dired makes an Emacs buffer containing a listing of a directory, and
+;; optionally some of its subdirectories as well. You can use the normal
+;; Emacs commands to move around in this buffer, and special Dired commands
+;; to operate on the listed files. Dired works with both local and remote
+;; directories.
+;;
+;; Helpful: https://emacs.stackexchange.com/questions/34567/dired-not-showing-recently-created-files-when-emacs-is-run-in-daemon-mode
+;; 
+;; Link: https://www.gnu.org/software/emacs/manual/html_node/emacs/Dired.html
+(use-package dired
+  :ensure nil ;; 'dired' is built-in
+  :bind
+  (:map dired-mode-map
+	("i" . nil))
+;;  :hook (dired-mode . auto-revert-mode)  ;; Need to test this...
+  :config
+  ;; Customize dired to show human-readable sizes and to auto-revert
+  (setq dired-listing-switches "-alh"
+        dired-dwim-target t
+        dired-hide-details-hide-symlink-targets nil)
+  
+  (customize-set-value
+   'auto-revert-verbose
+   nil
+   "Prevent any auto-revert messages from obscuring the minibuffer at crucial times!"))
+
+;; File Browser - This loads after the ibuffer-sidebar to ensure that the command
+;; 'ibuffer-sidebar-toggle-sidebar is available when called from the
+;; '+sidebar-toggle command.
+;;
+;; Link: https://github.com/jojojames/dired-sidebar
+(use-package dired-sidebar
+  :after dired
+  :commands (dired-sidebar-toggle-sidebar)
+  :bind ("C-x C-n" . dired-sidebar-toggle-sidebar)
+  :init
+  (add-hook 'dired-sidebar-mode-hook
+	    (lambda ()
+	      (unless (file-remote-p default-directory)
+		(auto-revert-mode))))
+  
+  ;; (defun sidebar-toggle ()
+    ;; Toggle both `dired-sidebar' and `ibuffer-sidebar'."
+    ;;(interactive)
+    ;; (ibuffer-sidebar-toggle-sidebar)
+    ;; (dired-sidebar-toggle-sidebar))
+
+  ;; (define-key global-map (kbd "C-x C-n") 'sidebar-toggle)
+  :config
+  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+
+  (setq dired-sidebar-subtree-line-prefix "  ")
+  ;; (setq dired-sidebar-theme 'vscode)
+  (setq dired-sidebar-theme 'none)
+  (setq dired-sidebar-use-term-integration t)
+  (setq dired-sidebar-use-custom-font t)
+  :ensure t)
 
 ;; dired-k.el highlights dired buffer like k.
 ;;
@@ -66,13 +125,13 @@
 ;; (but we often use only one anyway). If the user wants to access these directories
 ;; they have to quite needlessly drill-down through varying number of "uninteresting"
 ;; directories to get to the content.
-;;
+;; NOTE: causes issues with dired sidebar
 ;; Link: https://github.com/Fuco1/dired-hacks
-(use-package dired-collapse
-  :after dired
-  :hook ((dired-mode . dired-collapse-mode)
-	 (dired-sidebar-mode . dired-collapse-mode))
-  :ensure t)
+;;; (use-package dired-collapse
+;;;  :after dired
+;;;  :hook ((dired-mode . dired-collapse-mode))
+;;;  (dired-sidebar-mode . dired-collapse-mode))
+;;;  :ensure t)
 
 ;; The basic command to work with subdirectories in dired is i, which inserts the
 ;; sub-directory as a separate listing in the active dired buffer.
@@ -89,40 +148,11 @@
   :commands dired-subtree-insert dired-subtre-remove dired-subtree-toggle
   :bind
   (:map dired-mode-map
-   ("i" . dired-subtree-toggle))
-  :ensure t)
-
-;; File Browser - This loads after the ibuffer-sidebar to ensure that the command
-;; 'ibuffer-sidebar-toggle-sidebar is available when called from the
-;; '+sidebar-toggle command.
-;;
-;; Link: https://github.com/jojojames/dired-sidebar
-(use-package dired-sidebar
-  :after dired
-  :commands (dired-sidebar-toggle-sidebar)
-  :bind ("C-x C-n" . dired-sidebar-toggle-sidebar)
-  :init
-  (add-hook 'dired-sidebar-mode-hook
-	    (lambda ()
-	      (unless (file-remote-p default-directory)
-		(auto-revert-mode))))
-  
-  ;; (defun sidebar-toggle ()
-    ;; Toggle both `dired-sidebar' and `ibuffer-sidebar'."
-    ;;(interactive)
-    ;; (ibuffer-sidebar-toggle-sidebar)
-    ;; (dired-sidebar-toggle-sidebar))
-
-  ;; (define-key global-map (kbd "C-x C-n") 'sidebar-toggle)
-  :config  
-  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
-  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
-
-  (setq dired-sidebar-subtree-line-prefix "  ")
-  ;; (setq dired-sidebar-theme 'vscode)
-  (setq dired-sidebar-theme 'none)
-  (setq dired-sidebar-use-term-integration t)
-  (setq dired-sidebar-use-custom-font t)
+	("i" . dired-subtree-toggle))
+  :config
+  ;; Customize appearance of subtree indentations
+  (setq dired-subtree-line-prefix "  ")
+  (setq dired-subtree-use-backgrounds nil)
   :ensure t)
 
 ;;; dired.el ends here

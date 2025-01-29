@@ -15,7 +15,16 @@
   ;; Optional - enable lsp-mode automatically in scala files
   :commands (lsp lsp-deferred)
   :hook (lsp-mode . lsp-lens-mode)
-  :config
+  :custom
+  (lsp-enable-file-watchers t)
+  (lsp-file-watch-threshold 6000)
+  (lsp-prefer-flymake nil)
+  (lsp-eslint-auto-fix-on-save t) ; Automatically fix errors on save
+  (lsp-eslint-enable t)
+  (lsp-file-watch-ignored-directories '(".emacs.d"))
+  ;; ( lsp-enable-snippet nil)
+  
+  ;; :config
   ;; Uncomment following section if you would like to tune lsp-mode performance according to
   ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
   ;;       (setq gc-cons-threshold 100000000) ;; 100mb
@@ -31,18 +40,6 @@
   ;; ("pyls.plugins.pyls_isort.enabled" t t)
   ;; ("pyls.plugins.rope_completion.enabled" t t)
   ;; ("pyls.plugins.yapf.enabled." t t)))
-  
-  (setq lsp-prefer-flymake nil)
-  ;; (setq lsp-enable-snippet nil)
-  (setq lsp-eslint-auto-fix-on-save t) ; Automatically fix errors on save
-  (setq lsp-eslint-enable t)
-  :ensure t)
-
-;; Integration between lsp-mode and treemacs and implementation of
-;;   treeview controls using treemacs as a tree renderer.
-;; Link: https://github.com/emacs-lsp/lsp-treemacs
-(use-package lsp-treemacs
-  :commands (lsp-treemacs-errors-list)
   :ensure t)
 
 ;; This package contains all the higher level UI modules of lsp-mode, like flycheck support and code lenses.
@@ -57,19 +54,27 @@
   :after lsp-mode
   :commands lsp-ui-mode
   :hook (lsp-mode . lsp-ui-mode)
-  :config
-  (setq lsp-ui-sideline-show-hover t)
-  (setq lsp-ui-sideline-delay 0.5)
-  (setq lsp-ui-doc-delay 5)
-  (setq lsp-ui-sideline-ignore-duplicates t)
-  (setq lsp-ui-doc-position 'bottom)
-  (setq lsp-ui-doc-alignment 'frame)
-  (setq lsp-ui-doc-header nil)
-  (setq lsp-ui-doc-include-signature t)
-  (setq lsp-ui-doc-use-childframe t)
-  (setq lsp-ui-imenu-enable t)
-  (setq lsp-ui-peek-enable t)
-  (setq lsp-ui-doc-enable t)
+  :custom
+  (lsp-ui-sideline-show-hover t)
+  (lsp-ui-sideline-delay 0.5)
+  (lsp-ui-doc-delay 5)
+  (lsp-ui-sideline-ignore-duplicates t)
+  (lsp-ui-doc-position 'bottom)
+  (lsp-ui-doc-alignment 'frame)
+  (lsp-ui-doc-header nil)
+  (lsp-ui-doc-include-signature t)
+  (lsp-ui-doc-use-childframe t)
+  (lsp-ui-imenu-enable t)
+  (lsp-ui-peek-enable t)
+  (lsp-ui-doc-enable t)
+  :ensure t)
+
+;; Integration between lsp-mode and treemacs and implementation of
+;;   treeview controls using treemacs as a tree renderer.
+;;
+;; Link: https://github.com/emacs-lsp/lsp-treemacs
+(use-package lsp-treemacs
+  :commands (lsp-treemacs-errors-list)
   :ensure t)
 
 ;; TODO: https://emacs-lsp.github.io/lsp-mode/tutorials/reactjs-tutorial/

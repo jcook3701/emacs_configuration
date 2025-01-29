@@ -1,0 +1,44 @@
+# lint-elisp.yml
+---
+
+name: Lint Emacs Lisp
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  build:
+    name: Emacs Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Emacs
+        run: sudo apt-get update && sudo apt-get install -y emacs-nox
+
+      - name: Lint with package-lint
+        run: |
+          emacs --batch -Q \
+            --eval "(progn
+              (require 'package)
+              (package-initialize)
+              (require 'package-lint)
+              (mapc #'package-lint-buffer (directory-files-recursively \"./\" \"\\.el$\")))"
+
+      - name: Lint with checkdoc
+        run: |
+          emacs --batch -Q \
+            --eval "(progn
+              (dolist (file (directory-files-recursively \"./\" \"\\.el$\"))
+                (find-file file)
+                (unless (checkdoc nil t)
+                  (kill-emacs 1))))"
+
+      - name: Byte-compile Emacs Lisp files
+        run: |
+          for file in $(find . -name "*.el"); do
+            emacs --batch -Q -f batch-byte-compile "$file" || exit 1
+          done

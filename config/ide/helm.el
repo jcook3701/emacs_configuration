@@ -146,4 +146,11 @@
    ("M-s A" . helm-ag-project-root))  ;; Search within the current project root (M-s A)
   :ensure t)
 
+;; Helm for org headlines and keywords completion.
+;;
+;; Link: https://github.com/emacs-helm/helm-org
+;; (use-package helm-org
+;;   :after helm org
+;;  :bind ("C-c a" . helm-org-agenda-files-headings))
+
 ;;; helm.el ends here

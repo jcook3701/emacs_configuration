@@ -17,7 +17,10 @@
 ;; 
 ;; Link: https://github.com/yoshiki/yaml-mode
 (use-package yaml-mode
-  :mode ("\\.ya?ml\\'" . yaml-mode)
+  :mode
+  (("\\.ya?ml\\'" . yaml-mode)
+   ("\\.ansible-lint\\'" . yaml-mode)
+   ("\\.yamllint\\'" . yaml-mode))
   :interpreter ("yaml" . yaml-mode)
   :config
   (setq yaml-indent-offset 2) ;; Set the indentation width to 2 spaces
@@ -27,7 +30,8 @@
 ;;
 ;; Link: https://github.com/zkry/yaml-pro
 (use-package yaml-pro
-  :hook ((yaml-ts-mode yaml-mode) . yaml-pro-mode) ;; Enable yaml-pro-mode automatically in yaml-mode
+  :hook ((yaml-mode . yaml-pro-mode)
+	 (yaml-ts-mode . yaml-pro-ts-mode)) ;; Enable yaml-pro-mode automatically in yaml-mode
   :config
   ;; Optional: Set up keybindings for yaml-pro
   (define-key yaml-pro-mode-map (kbd "C-c C-n") 'yaml-pro-forward-node)

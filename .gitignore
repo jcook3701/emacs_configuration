@@ -3,6 +3,7 @@
 .dap-breakpoints
 .lsp-session-v1
 
+google-accounts.el
 openai-api-key.el
 .chatgpt*
 *bytecomp*
