@@ -59,7 +59,7 @@ jobs:
       - name: Byte-compile Emacs config
         run: |
           emacs --batch -Q -L . \
-                -f batch-byte-compile init.el early-init.el || exit 1
+                -f batch-byte-compile ${{ github.workspace }}/init.el ${{ github.workspace }}/early-init.el || exit 1
 
       - name: Lint Emacs Lisp files with package-lint
         run: |
