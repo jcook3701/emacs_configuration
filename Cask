@@ -1,6 +1,6 @@
-(source "gnu")
-(source "melpa")
-(source "melpa-stable")
+(source gnu)
+(source melpa)
+(source melpa-stable)
 
 (development
   (depends-on "package-lint")
