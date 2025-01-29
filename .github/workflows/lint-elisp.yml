@@ -49,6 +49,13 @@ jobs:
       - name: Install dependencies with Cask
         run: "cask install"
 
+      - name: Print HOME and locate package-lint
+        run: |
+          cask exec emacs --batch -Q \
+                --eval "(progn
+                  (prin1 (getenv \"HOME\"))
+                  (prin1 (file-name-directory (locate-library \"package-lint\"))) )"
+
       - name: Byte-compile Emacs config
         run: |
           emacs --batch -Q -L . \
