@@ -124,4 +124,9 @@
   :hook ((python-ts-mode python-mode) . flymake-python-pyflakes-load)
   :ensure t)
 
+;; I think this is now part of package-lint
+;; (use-package package-lint-flymake
+;;   :after flymake
+;;  :ensure t)
+
 ;;; flymake.el ends here

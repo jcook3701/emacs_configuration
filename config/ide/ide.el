@@ -158,6 +158,14 @@
 
 ;; ----------------------------------- Useful Tools -----------------------------------
 
+;; This library provides a linter for the metadata in Emacs Lisp files which
+;; are intended to be packages. You can integrate it into your build process.
+;;
+;; Link: https://github.com/purcell/package-lint?tab=readme-ov-file
+(use-package package-lint
+  :ensure t)
+
+
 ;; This is a minor mode to aid in finding common writing problems.
 ;; Matt Might’s weaselwords scripts inspired this mode.
 ;;

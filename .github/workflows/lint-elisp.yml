@@ -12,33 +12,61 @@ jobs:
   build:
     name: Emacs Lint
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        emacs-version: [29.4]
+        experimental: [false]
+        include:
+          - os: ubuntu-latest
+            emacs-version: snapshot
+            experimental: true
+          - os: macos-latest
+            emacs-version: snapshot
+            experimental: true
+          - os: windows-latest
+            emacs-version: snapshot
+            experimental: true
     steps:
+      - name: setenv
+        run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Emacs
-        run: sudo apt-get update && sudo apt-get install -y emacs-nox
+        # Install Emacs
+      - uses: jcs090218/setup-emacs@master
+        with:
+          version: ${{ matrix.emacs-version }}
 
-      - name: Lint with package-lint
-        run: |
-          emacs --batch -Q \
-            --eval "(progn
-              (require 'package)
-              (package-initialize)
-              (require 'package-lint)
-              (mapc #'package-lint-buffer (directory-files-recursively \"./\" \"\\.el$\")))"
+        # Install Cask
+      - uses: conao3/setup-cask@master
+        with:
+          version: 'snapshot'
 
-      - name: Lint with checkdoc
-        run: |
-          emacs --batch -Q \
-            --eval "(progn
-              (dolist (file (directory-files-recursively \"./\" \"\\.el$\"))
-                (find-file file)
-                (unless (checkdoc nil t)
-                  (kill-emacs 1))))"
+      - name: Install dependencies with Cask
+        run: "cask install"
 
-      - name: Byte-compile Emacs Lisp files
+      - name: Byte-compile Emacs config
         run: |
-          for file in $(find . -name "*.el"); do
-            emacs --batch -Q -f batch-byte-compile "$file" || exit 1
-          done
+          emacs --batch -Q -L . \
+                -f batch-byte-compile init.el early-init.el || exit 1
+
+      - name: Lint Emacs Lisp files with package-lint
+        run: |
+          cask exec emacs --batch -Q \
+                --eval "(progn
+                  (require 'package-lint)
+                  (mapc #'package-lint-buffer (directory-files-recursively \"./\" \"\\.el$\")))"
+
+      - name: Checkdoc on Emacs Lisp files
+        run: |
+          cask exec emacs --batch -Q \
+                --eval "(progn
+                  (require 'checkdoc)
+                  (dolist (file (directory-files-recursively \"./\" \"\\.el$\"))
+                    (find-file file)
+                    (unless (checkdoc nil t)
+                      (kill-emacs 1))))"
