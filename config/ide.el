@@ -5,6 +5,7 @@
 ;;; Code:
 
 (load "~/.emacs.d/config/ide/built-in.el")
+(load "~/.emacs.d/config/ide/cond-let.el")
 (load "~/.emacs.d/config/ide/chatgpt.el")
 (load "~/.emacs.d/config/ide/company.el")
 (load "~/.emacs.d/config/ide/debug.el")

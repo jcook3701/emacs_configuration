@@ -6,7 +6,7 @@
 
 ;; Link: https://github.com/progfolio/elpaca
 ;; Bootstrap Elpaca
-(defvar elpaca-installer-version 0.9)
+(defvar elpaca-installer-version 0.11) ;; TODO: This needs a better test.
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
