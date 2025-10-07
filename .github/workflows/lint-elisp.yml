@@ -67,10 +67,14 @@ jobs:
         run: |
           cask exec emacs --batch -Q \
                 --eval "(progn
-                  (add-to-list 'load-path
-                               (file-name-directory (locate-library \"package-lint\")))
-                  (require 'package-lint)
-                  (mapc #'package-lint-buffer (directory-files-recursively \"./\" \"\\.el$\")))"
+                (require 'seq)
+                (require 'package-lint)
+                (let ((files
+                       (seq-filter
+                        (lambda (f)
+                         (not (string-match-p \"/\\(\\.cask\\|elpa\\|node_modules\\|dist\\)/\" f)))
+                           (directory-files-recursively \"./\" \"\\.el$\"))))
+                         (mapc #'package-lint-buffer files)))"
         working-directory: ${{ github.workspace }}
 
       - name: Checkdoc on Emacs Lisp files
