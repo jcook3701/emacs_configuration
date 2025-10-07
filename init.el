@@ -12,11 +12,11 @@
 ;;----------------------------------------------------------------------------------------------
 ;;; Code:
 
-(load "./config/settings.el")
-(load "./config/pkg-manager/elpaca.el")
+(load "~/.emacs.d/config/settings.el")
+(load "~/.emacs.d/config/pkg-manager/elpaca.el")
 
-(load "./config/ide.el")
-(load "./config/code.el")
+(load "~/.emacs.d/config/ide.el")
+(load "~/.emacs.d/config/code.el")
 
 ;; TODO: Setup email and calendar
 ;; (load "~/.emacs.d/config/email.el")
