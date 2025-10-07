@@ -74,8 +74,11 @@ jobs:
                         (lambda (f)
                           (not (string-match-p \"/\\\\(\\\\.cask\\\\|elpa\\\\|node_modules\\\\|dist\\\\)/\" f)))
                         (directory-files-recursively \"./\" \"\\\\.el$\"))))
-                      (mapc #'package-lint-buffer files)))"
-        working-directory: ${{ github.workspace }}
+                        (with-temp-buffer
+                        (insert-file-contents file)
+                        (delay-warning 'package-lint :error) ;; optional: suppress warnings
+                        (package-lint-buffer file)))
+                        working-directory: ${{ github.workspace }}
 
       - name: Checkdoc on Emacs Lisp files
         run: |
