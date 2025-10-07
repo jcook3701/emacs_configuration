@@ -66,18 +66,18 @@ jobs:
       - name: Lint Emacs Lisp files with package-lint
         run: |
           cask exec emacs --batch -Q \
-                --eval "(progn
-                (require 'seq)
-                (require 'package-lint)
-                (let ((files
-                       (seq-filter
-                        (lambda (f)
-                          (not (string-match-p \"/\\\\(\\\\.cask\\\\|elpa\\\\|node_modules\\\\|dist\\\\)/\" f)))
-                        (directory-files-recursively \"./\" \"\\\\.el$\"))))
-                        (with-temp-buffer
-                        (insert-file-contents file)
-                        (delay-warning 'package-lint :error) ;; optional: suppress warnings
-                        (package-lint-buffer file)))"
+            --eval "(progn
+              (require 'seq)
+              (require 'package-lint)
+              (let ((files
+                    (seq-filter
+                     (lambda (f)
+                       (not (string-match-p \"/\\\\(\\\\.cask\\\\|elpa\\\\|node_modules\\\\|dist\\\\)/\" f)))
+                     (directory-files-recursively \"./\" \"\\\\.el$\"))))
+                (dolist (file files)
+                  (with-temp-buffer
+                    (insert-file-contents file)
+                    (package-lint-buffer file)))))"
         working-directory: ${{ github.workspace }}
 
       - name: Checkdoc on Emacs Lisp files
