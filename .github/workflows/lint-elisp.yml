@@ -72,9 +72,9 @@ jobs:
                 (let ((files
                        (seq-filter
                         (lambda (f)
-                         (not (string-match-p \"/\\(\\.cask\\|elpa\\|node_modules\\|dist\\)/\" f)))
-                           (directory-files-recursively \"./\" \"\\.el$\"))))
-                         (mapc #'package-lint-buffer files)))"
+                          (not (string-match-p \"/\\\\(\\\\.cask\\\\|elpa\\\\|node_modules\\\\|dist\\\\)/\" f)))
+                        (directory-files-recursively \"./\" \"\\\\.el$\"))))
+                      (mapc #'package-lint-buffer files)))"
         working-directory: ${{ github.workspace }}
 
       - name: Checkdoc on Emacs Lisp files
