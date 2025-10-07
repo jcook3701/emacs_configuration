@@ -77,8 +77,8 @@ jobs:
                         (with-temp-buffer
                         (insert-file-contents file)
                         (delay-warning 'package-lint :error) ;; optional: suppress warnings
-                        (package-lint-buffer file)))
-                        working-directory: ${{ github.workspace }}
+                        (package-lint-buffer file)))"
+        working-directory: ${{ github.workspace }}
 
       - name: Checkdoc on Emacs Lisp files
         run: |
