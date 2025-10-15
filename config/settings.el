@@ -68,4 +68,8 @@
 ;; (require 'tls)
 (add-to-list 'gnutls-trustfiles "/usr/local/etc/libressl/cert.Perm")
 
+;; Make Emacs display emoji properly
+(when (member "Noto Color Emoji" (font-family-list))
+  (set-fontset-font t 'emoji (font-spec :family "Noto Color Emoji") nil 'prepend))
+
 ;;; settings.el ends here
